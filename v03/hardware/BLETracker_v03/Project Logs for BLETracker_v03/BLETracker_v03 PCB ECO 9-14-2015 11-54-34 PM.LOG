@@ -1,0 +1,32 @@
+Added Component: Designator=CoinCell(CoinCell)
+Added Component: Designator=prg(HDR1X5)
+Added Component: Designator=RFD22301(RFD22301)
+Added Component: Designator=SPDT1(CUS-12B)
+Added Pin To Net: NetName=GND Pin=CoinCell-2
+Added Pin To Net: NetName=GND Pin=prg-2
+Added Pin To Net: NetName=GND Pin=RFD22301-1
+Added Pin To Net: NetName=GND Pin=RFD22301-2
+Added Pin To Net: NetName=GND Pin=RFD22301-8
+Added Pin To Net: NetName=GND Pin=RFD22301-9
+Added Pin To Net: NetName=GND Pin=RFD22301-10
+Added Pin To Net: NetName=GND Pin=RFD22301-12
+Added Pin To Net: NetName=GND Pin=RFD22301-18
+Added Pin To Net: NetName=GND Pin=RFD22301-19
+Added Net: Name=GND
+Added Pin To Net: NetName=RESET Pin=prg-5
+Added Pin To Net: NetName=RESET Pin=RFD22301-14
+Added Net: Name=RESET
+Added Pin To Net: NetName=RX Pin=prg-3
+Added Pin To Net: NetName=RX Pin=RFD22301-17
+Added Net: Name=RX
+Added Pin To Net: NetName=TX Pin=prg-4
+Added Pin To Net: NetName=TX Pin=RFD22301-16
+Added Net: Name=TX
+Added Pin To Net: NetName=VCC Pin=prg-1
+Added Pin To Net: NetName=VCC Pin=SPDT1-3
+Added Net: Name=VCC
+Added Pin To Net: NetName=VRAW Pin=CoinCell-3
+Added Pin To Net: NetName=VRAW Pin=SPDT1-2
+Added Net: Name=VRAW
+Added Class: Name=BLETracker_v03
+Added Room: Name=BLETracker_v03

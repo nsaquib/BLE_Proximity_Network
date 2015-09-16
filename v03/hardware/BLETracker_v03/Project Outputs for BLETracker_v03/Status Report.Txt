@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [BLETracker_v03.PrjPcb]
+   Generated File[BLETracker_v03.TXT]
+   Generated File[BLETracker_v03.LDP]
+   Generated File[BLETracker_v03.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 2:17:08 AM On 9/15/2015

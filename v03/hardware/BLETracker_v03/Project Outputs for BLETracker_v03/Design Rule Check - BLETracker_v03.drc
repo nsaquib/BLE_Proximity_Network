@@ -1,0 +1,88 @@
+Protel Design System Design Rule Check
+PCB File : D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v03\hardware\BLETracker_v03\BLETracker_v03.PcbDoc
+Date     : 9/15/2015
+Time     : 2:11:26 AM
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+Rule Violations :0
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=10mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=10mil) (Max=10mil) (Preferred=10mil) (All)
+Rule Violations :0
+
+Processing Rule : Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=1mil) (Max=100mil) (All)
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=10mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=10mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk To Solder Mask (Clearance=10mil) (IsPad),(All)
+   Violation between Track (2915mil,1755mil)(2915mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-1(2950mil,2300mil)  Top Layer
+   Violation between Track (2915mil,1755mil)(2915mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-2(2950mil,2250mil)  Top Layer
+   Violation between Track (2915mil,1755mil)(2915mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-3(2950mil,2200mil)  Top Layer
+   Violation between Track (2915mil,1755mil)(2915mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-6(2950mil,2050mil)  Top Layer
+   Violation between Track (2915mil,1755mil)(2915mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-5(2950mil,2100mil)  Top Layer
+   Violation between Track (2915mil,1755mil)(2915mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-4(2950mil,2150mil)  Top Layer
+   Violation between Track (2915mil,1755mil)(2915mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-7(2950mil,2000mil)  Top Layer
+   Violation between Track (2915mil,1755mil)(2915mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-8(2950mil,1950mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-12(3480mil,1950mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-13(3480mil,2000mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-16(3480mil,2150mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-15(3480mil,2100mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-14(3480mil,2050mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-17(3480mil,2200mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-18(3480mil,2250mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-19(3480mil,2300mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-11(3480mil,1900mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-10(3480mil,1850mil)  Top Layer
+   Violation between Track (3515mil,1755mil)(3515mil,2355mil)  Top Overlay and 
+                     Pad RFD22301-9(3480mil,1800mil)  Top Layer
+Rule Violations :19
+
+Processing Rule : Silk to Silk (Clearance=10mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk primitive without silk layer
+Rule Violations :0
+
+Processing Rule : Net Antennae (Tolerance=0mil) (All)
+Rule Violations :0
+
+Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
+Rule Violations :0
+
+
+Violations Detected : 19
+Time Elapsed        : 00:00:00

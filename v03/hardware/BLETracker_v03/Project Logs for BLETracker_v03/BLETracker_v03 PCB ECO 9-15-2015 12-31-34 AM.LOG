@@ -1,0 +1,13 @@
+Removed Pin From Net: NetName=GND Pin=prg-2
+Removed Pin From Net: NetName=RX Pin=prg-3
+Removed Pin From Net: NetName=TX Pin=prg-4
+Removed Pin From Net: NetName=RESET Pin=prg-5
+Change Component DesignItemId : Designator=prg Old DesignItemId=Header 5 New DesignItemId=ProgrammingHeader
+Change Component Footprint: Designator=prg Old Footprint=HDR1X5 New Footprint=ProgrammingHeader
+Change Component Comment : Designator=prg Old Comment=Header 5 New Comment=Programmer
+Added Pin To Net: NetName=VRAW Pin=CoinCell-1
+Added Pin To Net: NetName=RESET Pin=prg-2
+Added Pin To Net: NetName=GND Pin=prg-3
+Added Pin To Net: NetName=RX Pin=prg-4
+Added Pin To Net: NetName=TX Pin=prg-5
+Added Room: Name=BLETracker_v03

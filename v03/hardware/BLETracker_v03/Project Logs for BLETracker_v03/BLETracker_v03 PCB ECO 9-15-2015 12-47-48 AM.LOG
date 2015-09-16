@@ -1,0 +1,5 @@
+Added Component: Designator=SPDT1(CUS-12B)
+Added Pin To Net: NetName=VRAW Pin=SPDT1-2
+Added Pin To Net: NetName=VCC Pin=SPDT1-3
+Added Member To Class: ClassName=BLETracker_v03 Member=Component SPDT1 CUS-12B SPDT
+Added Room: Name=BLETracker_v03

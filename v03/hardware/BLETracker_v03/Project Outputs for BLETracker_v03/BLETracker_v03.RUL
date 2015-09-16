@@ -1,0 +1,5 @@
+DRC Rules Export File for PCB: D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v03\hardware\BLETracker_v03\BLETracker_v03.PcbDoc
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=10.00
+RuleKind=Width|RuleName=Width|Scope=Board|Minimum=10.00
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=4.00
