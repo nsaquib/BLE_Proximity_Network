@@ -100,12 +100,6 @@
             android:text="Value:"
             android:id="@+id/textView6" />
 
-        <view
-            class="com.lannbox.rfduinotest.EditData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/value" />
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
@@ -115,7 +109,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send Zero"
+                android:text="Start Transfer"
                 android:id="@+id/sendZero"
                 android:layout_weight="1"
                 android:enabled="false" />
@@ -123,7 +117,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send Value"
+                android:text="Stop Transfer"
                 android:id="@+id/sendValue"
                 android:layout_weight="1"
                 android:enabled="false" />
