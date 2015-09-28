@@ -12,6 +12,10 @@ All rights reserved.
 #define END_HOUR 17
 #define END_MINUTE 0
 
+// Time as host: 1 second, time as device: 15 seconds
+#define timeAsHost 1000
+#define timeAsDevice 15000
+
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
 
@@ -53,7 +57,7 @@ int greenLED = 3;
 void setup() {
   pinMode(greenLED, OUTPUT);
   // Adjust power output levels
-  RFduinoGZLL.txPowerLevel = 0;
+  RFduinoGZLL.txPowerLevel = 4;
   // Advertise for 4 seconds in BLE mode
   RFduinoBLE.advertisementInterval = 4000;
   // Start the serial monitor
@@ -91,48 +95,58 @@ void loop() {
 }
 
 void loopHost() { 
-  // Start GZZL stack from wake cycle
-  RFduinoGZLL.hostBaseAddress = hostBaseAddresses[deviceID];
-  RFduinoGZLL.begin(HOST);
-  
-  int i;
-  // Reset the RSSI averaging for each device
-  for (i = 0; i < MAX_DEVICES; i++) {
-    rssi_total[i] = 0;
-    rssi_count[i] = 0;
+  if (inDataCollectionPeriod()) {
+    // Start GZZL stack from wake cycle
+    RFduinoGZLL.hostBaseAddress = hostBaseAddresses[deviceID];
+    RFduinoGZLL.begin(HOST);
+    
+    int i;
+    // Reset the RSSI averaging for each device
+    for (i = 0; i < MAX_DEVICES; i++) {
+      rssi_total[i] = 0;
+      rssi_count[i] = 0;
+    }
+    // Start collecting RSSI samples
+    collect_samples = 1;
+    // Wait one second
+    timeDelay(timeAsHost);
+    // Stop collecting RSSI samples
+    collect_samples = 0;
+    // Calculate the RSSI avarages for each device
+    int average[MAX_DEVICES];
+    for (i = 0; i < MAX_DEVICES; i++) {
+      // No samples received, set to the lowest RSSI
+      // Prevents division by zero
+      if (rssi_count[i] == 0)
+        average[i] = -128;
+      else
+        average[i] = rssi_total[i] / rssi_count[i];
+    }
+    // Find the device with the maximum RSSI value
+    int closest = 0;
+    for (i = 1; i < MAX_DEVICES; i++)
+      if (average[i] > average[closest])
+        closest = i;
+    closest_device = closest;
   }
-  // Start collecting RSSI samples
-  collect_samples = 1;
-  // Wait one second
-  timeDelay(1000);
-  // Stop collecting RSSI samples
-  collect_samples = 0;
-  // Calculate the RSSI avarages for each device
-  int average[MAX_DEVICES];
-  for (i = 0; i < MAX_DEVICES; i++) {
-    // No samples received, set to the lowest RSSI
-    // Prevents division by zero
-    if (rssi_count[i] == 0)
-      average[i] = -128;
-    else
-      average[i] = rssi_total[i] / rssi_count[i];
+  else {
+    //sleep
   }
-  // Find the device with the maximum RSSI value
-  int closest = 0;
-  for (i = 1; i < MAX_DEVICES; i++)
-    if (average[i] > average[closest])
-      closest = i;
-  closest_device = closest;
 }
 
 void loopDevice() {
-  RFduinoBLE.begin();
-  // Wait 3 seconds
-  RFduino_ULPDelay(MILLISECONDS(3000));
-  updateTime(3000);
-  RFduinoBLE.end();
-  // Send data to all other hosts
-  //pollHost(deviceRole, hostBaseAddresses[deviceID]);
+  if (inDataCollectionPeriod()) {
+    RFduinoBLE.begin();
+    // Wait 3 seconds
+    RFduino_ULPDelay(MILLISECONDS(timeAsDevice));
+    updateTime(timeAsDevice);
+    RFduinoBLE.end();
+    // Send data to all other hosts
+    //pollHost(deviceRole, hostBaseAddresses[deviceID]);
+  }
+  else {
+    // sleep until start time
+  }
 }
 
 void pollHost(device_t drole, int hostAddr) {
@@ -220,6 +234,24 @@ void updateTime(int ms) {
     if (YEAR > 99) {
       YEAR = YEAR % 99;
     }
+  }
+}
+
+boolean inDataCollectionPeriod() {
+  // Collect data while within range
+  if (timer.hour >= START_HOUR && timer.hour <= END_HOUR) {
+    // Inclusive on START_MINUTE
+    if (timer.hour == START_HOUR && timer.minute >= START_MINUTE) {
+      return True;
+    }
+    // Exclusive on END_MINUTE
+    if (timer.hour == END_HOUR && timer.minute < END_MINUTE) {
+      return True;
+    }
+  }
+  // Otherwise, do not collect data
+  else {
+    return False;
   }
 }
 
