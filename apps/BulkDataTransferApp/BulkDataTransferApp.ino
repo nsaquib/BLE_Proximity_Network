@@ -1,7 +1,22 @@
+
+/*
+This sketch demonstrates how to do error free bulk data
+transfer over Bluetooth Low Energy 4.
+
+The data rate should be approximately:
+  - 32 kbit/sec at 1.5ft (4000 bytes per second)
+  - 24 kbit/sec at 40ft (3000 bytes per second)
+  
+This sketch sends a fixed number of 20 byte packets to
+an Android application.  Each packet is different, so
+that the Android application can verify if any data or
+packets were dropped.
+*/
+
 #include <RFduinoBLE.h>
 
 // send 500 20 byte buffers = 10000 bytes
-int packets = 500; 
+int packets = 500;
 
 // flag used to start sending
 int flag = false;
@@ -68,6 +83,7 @@ void loop() {
       RFduinoBLE.send(end);
       RFduinoBLE.send(secs);
       RFduinoBLE.send(bps / 1000.0);
+      //RFduinoBLE.send(2);
       flag = false;
     }
   }
