@@ -55,10 +55,10 @@ void setup() {
   // fill up the struct with values
   for (int i = 0; i < lenrec; i++)
   {
-    value.t[i] = value.id[i] = value.rsval[i] = i*2;
+    value.t[i] = value.id[i] = value.rsval[i] = i*3;
   }
   
-  ///*
+  /*
   Serial.print("Attempting to erase flash page " str(MY_FLASH_PAGE) ": ");
   rc = flashPageErase(PAGE_FROM_ADDRESS(p));
   if (rc == 0)
@@ -82,7 +82,7 @@ void setup() {
 
   Serial.println("The data stored in flash page " str(MY_FLASH_PAGE) " contains: ");
   dump_data(p);
-  //*/
+  */
 }
 
 void loop() {
