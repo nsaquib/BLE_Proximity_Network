@@ -19,15 +19,6 @@ void setup() {
   RFduinoBLE.begin(); // begin
 }
 
-void RFduinoBLE_onConnect() {
-  packet = 0;
-  ch = 'A';
-  start = 0;
-  flag = true;
-  RFduinoBLE.send("Sending", 7);
-  // first send is not possible until the iPhone completes service/characteristic discovery
-}
-
 void RFduinoBLE_onReceive(char *data, int len)
 {
   // if the first byte is 0x01 / on / true
@@ -37,11 +28,9 @@ void RFduinoBLE_onReceive(char *data, int len)
     ch = 'A';
     start = 0;
     flag = true;
-    RFduinoBLE.send("Sending", 7);
-    RFduinoBLE.send(1);
   }
   else
-    RFduinoBLE.send(0);
+    flag = false;
 }
  
 void loop() {
