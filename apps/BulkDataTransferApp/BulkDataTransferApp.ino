@@ -13,19 +13,28 @@ int packet;
 int start;
 
 void setup() {
-  Serial.begin(57600);
+  //Serial.begin(57600);
   RFduinoBLE.advertisementData = "Ayesha"; // shouldnt be more than 10 characters long
   RFduinoBLE.deviceName = "Ayesha device";  //  name of your RFduino. Will appear when other BLE enabled devices search for it
   RFduinoBLE.begin(); // begin
 }
 
-void RFduinoBLE_onConnect() {
-  packet = 0;
-  ch = 'A';
-  start = 0;
-  flag = true;
-  RFduinoBLE.send("Sending", 7);
-  // first send is not possible until the iPhone completes service/characteristic discovery
+void RFduinoBLE_onReceive(char *data, int len)
+{
+  // if the first byte is 0x01 / on / true
+  if (data[0])
+  {
+    RFduinoBLE.send(1);
+    packet = 0;
+    ch = 'A';
+    start = 0;
+    flag = true;
+  }
+  else 
+  {
+    RFduinoBLE.send(0);
+    flag = false;
+  }
 }
  
 void loop() {
