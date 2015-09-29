@@ -9,8 +9,9 @@ Data logging test for prnet nodes..
 */
 
 // select a flash page that isn't in use (see Memory.h for more info)
-#define  MY_FLASH_PAGE  251
+#define SETTINGS_FLASH_PAGE  251
 
+#define STORAGE_FLASH_PAGE 250
 // we can hold 80 rows of 12 bytes data (t, id, rssi) to be under 1K page memory
 #define lenrec 80
 
@@ -31,6 +32,10 @@ struct data_t
 
 struct data_t value;
 
+long hostcounter = 0;
+
+int curflashpage = STORAGE_FLASH_PAGE - hostcounter;
+
 void dump_data( struct data_t *p )
 {
   Serial.print("  a = ");
@@ -46,10 +51,10 @@ void setup() {
   Serial.println("All output will appear on the serial monitor.");
 
   // a flash page is 1K in length, so page 251 starts at address 251 * 1024 = 257024 = 3EC00 hex
-  data_t *p = (data_t*)ADDRESS_OF_PAGE(MY_FLASH_PAGE);
+  data_t *p = (data_t*)ADDRESS_OF_PAGE(curflashpage);
   int rc;
 
-  Serial.println("The data stored in flash page " str(MY_FLASH_PAGE) " contains: ");
+  Serial.println("The data stored in flash page " str(curflashpage) " contains: ");
   dump_data(p);
 
   // fill up the struct with values
