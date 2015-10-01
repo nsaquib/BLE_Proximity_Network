@@ -9,7 +9,7 @@ All rights reserved.
 // Time range to perform data collection
 #define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 23
+#define END_HOUR 13
 #define END_MINUTE 0
 // Devices poll host every 2.5 seconds
 #define DEVICE_POLL_TIME 2500
@@ -166,18 +166,20 @@ void loopHost() {
 void loopDevice() {
   Serial.println("Loop Device");
   if (inDataCollectionPeriod()) {
+    RFduinoGZLL.end();
     int i;
     for (i = 0; i < DEVICE_POLL_COUNT; i++) {
-      Serial.print("Device i is equal to: ");
-      Serial.println(i);
       RFduinoBLE.begin();
       // Sleep for DEVICE_POLL_TIME
       RFduino_ULPDelay(MILLISECONDS(DEVICE_POLL_TIME));
       updateTime(DEVICE_POLL_TIME);
       RFduinoBLE.end();
+      Serial.print("Device Iteration is: ");
+      Serial.println(i);
       // Send data to all other hosts
       pollHost(deviceRole, hostBaseAddresses[(int) floor(deviceID/8)]);
     }
+    switchToHost();
   }
 }
 
@@ -189,7 +191,6 @@ void pollHost(device_t drole, int hostAddr) {
     RFduinoGZLL.begin(drole);
     // Send null packet to host
     RFduinoGZLL.sendToHost(NULL, 0);
-    timeDelay(200); // adjust time for device polling frequency
     // End GZLL stack
     RFduinoGZLL.end();
   }
@@ -285,18 +286,16 @@ void updateTime(int ms) {
 }
 
 boolean inDataCollectionPeriod() {
-  Serial.println("Made it to inDCP function");
   // Collect data while within range
-  if (timer.hours > START_HOUR && timer.hours < END_HOUR) {
+  if ((timer.hours > START_HOUR) && (timer.hours < END_HOUR)) {
     return true;
   }
   // Inclusive on START_MINUTE and exclusive on END_MINUTE
-  else if ((timer.hours == START_HOUR && timer.minutes >= START_MINUTE) || (timer.hours == END_HOUR && timer.minutes < END_MINUTE)) {
+  else if (((timer.hours == START_HOUR) && (timer.minutes >= START_MINUTE)) || ((timer.hours == END_HOUR) && (timer.minutes < END_MINUTE))) {
     return true;
   }
   // Otherwise, do not collect data
   else {
-    Serial.println("Not in DCP");
     return false;
   }
 }
@@ -330,8 +329,8 @@ void sleepUntilStartTime() {
   // Calculate time to START_HOUR:START_MINUTE by converting higher order time units to ms
   int delayTime = ms + 1000*seconds + 60000*minutes + 3600000*hours;
   // Add additional offset for each device
-  //int offset = 60000*deviceID;
-  //delayTime += offset;
+  int offset = 60000*deviceID;
+  delayTime += offset;
   Serial.print("Sleeping for ");
   Serial.print(delayTime);
   Serial.println(" ms");
