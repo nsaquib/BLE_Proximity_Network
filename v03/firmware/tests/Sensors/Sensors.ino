@@ -9,10 +9,11 @@ All rights reserved.
 // Time range to perform data collection
 #define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 13
+#define END_HOUR 23
 #define END_MINUTE 0
 // Devices poll host every 2.5 seconds
 #define DEVICE_POLL_TIME 2500
+#define DEVICE_POLL_COUNT 60
 // Number of HBA groups
 #define HBA_GROUPS 2
 // Time as host: 5 seconds/HBA, time as device: 150 seconds
@@ -24,9 +25,9 @@ All rights reserved.
 
 // Serialized time from Python script
 struct timer {
-  int hour = 0;
-  int minute = 0;
-  int second = 0;
+  int hours = 0;
+  int minutes = 0;
+  int seconds = 0;
   int ms = 0;
 };
 
@@ -37,8 +38,8 @@ int YEAR = 15;
 int WEEKDAY = 4;
 
 // Device ID: 0...16
-const int deviceID = 0;
-device_t deviceRole = HOST;
+const int deviceID = 1;
+device_t deviceRole = DEVICE0;
 
 // Device roles, host base addresses, and device base addresses
 const int hostBaseAddresses[] = {0x000, 0x001};
@@ -93,10 +94,11 @@ void setupDevice() {
 
 void loop() {
   displayClockTime();
+  //Serial.println(deviceRole);
   // Time is not set
   if (!timeIsSet()) {
     Serial.println("Setting time...");
-    setTime();
+    setTimer();
   }
   // Time is  set
   else {
@@ -113,14 +115,17 @@ void loop() {
       }
     }
   }
+  timeDelay(1000);
 }
 
-void loopHost() { 
+void loopHost() {
+  Serial.println("Loop Host");
   if (inDataCollectionPeriod()) {
     // Start GZZL stack from wake cycle
     RFduinoGZLL.hostBaseAddress = hostBaseAddresses[hostCounter];
     RFduinoGZLL.begin(HOST);
-    
+    //Serial.print("My hostCounter is: ");
+    //Serial.println(hostCounter);
     int i;
     // Reset the RSSI averaging for each device
     for (i = 0; i < MAX_DEVICES; i++) {
@@ -143,6 +148,7 @@ void loopHost() {
       else
         average[i] = rssi_total[i] / rssi_count[i];
     }
+    //Serial.println(shouldBeDevice());
     if (shouldBeDevice()) {
       switchToDevice();
     }
@@ -158,9 +164,12 @@ void loopHost() {
 }
 
 void loopDevice() {
+  Serial.println("Loop Device");
   if (inDataCollectionPeriod()) {
     int i;
-    for (i = 0; i < DEVICE_TIME/DEVICE_POLL_TIME; i++) {
+    for (i = 0; i < DEVICE_POLL_COUNT; i++) {
+      Serial.print("Device i is equal to: ");
+      Serial.println(i);
       RFduinoBLE.begin();
       // Sleep for DEVICE_POLL_TIME
       RFduino_ULPDelay(MILLISECONDS(DEVICE_POLL_TIME));
@@ -180,6 +189,7 @@ void pollHost(device_t drole, int hostAddr) {
     RFduinoGZLL.begin(drole);
     // Send null packet to host
     RFduinoGZLL.sendToHost(NULL, 0);
+    timeDelay(200); // adjust time for device polling frequency
     // End GZLL stack
     RFduinoGZLL.end();
   }
@@ -215,26 +225,26 @@ void timeDelay(int ms) {
   updateTime(ms);
 }
 
-void setTime() {
+void setTimer() {
   // Set local time from Serial Monitor
   while (Serial.available() == 0) {
     delay(500);
   }
   if (Serial.available() > 0) {
-    timer.hour = Serial.parseInt();
-    timer.minute = Serial.parseInt();
-    timer.second = Serial.parseInt();
+    timer.hours = Serial.parseInt();
+    timer.minutes = Serial.parseInt();
+    timer.seconds = Serial.parseInt();
     timer.ms = Serial.parseInt();
   }
 }
 
 boolean timeIsSet() {
-  return !(timer.hour == 0 && timer.minute == 0 && timer.second == 0 && timer.ms == 0);
+  return !(timer.hours == 0 && timer.minutes == 0 && timer.seconds == 0 && timer.ms == 0);
 }
 
 void updateTime(int ms) {
   // Update time only if its been set
-  if (!(timer.hour == 0 && timer.minute == 0 && timer.second == 0 && timer.ms == 0)) {
+  if (!(timer.hours == 0 && timer.minutes == 0 && timer.seconds == 0 && timer.ms == 0)) {
     int carryOver;
     // Update each time component and propagate carryOver linearly
     timer.ms += ms;
@@ -242,20 +252,20 @@ void updateTime(int ms) {
     if (timer.ms > 999) {
       timer.ms = timer.ms % 1000;
     }
-    timer.second += carryOver;
-    carryOver = floor(timer.second/60);
-    if (timer.second > 59) {
-      timer.second = timer.second % 60;
+    timer.seconds += carryOver;
+    carryOver = floor(timer.seconds/60);
+    if (timer.seconds > 59) {
+      timer.seconds = timer.seconds % 60;
     }
-    timer.minute += carryOver;
-    carryOver = floor(timer.minute/60);
-    if (timer.minute > 59) {
-      timer.minute = timer.minute % 60;
+    timer.minutes += carryOver;
+    carryOver = floor(timer.minutes/60);
+    if (timer.minutes > 59) {
+      timer.minutes = timer.minutes % 60;
     }
-    timer.hour += carryOver;
-    carryOver = floor(timer.hour/24);
-    if (timer.hour > 23) {
-      timer.hour = timer.hour % 24;
+    timer.hours += carryOver;
+    carryOver = floor(timer.hours/24);
+    if (timer.hours > 23) {
+      timer.hours = timer.hours % 24;
     }
     DAY += carryOver;
     carryOver = floor(DAY/30);
@@ -275,16 +285,14 @@ void updateTime(int ms) {
 }
 
 boolean inDataCollectionPeriod() {
+  Serial.println("Made it to inDCP function");
   // Collect data while within range
-  if (timer.hour >= START_HOUR && timer.hour <= END_HOUR) {
-    // Inclusive on START_MINUTE
-    if (timer.hour == START_HOUR && timer.minute >= START_MINUTE) {
-      return true;
-    }
-    // Exclusive on END_MINUTE
-    if (timer.hour == END_HOUR && timer.minute < END_MINUTE) {
-      return true;
-    }
+  if (timer.hours > START_HOUR && timer.hours < END_HOUR) {
+    return true;
+  }
+  // Inclusive on START_MINUTE and exclusive on END_MINUTE
+  else if ((timer.hours == START_HOUR && timer.minutes >= START_MINUTE) || (timer.hours == END_HOUR && timer.minutes < END_MINUTE)) {
+    return true;
   }
   // Otherwise, do not collect data
   else {
@@ -295,11 +303,11 @@ boolean inDataCollectionPeriod() {
 
 void displayClockTime() {
   displayDate();
-  Serial.print(timer.hour);
+  Serial.print(timer.hours);
   Serial.print(":");
-  Serial.print(timer.minute);
+  Serial.print(timer.minutes);
   Serial.print(":");
-  Serial.print(timer.second);
+  Serial.print(timer.seconds);
   Serial.print(":");
   Serial.println(timer.ms);
 }
@@ -316,9 +324,9 @@ void displayDate() {
 void sleepUntilStartTime() {
   // Number of ms, seconds, minutes, and hours to delay
   int ms = 1000 - timer.ms;
-  int seconds = 60 - timer.second;
-  int minutes = (60 - timer.minute + START_MINUTE) % 60;
-  int hours = (timer.hour <= START_HOUR) ? START_HOUR - timer.hour - 1 : 24 - timer.hour + START_HOUR - 1;
+  int seconds = 60 - timer.seconds;
+  int minutes = (60 - timer.minutes + START_MINUTE) % 60;
+  int hours = (timer.hours <= START_HOUR) ? START_HOUR - timer.hours - 1 : 24 - timer.hours + START_HOUR - 1;
   // Calculate time to START_HOUR:START_MINUTE by converting higher order time units to ms
   int delayTime = ms + 1000*seconds + 60000*minutes + 3600000*hours;
   // Add additional offset for each device
@@ -345,6 +353,6 @@ void switchToDevice() {
 }
 
 device_t assignDeviceT() {
-  int deviceNum = floor(deviceID/2);
+  int deviceNum = (int) floor(deviceID/2);
   return deviceRoles[deviceNum];
 }
