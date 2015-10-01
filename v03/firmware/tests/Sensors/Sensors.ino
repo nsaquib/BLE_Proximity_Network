@@ -1,6 +1,6 @@
 /*
 Dwyane George
-Social Computing Group, Media Lab
+Social Computing Group, MIT Media Lab
 All rights reserved.
 */
 
@@ -9,7 +9,7 @@ All rights reserved.
 // Time range to perform data collection
 #define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 17
+#define END_HOUR 13
 #define END_MINUTE 0
 
 // Time as host: 1 second, time as device: 15 seconds
@@ -28,18 +28,20 @@ struct timer {
 };
 
 struct timer timer;
-int DAY = 28;
-int MONTH = 9;
+int DAY = 1;
+int MONTH = 10;
 int YEAR = 15;
+int WEEKDAY = 4;
+boolean timeSet = false;
 
-// Device ID: 0...8 --> DEVICE0...8
+// Device ID: 0...16
 int deviceID = 0;
 device_t deviceRole = HOST;
 
 // Device roles, host base addresses, and device base addresses
 int hostBaseAddresses[] = {0x000, 0x001, 0x002, 0x003, 0x004, 0x005, 0x006, 0x007, 0x008, 0x009, 0x010, 0x011, 0x012, 0x013, 0x014, 0x015};
 //int deviceBaseAddresses[] = {0x100, 0x101, 0x102, 0x103, 0x104, 0x105, 0x106, 0x107, 0x108, 0x109, 0x110, 0x111, 0x112, 0x113, 0x114, 0x115};
-//device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
+device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 
 // RSSI total and count for each device for averaging
 int rssi_total[MAX_DEVICES];
@@ -74,7 +76,7 @@ void setup() {
 
 void setupHost() {
   // Start the GZLL stack
-  RFduinoGZLL.hostBaseAddress = hostBaseAddresses[0];
+  RFduinoGZLL.hostBaseAddress = hostBaseAddresses[deviceID];
   RFduinoGZLL.begin(HOST);
 }
 
@@ -84,13 +86,25 @@ void setupDevice() {
 void loop() {
   setTime();
   displayClockTime();
-
-  // Loop for specific device roles
-  if (deviceRole == HOST) {
-    loopHost();
+  // Time is set
+  if (timeIsSet()) {
+    if (!inDataCollectionPeriod()) {
+      sleepUntilStartTime();
+    }
+    else {
+      // Loop for specific device roles
+      if (deviceRole == HOST) {
+        loopHost();
+      }
+      else {
+        loopDevice();
+      }
+    }
   }
+  // Time is not set
   else {
-    loopDevice();
+    // Wait for time on Serial Monitor
+    delay(500);
   }
 }
 
@@ -123,29 +137,23 @@ void loopHost() {
         average[i] = rssi_total[i] / rssi_count[i];
     }
     // Find the device with the maximum RSSI value
-    int closest = 0;
+    /*int closest = 0;
     for (i = 1; i < MAX_DEVICES; i++)
       if (average[i] > average[closest])
         closest = i;
-    closest_device = closest;
-  }
-  else {
-    //sleep
+    closest_device = closest;*/
   }
 }
 
 void loopDevice() {
   if (inDataCollectionPeriod()) {
     RFduinoBLE.begin();
-    // Wait 3 seconds
+    // Sleep for timeAsDevice
     RFduino_ULPDelay(MILLISECONDS(timeAsDevice));
     updateTime(timeAsDevice);
     RFduinoBLE.end();
     // Send data to all other hosts
     //pollHost(deviceRole, hostBaseAddresses[deviceID]);
-  }
-  else {
-    // sleep until start time
   }
 }
 
@@ -195,6 +203,10 @@ void setTime() {
   }
 }
 
+boolean timeIsSet() {
+  return !(timer.hour == 0 && timer.minute == 0);
+}
+
 void updateTime(int ms) {
   // Update time only if its been set
   if (!(timer.hour == 0 && timer.minute == 0 && timer.second == 0 && timer.ms == 0)) {
@@ -242,16 +254,16 @@ boolean inDataCollectionPeriod() {
   if (timer.hour >= START_HOUR && timer.hour <= END_HOUR) {
     // Inclusive on START_MINUTE
     if (timer.hour == START_HOUR && timer.minute >= START_MINUTE) {
-      return True;
+      return true;
     }
     // Exclusive on END_MINUTE
     if (timer.hour == END_HOUR && timer.minute < END_MINUTE) {
-      return True;
+      return true;
     }
   }
   // Otherwise, do not collect data
   else {
-    return False;
+    return false;
   }
 }
 
@@ -273,5 +285,22 @@ void displayDate() {
   Serial.print("-");
   Serial.print(YEAR);
   Serial.print(" ");
+}
+
+void sleepUntilStartTime() {
+  // Number of ms, seconds, minutes, and hours to delay
+  int ms = 1000 - timer.ms;
+  int seconds = 60 - timer.second;
+  int minutes = (60 - timer.minute + START_MINUTE) % 60;
+  int hours = (timer.hour <= START_HOUR) ? START_HOUR - timer.hour - 1 : 24 - timer.hour + START_HOUR - 1;
+  // Calculate time to START_HOUR:START_MINUTE by converting higher order time units to ms
+  int delayTime = ms + 1000*seconds + 60000*minutes + 3600000*hours;
+  // Add additional offset for each device
+  //int offset = 60000*deviceID;
+  //delayTime += offset;
+  Serial.print("Sleeping for ");
+  Serial.print(delayTime);
+  Serial.println(" ms");
+  timeDelay(delayTime);
 }
 
