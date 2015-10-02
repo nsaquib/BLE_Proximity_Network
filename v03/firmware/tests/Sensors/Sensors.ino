@@ -8,7 +8,7 @@ All rights reserved.
 #define MAX_DEVICES 16
 // Time range to perform data collection
 #define START_HOUR 20 // 8
-#define START_MINUTE 15 //45
+#define START_MINUTE 35 //45
 #define END_HOUR 23 //1
 #define END_MINUTE 0 //0
 // Devices poll host every 2.5 seconds
@@ -17,7 +17,7 @@ All rights reserved.
 // Number of HBA groups
 #define HBA_GROUPS 2
 // Time as host: 5 seconds/HBA, time as device: 150 seconds
-#define HOST_TIME 10000
+#define HOST_TIME 20000
 #define DEVICE_TIME 25000
 
 #include <RFduinoGZLL.h>
@@ -122,6 +122,8 @@ void loopHost() {
   Serial.println("Loop Host");
   if (inDataCollectionPeriod()) {
     // Start GZZL stack from wake cycle
+    Serial.print("Transmitting on HBA");
+    Serial.println(hostCounter);
     RFduinoGZLL.hostBaseAddress = hostBaseAddresses[hostCounter];
     RFduinoGZLL.begin(HOST);
     //Serial.print("My hostCounter is: ");
@@ -197,6 +199,7 @@ void pollHost(device_t drole, int hostAddr) {
 }
 
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
+  Serial.println("Got data!");
   if (deviceRole == HOST) {
     // Ignore device if outside range, should never occur
     if (device > MAX_DEVICES)
