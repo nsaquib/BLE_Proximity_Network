@@ -7,18 +7,18 @@ All rights reserved.
 // Maximum devices in network
 #define MAX_DEVICES 16
 // Time range to perform data collection
-#define START_HOUR 9
-#define START_MINUTE 0
-#define END_HOUR 13
-#define END_MINUTE 0
+#define START_HOUR 20 // 8
+#define START_MINUTE 15 //45
+#define END_HOUR 23 //1
+#define END_MINUTE 0 //0
 // Devices poll host every 2.5 seconds
 #define DEVICE_POLL_TIME 2500
-#define DEVICE_POLL_COUNT 60
+#define DEVICE_POLL_COUNT 10 //60
 // Number of HBA groups
 #define HBA_GROUPS 2
 // Time as host: 5 seconds/HBA, time as device: 150 seconds
 #define HOST_TIME 10000
-#define DEVICE_TIME 150000
+#define DEVICE_TIME 25000
 
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
@@ -38,8 +38,8 @@ int YEAR = 15;
 int WEEKDAY = 4;
 
 // Device ID: 0...16
-const int deviceID = 1;
-device_t deviceRole = DEVICE0;
+const int deviceID = 0;
+device_t deviceRole = HOST;
 
 // Device roles, host base addresses, and device base addresses
 const int hostBaseAddresses[] = {0x000, 0x001};
@@ -322,10 +322,40 @@ void displayDate() {
 
 void sleepUntilStartTime() {
   // Number of ms, seconds, minutes, and hours to delay
-  int ms = 1000 - timer.ms;
-  int seconds = 60 - timer.seconds;
-  int minutes = (60 - timer.minutes + START_MINUTE) % 60;
-  int hours = (timer.hours <= START_HOUR) ? START_HOUR - timer.hours - 1 : 24 - timer.hours + START_HOUR - 1;
+  int hours;
+  int minutes;
+  int seconds;
+  int ms;
+  if (timer.hours < START_HOUR) {
+    hours = START_HOUR - timer.hours;
+  }
+  else if (timer.hours == START_HOUR) {
+    if (timer.minutes <= START_MINUTE) {
+      hours = 0;
+    }
+    else {
+      hours = 23;
+    }
+  }
+  else {
+    hours = 24 - timer.hours + START_HOUR;
+  }
+  Serial.println(hours);
+  if (timer.seconds <= 0) {
+    minutes = (60 - timer.minutes + START_MINUTE) % 60;
+  }
+  else {
+    minutes = (60 - timer.minutes + START_MINUTE - 1) % 60;
+  }
+  if (timer.ms <= 0) {
+    seconds = (60 - timer.seconds) % 60;
+  }
+  else {
+    seconds = (60 - timer.seconds - 1) % 60;
+  }
+  Serial.println(seconds);
+  ms = (1000 - timer.ms) % 1000;
+  Serial.println(ms);
   // Calculate time to START_HOUR:START_MINUTE by converting higher order time units to ms
   int delayTime = ms + 1000*seconds + 60000*minutes + 3600000*hours;
   // Add additional offset for each device
