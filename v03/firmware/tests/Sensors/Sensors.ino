@@ -11,16 +11,13 @@ All rights reserved.
 #define START_MINUTE 0 //45
 #define END_HOUR 23 //1
 #define END_MINUTE 0 //0
-// Time as host: 5 seconds/HBA, time as device: 150 seconds
+// Time as host: 20000 (20000 ms)
 #define HOST_TIME 20000
-#define DEVICE_TIME 25000 // 150000
-// Devices poll host every 2.5 seconds
-#define DEVICE_POLL_TIME 2300
-#define POST_HOST_DELAY 500
-#define DEVICE_POLL_COUNT 10 //60
-// Number of HBA groups
 #define HBA_GROUPS 2
-
+// Device time is 20000 (500 ms * 40)
+//#define DEVICE_POLL_TIME 2300
+#define POLL_HOST_DELAY 500
+#define DEVICE_POLL_COUNT 40
 
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
@@ -39,15 +36,12 @@ int MONTH = 10;
 int YEAR = 15;
 int WEEKDAY = 4;
 
-// Device ID: 0...16
+// Device ID: 0...15
 const int deviceID = 1;
-device_t deviceRole = HOST;
+device_t deviceRole = DEVICE1;
 
-// Device roles, host base addresses, and device base addresses
-// HBA cannot be 0x55 or 0xaa
+// Device roles, host base addresses, and device base addresses, HBA cannot be 0x55 or 0xaa
 const int hostBaseAddresses[] = {0x000, 0x001}; 
-//int hostBaseAddresses[] = {0x000, 0x001, 0x002, 0x003, 0x004, 0x005, 0x006, 0x007, 0x008, 0x009, 0x010, 0x011, 0x012, 0x013, 0x014, 0x015};
-//int deviceBaseAddresses[] = {0x100, 0x101, 0x102, 0x103, 0x104, 0x105, 0x106, 0x107, 0x108, 0x109, 0x110, 0x111, 0x112, 0x113, 0x114, 0x115};
 const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 
 // Index for hostBaseAddresses
@@ -199,7 +193,7 @@ void pollHost(device_t drole, int hostAddr) {
     RFduinoGZLL.begin(drole);
     // Send null packet to host
     RFduinoGZLL.sendToHost(NULL, 0);
-    timeDelay(POST_HOST_DELAY);
+    timeDelay(POLL_HOST_DELAY);
     // End GZLL stack
     RFduinoGZLL.end();
   }
@@ -376,7 +370,7 @@ device_t assignDeviceT() {
   return deviceRoles[deviceNum];
 }
 
-void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
+/*void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   //if (deviceRole == HOST) {
     // Ignore device if outside range, should never occur
   if (device > MAX_DEVICES)
@@ -384,7 +378,7 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[0]) {
     Serial.print("ID ");
     Serial.print(deviceID);
-    Serial.print("from DEVICE");
+    Serial.print(" from DEVICE");
     Serial.print(device);
     Serial.print(" (HBA0) ");
     Serial.print("RSSI: ");
@@ -393,14 +387,13 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[1]) {
     Serial.print("ID ");
     Serial.print(deviceID);
-    Serial.print("from DEVICE");
+    Serial.print(" from DEVICE");
     Serial.print(device);
-    Serial.print(" (HBA0) ");
-    Serial.print("RSSI: ");
+    Serial.print(" (HBA1) RSSI: ");
     Serial.println(rssi);
   }
   // If collecting samples, update the RSSI total and count
-  if (collect_samples) {
+  /*if (collect_samples) {
     if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[0]) {
       rssi_total[device] += rssi;
       rssi_count[device]++;
@@ -411,4 +404,4 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
     }
   }
   //}
-}
+}*/
