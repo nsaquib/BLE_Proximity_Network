@@ -62,8 +62,8 @@ const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEV
 int hostCounter = 0;
 
 // RSSI total and count for each device for averaging
-int rssi_total[MAX_DEVICES];
-int rssi_count[MAX_DEVICES];
+float rssi_total[MAX_DEVICES];
+float rssi_count[MAX_DEVICES];
 
 // Device with the maximum RSSI
 char closest_device = 0;
