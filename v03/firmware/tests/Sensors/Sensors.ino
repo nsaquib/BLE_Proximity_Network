@@ -37,8 +37,8 @@ int YEAR = 15;
 int WEEKDAY = 4;
 
 // Device ID: 0...15
-const int deviceID = 1;
-device_t deviceRole = DEVICE1;
+const int deviceID = 0;
+device_t deviceRole = HOST;
 
 // Device roles, host base addresses, and device base addresses, HBA cannot be 0x55 or 0xaa
 const int hostBaseAddresses[] = {0x000, 0x001}; 
@@ -145,10 +145,16 @@ void loopHost() {
     for (i = 0; i < MAX_DEVICES; i++) {
       // No samples received, set to the lowest RSSI
       // Prevents division by zero
-      if (rssi_count[i] == 0)
+      if (rssi_count[i] == 0) {
         average[i] = -128;
-      else
+      }
+      else {
         average[i] = rssi_total[i] / rssi_count[i];
+      }
+      Serial.print("Average RSSI for DEVICE");
+      Serial.print(i);
+      Serial.print(" :");
+      Serial.println(average[i]);
     }
     //Serial.println(shouldBeDevice());
     if (shouldBeDevice()) {
@@ -370,38 +376,39 @@ device_t assignDeviceT() {
   return deviceRoles[deviceNum];
 }
 
-/*void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
-  //if (deviceRole == HOST) {
+void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
+  if (deviceRole == HOST) {
     // Ignore device if outside range, should never occur
-  if (device > MAX_DEVICES)
-    return;
-  if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[0]) {
-    Serial.print("ID ");
-    Serial.print(deviceID);
-    Serial.print(" from DEVICE");
-    Serial.print(device);
-    Serial.print(" (HBA0) ");
-    Serial.print("RSSI: ");
-    Serial.println(rssi);
+    // If collecting samples, update the RSSI total and count
+    if (collect_samples) {
+      if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[0]) {
+        rssi_total[device] += rssi;
+        rssi_count[device]++;
+      }
+      if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[1]) {
+        rssi_total[8 + device] += rssi;
+        rssi_count[8 + device]++;
+      }
+    }
   }
-  if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[1]) {
-    Serial.print("ID ");
-    Serial.print(deviceID);
-    Serial.print(" from DEVICE");
-    Serial.print(device);
-    Serial.print(" (HBA1) RSSI: ");
-    Serial.println(rssi);
-  }
-  // If collecting samples, update the RSSI total and count
-  /*if (collect_samples) {
+}
+
+    /*if (device > MAX_DEVICES)
+      return;
     if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[0]) {
-      rssi_total[device] += rssi;
-      rssi_count[device]++;
+      Serial.print("ID ");
+      Serial.print(deviceID);
+      Serial.print(" from DEVICE");
+      Serial.print(device);
+      Serial.print(" (HBA0) ");
+      Serial.print("RSSI: ");
+      Serial.println(rssi);
     }
     if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[1]) {
-      rssi_total[8 + device] += rssi;
-      rssi_count[8 + device]++;
-    }
-  }
-  //}
-}*/
+      Serial.print("ID ");
+      Serial.print(deviceID);
+      Serial.print(" from DEVICE");
+      Serial.print(device);
+      Serial.print(" (HBA1) RSSI: ");
+      Serial.println(rssi);
+    }*/
