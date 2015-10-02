@@ -7,19 +7,20 @@ All rights reserved.
 // Maximum devices in network
 #define MAX_DEVICES 16
 // Time range to perform data collection
-#define START_HOUR 20 // 8
-#define START_MINUTE 43 //45
+#define START_HOUR 9 // 8
+#define START_MINUTE 0 //45
 #define END_HOUR 23 //1
 #define END_MINUTE 0 //0
+// Time as host: 5 seconds/HBA, time as device: 150 seconds
+#define HOST_TIME 20000
+#define DEVICE_TIME 25000 // 150000
 // Devices poll host every 2.5 seconds
 #define DEVICE_POLL_TIME 2300
-#define POST_HOST_DELAY 500
+#define POST_HOST_DELAY 200
 #define DEVICE_POLL_COUNT 10 //60
 // Number of HBA groups
 #define HBA_GROUPS 2
-// Time as host: 5 seconds/HBA, time as device: 150 seconds
-#define HOST_TIME 20000
-#define DEVICE_TIME 25000
+
 
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
@@ -39,7 +40,7 @@ int YEAR = 15;
 int WEEKDAY = 4;
 
 // Device ID: 0...16
-const int deviceID = 0;
+const int deviceID = 1;
 device_t deviceRole = HOST;
 
 // Device roles, host base addresses, and device base addresses
@@ -85,11 +86,13 @@ void setup() {
 
 void setupHost() {
   // Start the GZLL stack
+  RFduinoGZLL.end();
   RFduinoGZLL.hostBaseAddress = hostBaseAddresses[0];
   RFduinoGZLL.begin(HOST);
 }
 
 void setupDevice() {
+  RFduinoGZLL.end();
   RFduinoGZLL.hostBaseAddress = hostBaseAddresses[(int) floor(deviceID/8)];
   RFduinoGZLL.begin(deviceRole);
 }
@@ -202,36 +205,28 @@ void pollHost(device_t drole, int hostAddr) {
 }
 
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
-  //Serial.println("Got data!");
-  Serial.print("Device: ");
-  Serial.println(device);
+  Serial.println("Got data!");
   if (deviceRole == HOST) {
     // Ignore device if outside range, should never occur
     if (device > MAX_DEVICES)
       return;
     if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[0]) {
-      /*
       Serial.print("ID ");
       Serial.print(deviceID);
-      Serial.print("received packet from DEVICE");
+      Serial.print("from DEVICE");
       Serial.print(device);
-      Serial.print("(hba0) with ID");
-      Serial.print(device);
-      Serial.print("- RSSI: ");
+      Serial.print(" (HBA0) ");
+      Serial.print("RSSI: ");
       Serial.println(rssi);
-      */
     }
     if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[1]) {
-      /*
       Serial.print("ID ");
       Serial.print(deviceID);
-      Serial.print("received packet from DEVICE");
+      Serial.print("from DEVICE");
       Serial.print(device);
-      Serial.print("(hba1) with ID");
-      Serial.print(8 + device);
-      Serial.print("- RSSI: ");
+      Serial.print(" (HBA0) ");
+      Serial.print("RSSI: ");
       Serial.println(rssi);
-      */
     }
     // If collecting samples, update the RSSI total and count
     if (collect_samples) {
@@ -244,6 +239,11 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
         rssi_count[8 + device]++;
       }
     }
+  }
+  else {
+    Serial.println("I'm a DEVICE");
+    Serial.print("Data from: ");
+    Serial.println(device);
   }
 }
 
@@ -391,16 +391,25 @@ void sleepUntilStartTime() {
 }
 
 boolean shouldBeDevice() {
+  if (hostCounter == HBA_GROUPS - 1) {
+    Serial.println("It's time to become a DEVICE...");
+  }
   return hostCounter == HBA_GROUPS - 1;
 }
 
 void switchToHost() {
+  Serial.println("Becoming a host now...");
   deviceRole = HOST;
+  Serial.println("My role is HOST");
   setupHost();
 }
 
 void switchToDevice() {
+  
+  Serial.println("Becoming a device now...");
   deviceRole = assignDeviceT();
+  Serial.print("My role is DEVICE");
+  Serial.println(deviceRole);
   setupDevice();
 }
 
