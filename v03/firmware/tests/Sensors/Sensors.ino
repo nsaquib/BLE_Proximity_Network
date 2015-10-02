@@ -8,11 +8,12 @@ All rights reserved.
 #define MAX_DEVICES 16
 // Time range to perform data collection
 #define START_HOUR 20 // 8
-#define START_MINUTE 35 //45
+#define START_MINUTE 43 //45
 #define END_HOUR 23 //1
 #define END_MINUTE 0 //0
 // Devices poll host every 2.5 seconds
-#define DEVICE_POLL_TIME 2500
+#define DEVICE_POLL_TIME 2300
+#define POST_HOST_DELAY 200
 #define DEVICE_POLL_COUNT 10 //60
 // Number of HBA groups
 #define HBA_GROUPS 2
@@ -122,7 +123,7 @@ void loopHost() {
   Serial.println("Loop Host");
   if (inDataCollectionPeriod()) {
     // Start GZZL stack from wake cycle
-    Serial.print("Transmitting on HBA");
+    Serial.print("Listening on HBA");
     Serial.println(hostCounter);
     RFduinoGZLL.hostBaseAddress = hostBaseAddresses[hostCounter];
     RFduinoGZLL.begin(HOST);
@@ -193,6 +194,7 @@ void pollHost(device_t drole, int hostAddr) {
     RFduinoGZLL.begin(drole);
     // Send null packet to host
     RFduinoGZLL.sendToHost(NULL, 0);
+    timeDelay(POST_HOST_DELAY);
     // End GZLL stack
     RFduinoGZLL.end();
   }
@@ -343,7 +345,6 @@ void sleepUntilStartTime() {
   else {
     hours = 24 - timer.hours + START_HOUR;
   }
-  Serial.println(hours);
   if (timer.seconds <= 0) {
     minutes = (60 - timer.minutes + START_MINUTE) % 60;
   }
@@ -356,9 +357,7 @@ void sleepUntilStartTime() {
   else {
     seconds = (60 - timer.seconds - 1) % 60;
   }
-  Serial.println(seconds);
   ms = (1000 - timer.ms) % 1000;
-  Serial.println(ms);
   // Calculate time to START_HOUR:START_MINUTE by converting higher order time units to ms
   int delayTime = ms + 1000*seconds + 60000*minutes + 3600000*hours;
   // Add additional offset for each device
