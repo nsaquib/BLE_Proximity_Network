@@ -202,7 +202,7 @@ void pollHost(device_t drole, int hostAddr) {
 }
 
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
-  Serial.println("Got data!");
+  //Serial.println("Got data!");
   Serial.print("Device: ");
   Serial.println(device);
   if (deviceRole == HOST) {
@@ -210,6 +210,7 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
     if (device > MAX_DEVICES)
       return;
     if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[0]) {
+      /*
       Serial.print("ID ");
       Serial.print(deviceID);
       Serial.print("received packet from DEVICE");
@@ -218,8 +219,10 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
       Serial.print(device);
       Serial.print("- RSSI: ");
       Serial.println(rssi);
+      */
     }
     if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[1]) {
+      /*
       Serial.print("ID ");
       Serial.print(deviceID);
       Serial.print("received packet from DEVICE");
@@ -228,6 +231,7 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
       Serial.print(8 + device);
       Serial.print("- RSSI: ");
       Serial.println(rssi);
+      */
     }
     // If collecting samples, update the RSSI total and count
     if (collect_samples) {
