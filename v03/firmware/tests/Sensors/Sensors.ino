@@ -13,7 +13,7 @@ All rights reserved.
 #define END_MINUTE 0 //0
 // Devices poll host every 2.5 seconds
 #define DEVICE_POLL_TIME 2300
-#define POST_HOST_DELAY 200
+#define POST_HOST_DELAY 500
 #define DEVICE_POLL_COUNT 10 //60
 // Number of HBA groups
 #define HBA_GROUPS 2
@@ -173,11 +173,11 @@ void loopDevice() {
     RFduinoGZLL.end();
     int i;
     for (i = 0; i < DEVICE_POLL_COUNT; i++) {
-      RFduinoBLE.begin();
+      //RFduinoBLE.begin();
       // Sleep for DEVICE_POLL_TIME
-      RFduino_ULPDelay(MILLISECONDS(DEVICE_POLL_TIME));
-      updateTime(DEVICE_POLL_TIME);
-      RFduinoBLE.end();
+      //RFduino_ULPDelay(MILLISECONDS(DEVICE_POLL_TIME));
+      //updateTime(DEVICE_POLL_TIME);
+      //RFduinoBLE.end();
       Serial.print("Device Iteration is: ");
       Serial.println(i);
       // Send data to all other hosts
