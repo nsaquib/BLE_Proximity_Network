@@ -65,9 +65,6 @@ int hostCounter = 0;
 float rssi_total[MAX_DEVICES];
 float rssi_count[MAX_DEVICES];
 
-// Device with the maximum RSSI
-char closest_device = 0;
-
 // Collect samples flag
 int collect_samples = 0;
 
@@ -140,8 +137,6 @@ void loopHost() {
     RFduinoGZLL.end();
     RFduinoGZLL.hostBaseAddress = hostBaseAddresses[hostCounter];
     RFduinoGZLL.begin(HOST);
-    //Serial.print("My hostCounter is: ");
-    //Serial.println(hostCounter);
     int i;
     // Reset the RSSI averaging for each device
     for (i = 0; i < MAX_DEVICES; i++) {
@@ -170,18 +165,11 @@ void loopHost() {
       Serial.print(" :");
       Serial.println(average[i]);
     }
-    //Serial.println(shouldBeDevice());
     if (shouldBeDevice()) {
       switchToDevice();
     }
     // Increment the hostCounter such that it cycles from 0...number of cycles - 1
     hostCounter = (hostCounter + 1) % HBA_GROUPS;
-    // Find the device with the maximum RSSI value
-    /*int closest = 0;
-    for (i = 1; i < MAX_DEVICES; i++)
-      if (average[i] > average[closest])
-        closest = i;
-    closest_device = closest;*/
   }
 }
 
