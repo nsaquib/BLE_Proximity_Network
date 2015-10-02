@@ -37,6 +37,20 @@ int YEAR = 15;
 int WEEKDAY = 4;
 
 // Device ID: 0...15
+/*
+ * DEVICEX = floor(deviceID/2)
+ * ID DEVICEX
+ *  0 DEVICE0
+ *  1 DEVICE1
+ *  2 DEVICE2
+ *  3 DEVICE3
+ *  4 DEVICE4
+ *  5 DEVICE5
+ *  6 DEVICE6
+ *  7 DEVICE7
+ *  8 DEVICE0
+ *  ...
+ */
 const int deviceID = 0;
 device_t deviceRole = HOST;
 
@@ -141,7 +155,7 @@ void loopHost() {
     // Stop collecting RSSI samples
     collect_samples = 0;
     // Calculate the RSSI avarages for each device
-    int average[MAX_DEVICES];
+    float average[MAX_DEVICES];
     for (i = 0; i < MAX_DEVICES; i++) {
       // No samples received, set to the lowest RSSI
       // Prevents division by zero
@@ -372,7 +386,7 @@ void switchToDevice() {
 }
 
 device_t assignDeviceT() {
-  int deviceNum = (int) floor(deviceID/2);
+  int deviceNum = (int) (deviceID % 8);
   return deviceRoles[deviceNum];
 }
 
