@@ -43,7 +43,8 @@ const int deviceID = 0;
 device_t deviceRole = HOST;
 
 // Device roles, host base addresses, and device base addresses
-const int hostBaseAddresses[] = {0x000, 0x001};
+// HBA cannot be 0x55 or 0xaa
+const int hostBaseAddresses[] = {0x000, 0x001}; 
 //int hostBaseAddresses[] = {0x000, 0x001, 0x002, 0x003, 0x004, 0x005, 0x006, 0x007, 0x008, 0x009, 0x010, 0x011, 0x012, 0x013, 0x014, 0x015};
 //int deviceBaseAddresses[] = {0x100, 0x101, 0x102, 0x103, 0x104, 0x105, 0x106, 0x107, 0x108, 0x109, 0x110, 0x111, 0x112, 0x113, 0x114, 0x115};
 const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
@@ -202,15 +203,31 @@ void pollHost(device_t drole, int hostAddr) {
 
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   Serial.println("Got data!");
+  Serial.print("Device: ");
+  Serial.println(device);
   if (deviceRole == HOST) {
     // Ignore device if outside range, should never occur
     if (device > MAX_DEVICES)
       return;
     if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[0]) {
-      printf("ID %d received packet from DEVICE%d (hba0) with ID %d - RSSI: %d\n", deviceID, device, device, rssi);
+      Serial.print("ID ");
+      Serial.print(deviceID);
+      Serial.print("received packet from DEVICE");
+      Serial.print(device);
+      Serial.print("(hba0) with ID");
+      Serial.print(device);
+      Serial.print("- RSSI: ");
+      Serial.println(rssi);
     }
     if (RFduinoGZLL.hostBaseAddress == hostBaseAddresses[1]) {
-      printf("ID %d received packet from DEVICE%d (hba1) with ID %d - RSSI: %d\n", deviceID, device, 8 + device, rssi);
+      Serial.print("ID ");
+      Serial.print(deviceID);
+      Serial.print("received packet from DEVICE");
+      Serial.print(device);
+      Serial.print("(hba1) with ID");
+      Serial.print(8 + device);
+      Serial.print("- RSSI: ");
+      Serial.println(rssi);
     }
     // If collecting samples, update the RSSI total and count
     if (collect_samples) {
