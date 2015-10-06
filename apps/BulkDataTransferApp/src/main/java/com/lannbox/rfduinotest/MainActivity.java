@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
+import java.io.File;
 import java.util.UUID;
 
 public class MainActivity extends Activity implements BluetoothAdapter.LeScanCallback {
@@ -48,6 +50,10 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     private Button sendValueButton;
     private Button clearButton;
     private LinearLayout dataLayout;
+
+    private String data_to_write;
+
+    private static final String LOG_TAG = "rfduino_data_transfer";
 
     private final BroadcastReceiver bluetoothStateReceiver = new BroadcastReceiver() {
         @Override
@@ -164,6 +170,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             @Override
             public void onClick(View v) {
                 rfduinoService.send(new byte[]{0});
+                writeData(data_to_write);
             }
         });
 
@@ -256,6 +263,59 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         sendValueButton.setEnabled(connected);
     }
 
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = android.os.Environment.getExternalStorageState();
+        if (android.os.Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable() {
+        String state = android.os.Environment.getExternalStorageState();
+        if (android.os.Environment.MEDIA_MOUNTED.equals(state) ||
+                android.os.Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    public java.io.File getDCIMStorageDir() {
+        java.io.File folder = android.os.Environment.getExternalStorageDirectory();
+        boolean success = true;
+        if (!folder.exists()) {
+            android.util.Log.e(LOG_TAG, "Folder does not exist");
+            success = folder.mkdir();
+        }
+        if (!success) android.util.Log.e(LOG_TAG, "Directory not created");
+        return folder;
+    }
+
+    private void writeData(String data) {
+        File root = android.os.Environment.getExternalStorageDirectory();
+        // See
+        // http://stackoverflow.com/questions/3551821/android-write-to-sd-card-folder
+        File dir = new File(root.getAbsolutePath() + "/ayesha_rfduino");
+        dir.mkdirs();
+        File file = new File(dir, "myData.txt");
+        try {
+            java.io.FileOutputStream f = new java.io.FileOutputStream(file);
+            java.io.PrintWriter pw = new java.io.PrintWriter(f);
+            pw.println(data);
+            pw.flush();
+            pw.close();
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            android.util.Log.e(LOG_TAG, "******* File not found. Did you"
+                    + " add a WRITE_EXTERNAL_STORAGE permission to the   manifest?");
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void addData(byte[] data) {
         View view = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, dataLayout, false);
 
@@ -263,6 +323,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         text1.setText(HexAsciiHelper.bytesToHex(data));
 
         String ascii = HexAsciiHelper.bytesToAsciiMaybe(data);
+        data_to_write = data_to_write + HexAsciiHelper.bytesToHex(data);
         if (ascii != null) {
             TextView text2 = (TextView) view.findViewById(android.R.id.text2);
             text2.setText(ascii);
