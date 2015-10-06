@@ -15,6 +15,9 @@ packets were dropped.
 
 #include <RFduinoBLE.h>
 
+// we can hold 80 rows of 12 bytes data (t, id, rssi) to be under 1K page memory
+#define lenrec 80
+
 // send 500 20 byte buffers = 10000 bytes
 int packets = 500;
 
@@ -25,6 +28,15 @@ int flag = false;
 int ch;
 int packet;
 
+struct data_t
+{
+  int t[lenrec] = {0};
+  // the compiler will insert 3 bytes of padding here so id is aligned on a dword boundary
+  int id[lenrec] = {0};
+  int rsval[lenrec] = {0};
+};
+struct data_t value;
+
 int start;
 
 void setup() {
@@ -32,6 +44,10 @@ void setup() {
   RFduinoBLE.advertisementData = "Ayesha"; // shouldnt be more than 10 characters long
   RFduinoBLE.deviceName = "Ayesha device";  //  name of your RFduino. Will appear when other BLE enabled devices search for it
   RFduinoBLE.begin(); // begin
+  for (int i = 0; i < lenrec; i++)
+  {
+    value.t[i] = value.id[i] = value.rsval[i] = i*3;
+  }
 }
 
 void RFduinoBLE_onReceive(char *data, int len)
@@ -41,7 +57,7 @@ void RFduinoBLE_onReceive(char *data, int len)
   {
     RFduinoBLE.send(1);
     packet = 0;
-    ch = 'A';
+    // ch = 'A';
     start = 0;
     flag = true;
   }
@@ -56,13 +72,20 @@ void loop() {
   if (flag)
   {
     // generate the next packet
-    char buf[20];
-    for (int i = 0; i < 20; i++)
+    //char buf[20];
+    //for (int i = 0; i < 20; i++)
+    //{
+      //buf[i] = ch;
+      //ch++;
+      //if (ch > 'Z')
+        //ch = 'A';
+    //}
+
+    // generate the next packet
+    char buf[lenrec];
+    for (int i = 0; i < lenrec; i++)
     {
-      buf[i] = ch;
-      ch++;
-      if (ch > 'Z')
-        ch = 'A';
+      buf[i] = value.t[i];
     }
     
     // send is queued (the ble stack delays send to the start of the next tx window)
