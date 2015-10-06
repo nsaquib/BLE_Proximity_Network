@@ -41,12 +41,11 @@ void loop()
   ///*
 
   RFduinoBLE.begin();
-  RFduino_ULPDelay(SECONDS(3.0));
+  RFduino_ULPDelay(SECONDS(0.2));
   RFduinoBLE.end();
 
-  //pollHost(DEVICE0,0x123);
 
-  pollHost(DEVICE7,0x123);
+  pollHost(DEVICE0,0x123);
 
 /*
   RFduinoGZLL.hostBaseAddress = 0x12345677;

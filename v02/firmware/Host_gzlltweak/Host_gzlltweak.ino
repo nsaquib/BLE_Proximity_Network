@@ -78,8 +78,10 @@ void loop()
     // (also prevents divide by zero)
     if (rssi_count[i] == 0)
       average[i] = -128;
-    else
+    else {
       average[i] = rssi_total[i] / rssi_count[i];
+      printf("Device %d: %d\n",i, rssi_count[i]);
+    }
 
     // printf increases the sketch size more than Serial.println, but
     // this is an easy way to concatenate data onto a single line
@@ -104,8 +106,8 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len)
     return;
 
   //Serial.println(data);
-  printf("%d: %d\n",device, rssi);
-  Serial.println("");
+  //printf("%d: %d\n",device, rssi);
+  //Serial.println("");
   // if collecting samples, update the RSSI total and count
   if (collect_samples)
   {
