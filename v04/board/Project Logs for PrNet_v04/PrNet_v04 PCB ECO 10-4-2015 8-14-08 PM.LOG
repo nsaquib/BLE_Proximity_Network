@@ -1,0 +1,99 @@
+Added Component: Designator=ADXL335(ADXL335)
+Added Component: Designator=C1(CAPC1005L)
+Added Component: Designator=C2(CAPC1005L)
+Added Component: Designator=C3(CAPC1005L)
+Added Component: Designator=C4(CAPC1005L)
+Added Component: Designator=C5(CAPC1005L)
+Added Component: Designator=C6(CAPC1005L)
+Added Component: Designator=C7(CAPC1005L)
+Added Component: Designator=CoinCell(CoinCell)
+Added Component: Designator=INMP401(INMP401)
+Added Component: Designator=OPA344(SOT23_5)
+Added Component: Designator=Programmer(HDR1X5)
+Added Component: Designator=R1(RESC1005L)
+Added Component: Designator=R2(RESC1005L)
+Added Component: Designator=R3(RESC1005L)
+Added Component: Designator=R4(RESC1005L)
+Added Component: Designator=RFD22301(RFD22301)
+Added Pin To Net: NetName=AOUT Pin=C1-1
+Added Pin To Net: NetName=AOUT Pin=INMP401-1
+Added Net: Name=AOUT
+Added Pin To Net: NetName=AUD Pin=C3-1
+Added Pin To Net: NetName=AUD Pin=OPA344-1
+Added Pin To Net: NetName=AUD Pin=R4-1
+Added Pin To Net: NetName=AUD Pin=RFD22301-7
+Added Net: Name=AUD
+Added Pin To Net: NetName=GND Pin=ADXL335-3
+Added Pin To Net: NetName=GND Pin=ADXL335-5
+Added Pin To Net: NetName=GND Pin=ADXL335-6
+Added Pin To Net: NetName=GND Pin=ADXL335-7
+Added Pin To Net: NetName=GND Pin=C2-1
+Added Pin To Net: NetName=GND Pin=C4-2
+Added Pin To Net: NetName=GND Pin=C5-2
+Added Pin To Net: NetName=GND Pin=C6-2
+Added Pin To Net: NetName=GND Pin=C7-2
+Added Pin To Net: NetName=GND Pin=CoinCell-2
+Added Pin To Net: NetName=GND Pin=INMP401-2
+Added Pin To Net: NetName=GND Pin=INMP401-3
+Added Pin To Net: NetName=GND Pin=INMP401-4
+Added Pin To Net: NetName=GND Pin=INMP401-6
+Added Pin To Net: NetName=GND Pin=OPA344-2
+Added Pin To Net: NetName=GND Pin=Programmer-2
+Added Pin To Net: NetName=GND Pin=R3-1
+Added Pin To Net: NetName=GND Pin=RFD22301-1
+Added Pin To Net: NetName=GND Pin=RFD22301-2
+Added Pin To Net: NetName=GND Pin=RFD22301-8
+Added Pin To Net: NetName=GND Pin=RFD22301-9
+Added Pin To Net: NetName=GND Pin=RFD22301-10
+Added Pin To Net: NetName=GND Pin=RFD22301-12
+Added Pin To Net: NetName=GND Pin=RFD22301-18
+Added Pin To Net: NetName=GND Pin=RFD22301-19
+Added Net: Name=GND
+Added Pin To Net: NetName=NetC1_2 Pin=C1-2
+Added Pin To Net: NetName=NetC1_2 Pin=R1-1
+Added Net: Name=NetC1_2
+Added Pin To Net: NetName=NetC2_2 Pin=C2-2
+Added Pin To Net: NetName=NetC2_2 Pin=OPA344-3
+Added Pin To Net: NetName=NetC2_2 Pin=R2-1
+Added Pin To Net: NetName=NetC2_2 Pin=R3-2
+Added Net: Name=NetC2_2
+Added Pin To Net: NetName=NetC3_2 Pin=C3-2
+Added Pin To Net: NetName=NetC3_2 Pin=OPA344-4
+Added Pin To Net: NetName=NetC3_2 Pin=R1-2
+Added Pin To Net: NetName=NetC3_2 Pin=R4-2
+Added Net: Name=NetC3_2
+Added Pin To Net: NetName=RESET Pin=Programmer-3
+Added Pin To Net: NetName=RESET Pin=RFD22301-14
+Added Net: Name=RESET
+Added Pin To Net: NetName=RX Pin=Programmer-4
+Added Pin To Net: NetName=RX Pin=RFD22301-17
+Added Net: Name=RX
+Added Pin To Net: NetName=TX Pin=Programmer-5
+Added Pin To Net: NetName=TX Pin=RFD22301-16
+Added Net: Name=TX
+Added Pin To Net: NetName=VCC Pin=CoinCell-3
+Added Pin To Net: NetName=VCC Pin=Programmer-1
+Added Pin To Net: NetName=VCC Pin=RFD22301-13
+Added Net: Name=VCC
+Added Pin To Net: NetName=VPWM Pin=ADXL335-14
+Added Pin To Net: NetName=VPWM Pin=ADXL335-15
+Added Pin To Net: NetName=VPWM Pin=C5-1
+Added Pin To Net: NetName=VPWM Pin=INMP401-5
+Added Pin To Net: NetName=VPWM Pin=OPA344-5
+Added Pin To Net: NetName=VPWM Pin=R2-2
+Added Pin To Net: NetName=VPWM Pin=RFD22301-3
+Added Net: Name=VPWM
+Added Pin To Net: NetName=XOUT Pin=ADXL335-12
+Added Pin To Net: NetName=XOUT Pin=C6-1
+Added Pin To Net: NetName=XOUT Pin=RFD22301-4
+Added Net: Name=XOUT
+Added Pin To Net: NetName=YOUT Pin=ADXL335-10
+Added Pin To Net: NetName=YOUT Pin=C7-1
+Added Pin To Net: NetName=YOUT Pin=RFD22301-5
+Added Net: Name=YOUT
+Added Pin To Net: NetName=ZOUT Pin=ADXL335-8
+Added Pin To Net: NetName=ZOUT Pin=C4-1
+Added Pin To Net: NetName=ZOUT Pin=RFD22301-6
+Added Net: Name=ZOUT
+Added Class: Name=PrNet_v04
+Added Room: Name=PrNet_v04
