@@ -1,0 +1,12 @@
+Added Component: Designator=ADXL335(ADXL335)
+Added Pin To Net: NetName=GND Pin=ADXL335-3
+Added Pin To Net: NetName=GND Pin=ADXL335-5
+Added Pin To Net: NetName=GND Pin=ADXL335-6
+Added Pin To Net: NetName=GND Pin=ADXL335-7
+Added Pin To Net: NetName=ZOUT Pin=ADXL335-8
+Added Pin To Net: NetName=YOUT Pin=ADXL335-10
+Added Pin To Net: NetName=XOUT Pin=ADXL335-12
+Added Pin To Net: NetName=VPWM Pin=ADXL335-14
+Added Pin To Net: NetName=VPWM Pin=ADXL335-15
+Added Member To Class: ClassName=PrNet_v04 Member=Component ADXL335 
+Added Room: Name=PrNet_v04
