@@ -1,0 +1,9 @@
+Added Component: Designator=INMP401(INMP401)
+Added Pin To Net: NetName=AOUT Pin=INMP401-1
+Added Pin To Net: NetName=GND Pin=INMP401-2
+Added Pin To Net: NetName=GND Pin=INMP401-3
+Added Pin To Net: NetName=GND Pin=INMP401-4
+Added Pin To Net: NetName=VPWM Pin=INMP401-5
+Added Pin To Net: NetName=GND Pin=INMP401-6
+Added Member To Class: ClassName=PrNet_v04 Member=Component INMP401 MEMS Mic
+Added Room: Name=PrNet_v04

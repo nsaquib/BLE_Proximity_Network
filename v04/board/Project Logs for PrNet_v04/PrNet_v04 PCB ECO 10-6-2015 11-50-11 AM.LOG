@@ -1,0 +1,8 @@
+Added Component: Designator=Prg(PrgHeader)
+Added Pin To Net: NetName=GND Pin=Prg-1
+Added Pin To Net: NetName=VCC Pin=Prg-2
+Added Pin To Net: NetName=RESET Pin=Prg-3
+Added Pin To Net: NetName=TX Pin=Prg-4
+Added Pin To Net: NetName=RX Pin=Prg-5
+Added Member To Class: ClassName=PrNet_v04 Member=Component Prg RFD programmer
+Added Room: Name=PrNet_v04
