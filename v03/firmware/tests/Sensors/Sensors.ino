@@ -5,10 +5,10 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 3
+#define MAX_DEVICES 16
 // Time range to perform data collection
-#define START_HOUR 19
-#define START_MINUTE 45
+#define START_HOUR 9
+#define START_MINUTE 0
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
@@ -52,7 +52,7 @@ int WEEKDAY = 1;
  *  8 DEVICE0
  *  ...
  */
-const int deviceID = 2;
+const int deviceID = 0;
 device_t deviceRole = (deviceID == 0) ? HOST : assignDeviceT();
 
 // Device roles, host base addresses, and device base addresses, HBA cannot be 0x55 or 0xaa
@@ -60,7 +60,7 @@ const int HBA = 0x000;
 const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 
 // Loop counters
-int hostCounter = 0;
+int hostCounter = 1;
 int deviceCounter = 0;
 
 // RSSI total and count for each device for averaging
@@ -346,7 +346,7 @@ void sleepUntilStartTime() {
 }
 
 boolean shouldBeDevice() {
-  if (hostCounter == HOST_LOOPS - 1) {
+  if (hostCounter >= HOST_LOOPS - 1) {
     Serial.println("It's time to become a DEVICE...");
     hostCounter = 0;
     return true;
@@ -358,7 +358,7 @@ boolean shouldBeDevice() {
 }
 
 boolean shouldBeHost() {
-  if (deviceCounter == DEVICE_LOOPS - 1) {
+  if (deviceCounter >= DEVICE_LOOPS - 1) {
     Serial.println("It's time to become a HOST...");
     deviceCounter = 0;
     return true;
