@@ -12,8 +12,8 @@
 #include <RFduinoGZLL.h>
 #include <PrNetRomManager.h>
 
-#define data_collection_period 10000  //10s
-#define sleep_time 10000  //60s
+#define data_collection_period 30000  //10s
+#define sleep_time 60000  //60s
 
 // RSSI total and count for each device for averaging
 int rssi_total[MAX_DEVICES];
@@ -24,6 +24,8 @@ int collect_samples = 0;
 bool sleep_flag = false;
 long loopcounter = 0;
 long rowcounter = 0;
+long timePassed = 0; // in seconds
+const long timeToRun = 300 ; // in seconds
 
 PrNetRomManager m;
 
@@ -39,71 +41,81 @@ void setup() {
 
 void loop() 
 {
-  if(loopcounter >= 10)
-  {
-    // erase any existing data in the current rom page
-    m.erasePage(STORAGE_FLASH_PAGE - m.pagecounter);
-    //write to rom memory
-    int success = m.writePage(STORAGE_FLASH_PAGE - m.pagecounter, m.table);
-    Serial.println(success);
-    loopcounter = 0;
-  }
+  if (timePassed < timeToRun) {
+    if(loopcounter >= 10)
+    {
+      // erase any existing data in the current rom page
+      m.erasePage(STORAGE_FLASH_PAGE - m.pagecounter);
+      //write to rom memory
+      int success = m.writePage(STORAGE_FLASH_PAGE - m.pagecounter, m.table);
+      Serial.println(success);
+      loopcounter = 0;
+    }
+    
+    int i;
   
-  int i;
-
-  Serial.println("beginning as host");
-  RFduinoGZLL.begin(HOST);
-  // reset the RSSI averaging for each device
-  for (i = 0; i < MAX_DEVICES; i++)
-  {
-    rssi_total[i] = 0;
-    rssi_count[i] = 0;
-  }
-
-  // start collecting RSSI samples
-  collect_samples = 1;
-
-  // wait a few seconds
-  delay(data_collection_period);
+    Serial.println("beginning as host");
+    RFduinoGZLL.begin(HOST);
+    // reset the RSSI averaging for each device
+    for (i = 0; i < MAX_DEVICES; i++)
+    {
+      rssi_total[i] = 0;
+      rssi_count[i] = 0;
+    }
   
-  // stop collecting RSSI samples
-  collect_samples = 0;
-
-  // calculate the RSSI avarages for each device
-  int average[MAX_DEVICES];
- 
-  for (i = 0; i < MAX_DEVICES; i++)
-  {
-    // no samples received, set to the lowest RSSI
-    // (also prevents divide by zero)
-    if (rssi_count[i] == 0)
-      average[i] = -128;
-    else
-      average[i] = rssi_total[i] / rssi_count[i];
-
-    // printf increases the sketch size more than Serial.println, but
-    // this is an easy way to concatenate data onto a single line
-    // (note: the newline is required with printf!)
-    printf("average RSSI for device %d is %d with %d pings\n", i, average[i], rssi_count[i]);
-  }
-  RFduinoGZLL.end();
-
-  // update rows for rom table
-  for (i = 0; i < MAX_DEVICES; i++)
-  {
-    m.table.t[i + loopcounter * MAX_DEVICES] = millis();
-    m.table.id[i + loopcounter * MAX_DEVICES] = i;
-    m.table.rsval[i + loopcounter * MAX_DEVICES] = average[i];
-  }
-
-  loopcounter++;
+    // start collecting RSSI samples
+    collect_samples = 1;
   
-  // sleep for some time
-  Serial.println("entering sleep");
-  RFduinoBLE.begin();
-  RFduino_ULPDelay(sleep_time);
-  RFduinoBLE.end();
+    // wait a few seconds
+    delay(data_collection_period);
+    
+    // stop collecting RSSI samples
+    collect_samples = 0;
   
+    // calculate the RSSI avarages for each device
+    int average[MAX_DEVICES];
+   
+    for (i = 0; i < MAX_DEVICES; i++)
+    {
+      // no samples received, set to the lowest RSSI
+      // (also prevents divide by zero)
+      if (rssi_count[i] == 0)
+        average[i] = -128;
+      else
+        average[i] = rssi_total[i] / rssi_count[i];
+  
+      // printf increases the sketch size more than Serial.println, but
+      // this is an easy way to concatenate data onto a single line
+      // (note: the newline is required with printf!)
+      printf("average RSSI for device %d is %d with %d pings\n", i, average[i], rssi_count[i]);
+    }
+    RFduinoGZLL.end();
+  
+    // update rows for rom table
+    for (i = 0; i < MAX_DEVICES; i++)
+    {
+      m.table.t[i + loopcounter * MAX_DEVICES] = millis();
+      m.table.id[i + loopcounter * MAX_DEVICES] = i;
+      m.table.rsval[i + loopcounter * MAX_DEVICES] = average[i];
+    }
+  
+    loopcounter++;
+    
+    // sleep for some time
+    Serial.println("entering sleep");
+    RFduinoBLE.begin();
+    RFduino_ULPDelay(sleep_time);
+    RFduinoBLE.end();
+  
+    timePassed += data_collection_period/1000;
+    timePassed += sleep_time/1000;
+  }
+  else {
+    Serial.println("Sleeping forever...");
+    RFduinoBLE.begin();
+    RFduino_ULPDelay(INFINITE);
+    RFduinoBLE.end();
+  }
 }
 
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len)
