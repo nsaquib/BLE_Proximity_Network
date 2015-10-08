@@ -19,7 +19,7 @@ packets were dropped.
 #define lenrec 80
 
 // send 500 20 byte buffers = 10000 bytes
-int packets = 500;
+int packets = 5;
 
 // flag used to start sending
 int flag = false;
@@ -48,39 +48,31 @@ void setup() {
   {
     value.t[i] = value.id[i] = value.rsval[i] = i*3;
   }
+  //RFduino_ULPDelay(INFINITE);
 }
 
 void RFduinoBLE_onReceive(char *data, int len)
 {
   // if the first byte is 0x01 / on / true
-  if (data[0])
+  if (!data[0])
   {
-    RFduinoBLE.send(1);
+    RFduinoBLE.send(0);
     packet = 0;
     // ch = 'A';
     start = 0;
     flag = true;
+    startTransfer();
   }
   else 
   {
-    RFduinoBLE.send(0);
-    flag = false;
+    RFduinoBLE.send(1);
+    //flag = false;
   }
 }
- 
-void loop() {
-  if (flag)
-  {
-    // generate the next packet
-    //char buf[20];
-    //for (int i = 0; i < 20; i++)
-    //{
-      //buf[i] = ch;
-      //ch++;
-      //if (ch > 'Z')
-        //ch = 'A';
-    //}
 
+void startTransfer() {
+  while (flag)
+  {
     // generate the next packet
     char buf[lenrec];
     for (int i = 0; i < lenrec; i++)
@@ -101,13 +93,19 @@ void loop() {
       int end = millis();
       float secs = (end - start) / 1000.0;
       int bps = ((packets * 20) * 8) / secs; 
-      RFduinoBLE.send("Finished", 8);
-      RFduinoBLE.send(start);
-      RFduinoBLE.send(end);
-      RFduinoBLE.send(secs);
-      RFduinoBLE.send(bps / 1000.0);
+      //RFduinoBLE.send("Finished", 8);
+      //RFduinoBLE.send(start);
+      //RFduinoBLE.send(end);
+      //RFduinoBLE.send(secs);
+      //RFduinoBLE.send(bps / 1000.0);
       //RFduinoBLE.send(2);
       flag = false;
+      RFduinoBLE.send(0);
+      RFduino_ULPDelay(INFINITE);
     }
   }
+}
+ 
+void loop() {
+  RFduino_ULPDelay(INFINITE);
 }
