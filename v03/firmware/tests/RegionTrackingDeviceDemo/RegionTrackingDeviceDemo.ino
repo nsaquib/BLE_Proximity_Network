@@ -9,7 +9,7 @@
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
 
-#define sleep_time 6000
+#define sleep_time 2000
 
 device_t role = DEVICE0;
 
@@ -29,6 +29,8 @@ void setup()
 
   RFduinoGZLL.txPowerLevel = 4;
 
+  RFduinoGZLL.begin(role);
+
 }
 
 void loop()
@@ -36,12 +38,20 @@ void loop()
   
   ///*
 
-  RFduinoBLE.begin();
-  RFduino_ULPDelay(sleep_time);
-  RFduinoBLE.end();
+  //RFduinoBLE.begin();
+  //RFduino_ULPDelay(sleep_time);
+  //RFduinoBLE.end();
 
+  delay(sleep_time);
+  //pollHost(role);
 
-  pollHost(role);
+  
+  
+  RFduinoGZLL.sendToHost(NULL, 0);
+
+  //delay(200);
+
+  //RFduinoGZLL.end();
 
 /*
   RFduinoGZLL.hostBaseAddress = 0x12345677;
