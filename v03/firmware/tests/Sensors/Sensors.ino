@@ -5,10 +5,10 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 2
+#define MAX_DEVICES 3
 // Time range to perform data collection
-#define START_HOUR 19
-#define START_MINUTE 18
+#define START_HOUR 9
+#define START_MINUTE 0
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
@@ -31,7 +31,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 1;
+const int deviceID = 2;
 
 // Device loops
 const int DEVICE_LOOPS = floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME)));
@@ -396,8 +396,8 @@ device_t assignDeviceT() {
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   // Ignore device if outside range, should never occur
   // If collecting samples, update the RSSI total and count
-  if (deviceRole == HOST && collectSamples) {
-    rssiTotal[data[0]] += rssi;
-    rssiCount[data[0]]++;
+  if (deviceRole == HOST && collectSamples && (int) data[0] >= 0 && (int) data[0] < MAX_DEVICES) {
+    rssiTotal[(int)data[0]] += rssi;
+    rssiCount[(int)data[0]]++;
   }
 }

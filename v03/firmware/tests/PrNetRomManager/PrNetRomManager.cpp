@@ -13,6 +13,7 @@ PrNetRomManager::PrNetRomManager()
   //pagecounter = 0;
   //pinMode(pin, OUTPUT);
   //_pin = pin;
+  pagecounter = 0;
 }
 
 void PrNetRomManager::printPage(int page)
@@ -23,7 +24,16 @@ void PrNetRomManager::printPage(int page)
 
 int PrNetRomManager::erasePage(int page)
 {
-  return flashPageErase(page);
+  int rc = flashPageErase(page);
+  if (rc == 0)
+  {
+    //pagecounter--;
+    return 0;
+  }
+  else
+  {
+    return rc;
+  }
 }
 
 int PrNetRomManager::writePage(int page, struct data_t values)
