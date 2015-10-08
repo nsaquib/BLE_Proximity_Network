@@ -12,7 +12,7 @@
 #include <RFduinoGZLL.h>
 #include <PrNetRomManager.h>
 
-#define data_collection_period 30000  //10s
+#define data_collection_period 30000  //30s
 #define sleep_time 60000  //60s
 
 // RSSI total and count for each device for averaging
@@ -25,7 +25,7 @@ bool sleep_flag = false;
 long loopcounter = 0;
 long rowcounter = 0;
 long timePassed = 0; // in seconds
-const long timeToRun = 300 ; // in seconds
+const long timeToRun = 10800; // in seconds
 
 PrNetRomManager m;
 
