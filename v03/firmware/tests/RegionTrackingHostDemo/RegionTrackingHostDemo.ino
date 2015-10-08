@@ -13,7 +13,7 @@
 #include <PrNetRomManager.h>
 
 #define data_collection_period 10000  //10s
-#define sleep_time 60000  //60s
+#define sleep_time 10000  //60s
 
 // RSSI total and count for each device for averaging
 int rssi_total[MAX_DEVICES];
@@ -29,7 +29,7 @@ PrNetRomManager m;
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(57600);
+  Serial.begin(9600);
   
   // start the GZLL stack
   //RFduinoGZLL.begin(HOST);
@@ -82,7 +82,7 @@ void loop()
     // printf increases the sketch size more than Serial.println, but
     // this is an easy way to concatenate data onto a single line
     // (note: the newline is required with printf!)
-    printf("average RSSI for device %d is %d\n", i, average[i]);
+    printf("average RSSI for device %d is %d with %d pings\n", i, average[i], rssi_count[i]);
   }
   RFduinoGZLL.end();
 
