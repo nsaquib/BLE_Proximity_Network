@@ -9,7 +9,7 @@
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
 
-#define sleep_time 2000
+#define sleep_time 5000
 
 device_t role = DEVICE0;
 
