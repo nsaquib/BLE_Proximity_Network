@@ -41,6 +41,8 @@ void loop()
 {
   if(loopcounter >= 10)
   {
+    // erase any existing data in the current rom page
+    m.erasePage(STORAGE_FLASH_PAGE - m.pagecounter);
     //write to rom memory
     int success = m.writePage(STORAGE_FLASH_PAGE - m.pagecounter, m.table);
     Serial.println(success);
