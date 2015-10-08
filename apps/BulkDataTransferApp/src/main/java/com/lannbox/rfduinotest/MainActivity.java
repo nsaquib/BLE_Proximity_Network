@@ -161,7 +161,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         sendZeroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rfduinoService.send(new byte[]{1});
+                rfduinoService.send(new byte[]{0});
             }
         });
 
@@ -169,7 +169,12 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         sendValueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rfduinoService.send(new byte[]{0});
+                int dateInSec = (int) (System.currentTimeMillis() / 1000);
+                byte[] bytes = java.nio.ByteBuffer.allocate(4).putInt(dateInSec).array();
+                android.util.Log.e("sending time", Integer.toString(dateInSec));
+                rfduinoService.send(bytes);
+                //rfduinoService.send(new byte[]{2});
+                addData(bytes);
                 writeData(data_to_write);
             }
         });

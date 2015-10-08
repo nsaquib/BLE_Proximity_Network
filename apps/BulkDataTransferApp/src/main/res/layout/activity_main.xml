@@ -117,7 +117,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stop Transfer"
+                android:text="Send Time"
                 android:id="@+id/sendValue"
                 android:layout_weight="1"
                 android:enabled="false" />
