@@ -12,8 +12,8 @@
 #include <RFduinoGZLL.h>
 #include <PrNetRomManager.h>
 
-#define data_collection_period 30000  //30s
-#define sleep_time 60000  //60s
+#define data_collection_period 10000
+#define sleep_time 10000
 
 // RSSI total and count for each device for averaging
 int rssi_total[MAX_DEVICES];
@@ -25,8 +25,7 @@ bool sleep_flag = false;
 long loopcounter = 0;
 long rowcounter = 0;
 long timePassed = 0; // in seconds
-const long timeToRun = 10800; // in seconds
-const int HBA = 0x000;
+const long timeToRun = 14400; // in seconds
 
 PrNetRomManager m;
 
@@ -56,7 +55,6 @@ void loop()
     int i;
   
     Serial.println("beginning as host");
-    RFduino.hostBaseAddress = HBA;
     RFduinoGZLL.begin(HOST);
     // reset the RSSI averaging for each device
     for (i = 0; i < MAX_DEVICES; i++)
@@ -113,6 +111,7 @@ void loop()
     timePassed += sleep_time/1000;
   }
   else {
+    delay(10000);
     Serial.println("Sleeping forever...");
     RFduinoBLE.begin();
     RFduino_ULPDelay(INFINITE);
