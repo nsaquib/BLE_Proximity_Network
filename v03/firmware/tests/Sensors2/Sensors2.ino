@@ -7,12 +7,12 @@
 // Maximum devices in network
 #define MAX_DEVICES 3
 // Time range to perform data collection
-#define START_HOUR 17
-#define START_MINUTE 10
+#define START_HOUR 9
+#define START_MINUTE 0
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
-#define HOST_LOOP_TIME 1000
+#define HOST_LOOP_TIME 10000
 #define HOST_LOOPS 1
 // Device time
 #define DEVICE_LOOP_TIME 200
@@ -33,8 +33,14 @@
  */
 const int deviceID = 0;
 
+// Device roles, host base addresses, and device base addresses, HBA cannot be 0x55 or 0xaa
+const int HBAs[] = {0x000, 0x001, 0x002}; //0x002, 0x003, 0x004, 0x005, 0x006, 0x007};
+const int HOSTS = sizeof(HBAs)/sizeof(*HBAs);
+device_t deviceRole = HOST; //(deviceID == 0) ? HOST : assignDeviceT(); 
+const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
+
 // Device loops
-const int DEVICE_LOOPS = floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME)));
+const int DEVICE_LOOPS = floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME*HOSTS)));
 
 // Serialized time from Python script
 struct timer {
@@ -49,11 +55,6 @@ int DAY = 10;
 int MONTH = 10;
 int YEAR = 15;
 int WEEKDAY = 7;
-
-// Device roles, host base addresses, and device base addresses, HBA cannot be 0x55 or 0xaa
-const int HBA = 0x000;
-device_t deviceRole = HOST; //(deviceID == 0) ? HOST : assignDeviceT(); 
-const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 
 // Loop counters
 int hostCounter = 0;
@@ -74,8 +75,6 @@ void setup() {
   pinMode(greenLED, OUTPUT);
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 4;
-  // Set host base address
-  RFduinoGZLL.hostBaseAddress = HBA;
   // Advertise for 4 seconds in BLE mode
   //RFduinoBLE.advertisementInterval = 4000;
   // Start the serial monitor
@@ -92,6 +91,7 @@ void setup() {
 
 void setupHost() {
   RFduinoGZLL.end();
+  RFduinoGZLL.hostBaseAddress = HBAs[(int) floor(deviceID/8)];
   RFduinoGZLL.begin(deviceRole);
 }
 
@@ -104,7 +104,7 @@ void loop() {
   displayClockTime();
   // Time is not set
   if (!timeIsSet()) {
-    Serial.println("Setting time...");
+    Serial.println("Now setting time...");
     setTimer();
   }
   // Time is  set
@@ -129,7 +129,7 @@ void loopHost() {
   if (inDataCollectionPeriod()) {
     // Start GZZL stack from wake cycle
     RFduinoGZLL.end();
-    RFduinoGZLL.hostBaseAddress = HBA;
+    RFduinoGZLL.hostBaseAddress = HBAs[(int) floor(deviceID/8)];
     RFduinoGZLL.begin(HOST);
     int i;
     // Reset the RSSI averaging for each device
@@ -173,19 +173,27 @@ void loopDevice() {
     // Sleep device
     //sleepDevice();
     // Send data to all other hosts
-    pollHost();
+    pollAllHosts();
     if (shouldBeHost()) {
       switchToHost();
     }
   }
 }
 
-void pollHost() {
+void pollAllHosts() {
+  int i;
+  for (i = 0; i < HOSTS; i++) {
+    pollHost(HBAs[i]);
+  }
+}
+
+void pollHost(int hostAddr) {
   // Only a device can poll the host
   if (deviceRole != HOST) {
     // Send deviceID to host
-    timeDelay(DEVICE_LOOP_TIME);
+    RFduinoGZLL.hostBaseAddress = hostAddr;
     RFduinoGZLL.sendToHost(deviceID);
+    timeDelay(DEVICE_LOOP_TIME);
   }
 }
 
@@ -397,9 +405,9 @@ device_t assignDeviceT() {
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   // Ignore device if outside range, should never occur
   // If collecting samples, update the RSSI total and count
-  Serial.print(device);
-  Serial.print(" ");
-  Serial.println((int) data[0]);
+  //Serial.print(device);
+  //Serial.print(" ");
+  //Serial.println((int) data[0]);
   if (deviceRole == HOST && collectSamples && (int) data[0] >= 0 && (int) data[0] < MAX_DEVICES) {
     rssiTotal[(int) data[0]] += rssi;
     rssiCount[(int) data[0]]++;
