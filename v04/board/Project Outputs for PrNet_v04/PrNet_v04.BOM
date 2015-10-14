@@ -1,0 +1,18 @@
+Bill of Material for 
+On 10/13/2015 at 4:38:32 PM
+
+ Comment             Pattern     Quantity  Components
+------------------------------------------------------------------------------
+                     ADXL335          1    ADXL335                                           
+                     CoinCell         1    CoinCell                                          
+ 0.1uF               CAPC1005L        4    C4, C5, C6, C7               Capacitor (Semiconductor SIM Model) 
+ 1.0uF               CAPC1005L        1    C2                           Capacitor (Semiconductor SIM Model) 
+ 1.5K                RESC1005L        1    R1                           Resistor             
+ 100K                RESC1005L        1    R4                           Resistor             
+ 100pF               CAPC1005L        1    C3                           Capacitor (Semiconductor SIM Model) 
+ 10K                 RESC1005L        2    R2, R3                       Resistor             
+ 4.7uF               CAPC1005L        1    C1                           Capacitor (Semiconductor SIM Model) 
+ MEMS Mic            INMP401          1    INMP401                                           
+ OPA344              SOT23_5          1    OPA344                                            
+ RFD programmer      PrgHeader        1    Prg                                               
+ RFD22301 module     RFD22301         1    RFD22301                                          

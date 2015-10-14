@@ -1,0 +1,9 @@
+Change Component Comment : Designator=ADXL335 Old Comment= New Comment=ADXL335 accelerometer
+Change Component Comment : Designator=INMP401 Old Comment=MEMS Mic New Comment=INMP401, MEMS Microphone
+Change Component Comment : Designator=OPA344 Old Comment=OPA344 New Comment=OPA344 op-amp, TI
+Change Component Comment : Designator=RFD22301 Old Comment=RFD22301 module New Comment=RFD22301 SMT module, 0.6"x0.6"
+Change Component Designator: OldDesignator=ADXL335 NewDesignator=U2
+Change Component Designator: OldDesignator=INMP401 NewDesignator=U4
+Change Component Designator: OldDesignator=OPA344 NewDesignator=U3
+Change Component Designator: OldDesignator=RFD22301 NewDesignator=U1
+Added Room: Name=PrNet_v04
