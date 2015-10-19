@@ -18,8 +18,12 @@ PrNetRomManager::PrNetRomManager()
 
 void PrNetRomManager::printPage(int page)
 {
+  Serial.println(page);
   data_t *p = (data_t*)ADDRESS_OF_PAGE(page);
-  Serial.println(p->t[lenrec-1]);
+  for(int i = 0; i < lenrec; i++)
+  {
+    printf("%d,%d,%d\n",p->t[i],p->id[i],p->rsval[i]);
+  }
 }
 
 int PrNetRomManager::erasePage(int page)

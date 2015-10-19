@@ -11,8 +11,10 @@
 
 #define sleep_time 5000
 
-device_t role = DEVICE1;
-const int HBAs[] = {0x000, 0x001, 0x002}; //0x002, 0x003, 0x004, 0x005, 0x006, 0x007};
+const int deviceID = 0;
+
+device_t role = DEVICE0;
+const int HBAs[] = {0x000, 0x001, 0x002, 0x003, 0x004, 0x005}; //0x002, 0x003, 0x004, 0x005, 0x006, 0x007};
 const int HOSTS = sizeof(HBAs)/sizeof(*HBAs);
 
 // pin for the Green Led
@@ -25,8 +27,9 @@ void setup() {
 }
 
 void loop() {
-  delay(sleep_time);
-  RFduinoGZLL.sendToHost(NULL, 0);
+  //delay(sleep_time);
+  //RFduinoGZLL.sendToHost(NULL, 0);
+  pollAllHosts();
 }
 
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
