@@ -15,19 +15,38 @@
 #define data_collection_period 10000
 #define sleep_time 10000
 
+// change the host addresses to match the device host base addresses
+#define hostAddr 0x000
+
+// what name the device shows up in the app
+#define ble_name "host0"
+
 // RSSI total and count for each device for averaging
 int rssi_total[MAX_DEVICES];
 int rssi_count[MAX_DEVICES];
 
 // collect samples flag
 int collect_samples = 0;
-bool sleep_flag = false;
+bool ble_setup_flag = false;
 long loopcounter = 0;
 long rowcounter = 0;
 long timePassed = 0; // in seconds
 const long timeToRun = 14400; // in seconds
 
-PrNetRomManager m;
+PrNetRomManager m;  //for writing to flash ROM
+PrNetRomManager m2; // for reading and sending through BLE
+
+// send to phone vars
+// flag used to start sending
+int flag = false;
+
+// variables used in packet generation
+int ch;
+int packet;
+
+// 1K page with 12 bytes rows and 80 rows = 960 bytes.
+// so each 1K page has 960/20 = 48 packets.
+int packets = 48;
 
 void setup() {
   // put your setup code here, to run once:
@@ -35,6 +54,7 @@ void setup() {
   
   // start the GZLL stack
   //RFduinoGZLL.begin(HOST);
+  RFduinoGZLL.hostBaseAddress = hostAddr;
 
   //m.
 }
@@ -113,6 +133,15 @@ void loop()
   else {
     delay(10000);
     Serial.println("Sleeping forever...");
+    if(ble_setup_flag == true) {
+      loopBLE(false);
+    }
+    else {
+      ble_setup_flag = true;
+      loopBLE(true);
+    }
+    
+    
     RFduinoBLE.begin();
     RFduino_ULPDelay(INFINITE);
     RFduinoBLE.end();
@@ -135,3 +164,70 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len)
   // piggyback max_device on the acknowledgement sent back to the requesting Device
   //RFduinoGZLL.sendToDevice(device, closest_device);
 }
+
+void RFduinoBLE_onReceive(char *data, int len)
+{
+  // if the first byte is 0x01 / on / true
+  if (!data[0])
+  {
+    RFduinoBLE.send(0);
+    packet = 0;
+    // ch = 'A';
+    start = 0;
+    flag = true;
+    startTransfer();
+  }
+  else 
+  {
+    RFduinoBLE.send(1);
+    //flag = false;
+  }
+}
+
+void startTransfer() {
+  while (flag)
+  {
+    // generate the next packet
+    char buf[lenrec];
+    for (int i = 0; i < lenrec; i++)
+    {
+      buf[i] = value.t[i];
+    }
+    
+    // send is queued (the ble stack delays send to the start of the next tx window)
+    while (! RFduinoBLE.send(buf, 20))
+      ;  // all tx buffers in use (can't send - try again later)
+
+    if (! start)
+      start = millis();
+
+    packet++;
+    if (packet >= packets)
+    {
+      int end = millis();
+      float secs = (end - start) / 1000.0;
+      int bps = ((packets * 20) * 8) / secs; 
+      //RFduinoBLE.send("Finished", 8);
+      //RFduinoBLE.send(start);
+      //RFduinoBLE.send(end);
+      //RFduinoBLE.send(secs);
+      //RFduinoBLE.send(bps / 1000.0);
+      //RFduinoBLE.send(2);
+      flag = false;
+      RFduinoBLE.send(0);
+      RFduino_ULPDelay(INFINITE);
+    }
+  }
+}
+
+void loopBLE(bool setup_flag)
+{
+  // this loop is activated when we enter the power conservation mode
+  if(setup_flag == true) {
+     RFduinoBLE.advertisementData = "h"; // shouldnt be more than 10 characters long
+     RFduinoBLE.deviceName = ble_name;  //  name of your RFduino. Will appear when other BLE enabled devices search for it
+     RFduinoBLE.begin(); // begin
+     packets = 48 * m.pagecounter;
+  }
+}
+
