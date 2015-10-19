@@ -1,0 +1,18 @@
+---------------------------------------------------------------------------
+NCDrill File Report For: PrNet_v04_panel.PcbDoc   10/16/2015  2:23:12 PM
+---------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : PrNet_v04_panel.TXT
+
+Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
+---------------------------------------------------------------------------
+T1        13mil (0.3302mm)         Round          5                4.00 Inch (101.60 mm)
+T2        17mil (0.4318mm)         Round          40               11.43 Inch (290.21 mm)
+T3        27.6mil (0.70104mm)      Round          25               4.40 Inch (111.76 mm)
+T4        28mil (0.7112mm)         Round          15               8.87 Inch (225.28 mm)
+T5        23.6mil (0.59944mm)      Round          5         NPTH   4.00 Inch (101.60 mm)
+---------------------------------------------------------------------------
+Totals                                            90               32.70 Inch (830.46 mm)
+
+Total Processing Time (hh:mm:ss) : 00:00:00
