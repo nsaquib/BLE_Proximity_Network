@@ -7,12 +7,12 @@
 // Maximum devices in network
 #define MAX_DEVICES 2
 // Time range to perform data collection
-#define START_HOUR 17
+#define START_HOUR 18
 #define START_MINUTE 15
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
-#define HOST_LOOP_TIME 10000
+#define HOST_LOOP_TIME 5000
 #define HOST_LOOPS 1
 // Device time
 #define DEVICE_LOOP_TIME 200
@@ -31,7 +31,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 0;
+const int deviceID = 1;
 
 // Device loops
 const int DEVICE_LOOPS = floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME)));
@@ -101,7 +101,6 @@ void setupDevice() {
 }
 
 void loop() {
-  displayClockTime();
   // Time is not set
   if (!timeIsSet()) {
     Serial.println("Setting time...");
@@ -125,6 +124,7 @@ void loop() {
 }
 
 void loopHost() {
+  displayClockTime();
   //Serial.println("Loop Host");
   if (inDataCollectionPeriod()) {
     // Start GZZL stack from wake cycle
@@ -404,11 +404,13 @@ device_t assignDeviceT() {
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   // Ignore device if outside range, should never occur
   // If collecting samples, update the RSSI total and count
-  //Serial.print(device);
-  //Serial.print(" ");
-  //Serial.println((int) data[0]);
   if (deviceRole == HOST && collectSamples && (int) data[0] >= 0 && (int) data[0] < MAX_DEVICES) {
     rssiTotal[(int) data[0]] += rssi;
     rssiCount[(int) data[0]]++;
+    Serial.print(device);
+    Serial.print("-");
+    Serial.print(data[0]);
+    Serial.print("-");
+    Serial.println((int) data[0]);
   }
 }
