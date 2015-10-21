@@ -7,10 +7,10 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 15
+#define MAX_DEVICES 2
 // Time range to perform data collection
 #define START_HOUR 19
-#define START_MINUTE 14
+#define START_MINUTE 30
 #define END_HOUR 12
 #define END_MINUTE 0
 // Host time
