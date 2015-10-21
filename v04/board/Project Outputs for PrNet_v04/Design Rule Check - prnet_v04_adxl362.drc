@@ -1,0 +1,122 @@
+Protel Design System Design Rule Check
+PCB File : D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc
+Date     : 10/21/2015
+Time     : 3:29:02 PM
+
+Processing Rule : Minimum Annular Ring (Minimum=7mil) (All)
+Rule Violations :0
+
+Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
+Rule Violations :0
+
+Processing Rule : Net Antennae (Tolerance=0mil) (All)
+Rule Violations :0
+
+Processing Rule : Silk primitive without silk layer
+Rule Violations :0
+
+Processing Rule : Silk to Silk (Clearance=10mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk To Solder Mask (Clearance=7mil) (IsPad),(All)
+   Violation between Track (3758.418mil,2105.402mil)(3758.418mil,2115.402mil)  Top Overlay and 
+                     Pad U12-1(3748.574mil,2125.402mil)  Top Layer
+   Violation between Track (3758.418mil,2214.614mil)(3758.418mil,2224.456mil)  Top Overlay and 
+                     Pad U12-5(3748.574mil,2204.772mil)  Top Layer
+   Violation between Track (3724.952mil,2224.456mil)(3758.418mil,2224.456mil)  Top Overlay and 
+                     Pad U12-6(3715.11mil,2215.598mil)  Top Layer
+   Violation between Track (3632.426mil,2224.456mil)(3665.426mil,2224.456mil)  Top Overlay and 
+                     Pad U12-8(3675.426mil,2215.598mil)  Top Layer
+   Violation between Track (3632.426mil,2214.614mil)(3632.426mil,2224.456mil)  Top Overlay and 
+                     Pad U12-9(3641.426mil,2204.772mil)  Top Layer
+   Violation between Track (3632.426mil,2105.402mil)(3632.426mil,2115.402mil)  Top Overlay and 
+                     Pad U12-13(3641.426mil,2125.402mil)  Top Layer
+   Violation between Track (3632.426mil,2105.402mil)(3665.426mil,2105.402mil)  Top Overlay and 
+                     Pad U12-14(3675.426mil,2114.402mil)  Top Layer
+   Violation between Track (3724.952mil,2105.402mil)(3758.418mil,2105.402mil)  Top Overlay and 
+                     Pad U12-16(3715.11mil,2114.402mil)  Top Layer
+   Violation between Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay and 
+                     Pad U13-1(3420mil,2820mil)  Top Layer
+   Violation between Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay and 
+                     Pad U13-2(3420mil,2770mil)  Top Layer
+   Violation between Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay and 
+                     Pad U13-3(3420mil,2720mil)  Top Layer
+   Violation between Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay and 
+                     Pad U13-6(3420mil,2570mil)  Top Layer
+   Violation between Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay and 
+                     Pad U13-5(3420mil,2620mil)  Top Layer
+   Violation between Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay and 
+                     Pad U13-4(3420mil,2670mil)  Top Layer
+   Violation between Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay and 
+                     Pad U13-7(3420mil,2520mil)  Top Layer
+   Violation between Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay and 
+                     Pad U13-8(3420mil,2470mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-12(3950mil,2470mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-13(3950mil,2520mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-16(3950mil,2670mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-15(3950mil,2620mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-14(3950mil,2570mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-17(3950mil,2720mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-18(3950mil,2770mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-19(3950mil,2820mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-11(3950mil,2420mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-10(3950mil,2370mil)  Top Layer
+   Violation between Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay and 
+                     Pad U13-9(3950mil,2320mil)  Top Layer
+Rule Violations :27
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=6mil) (All),(All)
+   Violation between Pad U12-4(3748.574mil,2185.086mil)  Top Layer and 
+                     Pad U12-3(3748.574mil,2165.402mil)  Top Layer
+   Violation between Pad U12-5(3748.574mil,2204.772mil)  Top Layer and 
+                     Pad U12-4(3748.574mil,2185.086mil)  Top Layer
+   Violation between Pad U12-7(3695.426mil,2215.598mil)  Top Layer and 
+                     Pad U12-6(3715.11mil,2215.598mil)  Top Layer
+   Violation between Pad U12-10(3641.426mil,2185.086mil)  Top Layer and 
+                     Pad U12-9(3641.426mil,2204.772mil)  Top Layer
+   Violation between Pad U12-11(3641.426mil,2165.402mil)  Top Layer and 
+                     Pad U12-10(3641.426mil,2185.086mil)  Top Layer
+   Violation between Pad U12-16(3715.11mil,2114.402mil)  Top Layer and 
+                     Pad U12-15(3695.426mil,2114.402mil)  Top Layer
+Rule Violations :6
+
+Processing Rule : Hole To Hole Clearance (Gap=10mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=13mil) (Max=100mil) (All)
+Rule Violations :0
+
+Processing Rule : Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=10mil) (Max=10mil) (Preferred=10mil) (All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=7mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+   Violation between Un-Routed Net Constraint: Net VCC Between Track on layer Top Layer (3875,2520mil) And Track on layer Top Layer (3909.598,2125.402mil)
+   Violation between Un-Routed Net Constraint: Net GND Between Pad U13-8 (3420,2470mil) And Pad U10-2 (3665,2480mil)
+   Violation between Un-Routed Net Constraint: Net GND Between Pad U13-8 (3420,2470mil) And Pad U13-2 (3420,2770mil)
+Rule Violations :3
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+Rule Violations :0
+
+
+Violations Detected : 36
+Time Elapsed        : 00:00:01

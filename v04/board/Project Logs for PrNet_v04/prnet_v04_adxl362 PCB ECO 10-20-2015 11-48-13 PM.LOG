@@ -1,0 +1,62 @@
+Added Component: Designator=CoinCell(CoinCell)
+Added Component: Designator=Prg(PrgHeader)
+Added Component: Designator=U10(CoinCell)
+Added Component: Designator=U11(PrgHeader)
+Added Component: Designator=U12(ADXL362)
+Added Component: Designator=U13(RFD22301)
+Added Pin To Net: NetName=CS Pin=U12-8
+Added Pin To Net: NetName=CS Pin=U13-7
+Added Net: Name=CS
+Added Pin To Net: NetName=GND Pin=CoinCell-2
+Added Pin To Net: NetName=GND Pin=Prg-1
+Added Pin To Net: NetName=GND Pin=U10-2
+Added Pin To Net: NetName=GND Pin=U11-1
+Added Pin To Net: NetName=GND Pin=U12-12
+Added Pin To Net: NetName=GND Pin=U12-13
+Added Pin To Net: NetName=GND Pin=U12-16
+Added Pin To Net: NetName=GND Pin=U13-1
+Added Pin To Net: NetName=GND Pin=U13-2
+Added Pin To Net: NetName=GND Pin=U13-8
+Added Pin To Net: NetName=GND Pin=U13-9
+Added Pin To Net: NetName=GND Pin=U13-10
+Added Pin To Net: NetName=GND Pin=U13-12
+Added Pin To Net: NetName=GND Pin=U13-18
+Added Pin To Net: NetName=GND Pin=U13-19
+Added Net: Name=GND
+Added Pin To Net: NetName=INT1 Pin=U12-11
+Added Pin To Net: NetName=INT1 Pin=U13-3
+Added Net: Name=INT1
+Added Pin To Net: NetName=INT2 Pin=U12-9
+Added Net: Name=INT2
+Added Pin To Net: NetName=MISO Pin=U12-7
+Added Pin To Net: NetName=MISO Pin=U13-4
+Added Net: Name=MISO
+Added Pin To Net: NetName=MOSI Pin=U12-6
+Added Pin To Net: NetName=MOSI Pin=U13-6
+Added Net: Name=MOSI
+Added Pin To Net: NetName=RESET Pin=Prg-3
+Added Pin To Net: NetName=RESET Pin=U11-3
+Added Pin To Net: NetName=RESET Pin=U13-14
+Added Net: Name=RESET
+Added Pin To Net: NetName=RX Pin=Prg-5
+Added Pin To Net: NetName=RX Pin=U11-5
+Added Pin To Net: NetName=RX Pin=U13-17
+Added Net: Name=RX
+Added Pin To Net: NetName=SCLK Pin=U12-4
+Added Pin To Net: NetName=SCLK Pin=U13-5
+Added Net: Name=SCLK
+Added Pin To Net: NetName=TX Pin=Prg-4
+Added Pin To Net: NetName=TX Pin=U11-4
+Added Pin To Net: NetName=TX Pin=U13-16
+Added Net: Name=TX
+Added Pin To Net: NetName=VCC Pin=CoinCell-3
+Added Pin To Net: NetName=VCC Pin=Prg-2
+Added Pin To Net: NetName=VCC Pin=U10-3
+Added Pin To Net: NetName=VCC Pin=U11-2
+Added Pin To Net: NetName=VCC Pin=U12-1
+Added Pin To Net: NetName=VCC Pin=U12-14
+Added Pin To Net: NetName=VCC Pin=U13-13
+Added Net: Name=VCC
+Added Class: Name=prnet_v04_adxl362
+Added Room: Name=PrNet_v04
+Added Room: Name=prnet_v04_adxl362
