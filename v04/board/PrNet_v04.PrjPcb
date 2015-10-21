@@ -444,143 +444,283 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
+[Document25]
+DocumentPath=prnet_v04_adxl362.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=BINLUDYE
+
+[Document26]
+DocumentPath=prnet_v04_adxl362.PcbDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=DDJLUMIN
+
+[Document27]
+DocumentPath=prnet_v04_adxl362.cam
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document28]
+DocumentPath=prnet_v04_adxl362_drills.cam
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
 [GeneratedDocument1]
 DocumentPath=Project Outputs for PrNet_v04\Design Rule Check - PrNet_v04.html
 DItemRevisionGUID=
 
 [GeneratedDocument2]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.BOM
+DocumentPath=Project Outputs for PrNet_v04\Design Rule Check - prnet_v04_adxl362.html
 DItemRevisionGUID=
 
 [GeneratedDocument3]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.CSV
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.BOM
 DItemRevisionGUID=
 
 [GeneratedDocument4]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.DRR
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.CSV
 DItemRevisionGUID=
 
 [GeneratedDocument5]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.EXTREP
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.DRR
 DItemRevisionGUID=
 
 [GeneratedDocument6]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GBL
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.EXTREP
 DItemRevisionGUID=
 
 [GeneratedDocument7]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GBO
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GBL
 DItemRevisionGUID=
 
 [GeneratedDocument8]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GBP
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GBO
 DItemRevisionGUID=
 
 [GeneratedDocument9]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GBS
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GBP
 DItemRevisionGUID=
 
 [GeneratedDocument10]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GKO
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GBS
 DItemRevisionGUID=
 
 [GeneratedDocument11]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GTL
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GKO
 DItemRevisionGUID=
 
 [GeneratedDocument12]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GTO
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GTL
 DItemRevisionGUID=
 
 [GeneratedDocument13]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GTP
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GTO
 DItemRevisionGUID=
 
 [GeneratedDocument14]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GTS
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GTP
 DItemRevisionGUID=
 
 [GeneratedDocument15]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.LDP
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.GTS
 DItemRevisionGUID=
 
 [GeneratedDocument16]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.REP
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.LDP
 DItemRevisionGUID=
 
 [GeneratedDocument17]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.RUL
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.REP
 DItemRevisionGUID=
 
 [GeneratedDocument18]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.TXT
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.RUL
 DItemRevisionGUID=
 
 [GeneratedDocument19]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.DRR
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument20]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.EXTREP
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.DRR
 DItemRevisionGUID=
 
 [GeneratedDocument21]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GBL
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.EXTREP
 DItemRevisionGUID=
 
 [GeneratedDocument22]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GBO
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GBL
 DItemRevisionGUID=
 
 [GeneratedDocument23]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GBP
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GBO
 DItemRevisionGUID=
 
 [GeneratedDocument24]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GBS
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GBP
 DItemRevisionGUID=
 
 [GeneratedDocument25]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GD1
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GBS
 DItemRevisionGUID=
 
 [GeneratedDocument26]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GG1
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GD1
 DItemRevisionGUID=
 
 [GeneratedDocument27]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GKO
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GG1
 DItemRevisionGUID=
 
 [GeneratedDocument28]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GTL
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GKO
 DItemRevisionGUID=
 
 [GeneratedDocument29]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GTO
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GTL
 DItemRevisionGUID=
 
 [GeneratedDocument30]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GTP
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GTO
 DItemRevisionGUID=
 
 [GeneratedDocument31]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GTS
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GTP
 DItemRevisionGUID=
 
 [GeneratedDocument32]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.LDP
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.GTS
 DItemRevisionGUID=
 
 [GeneratedDocument33]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.REP
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.LDP
 DItemRevisionGUID=
 
 [GeneratedDocument34]
-DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.RUL
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.REP
 DItemRevisionGUID=
 
 [GeneratedDocument35]
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.RUL
+DItemRevisionGUID=
+
+[GeneratedDocument36]
+DocumentPath=Project Outputs for PrNet_v04\prnet_v04_adxl362.TXT
+DItemRevisionGUID=
+
+[GeneratedDocument37]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.DRR
+DItemRevisionGUID=
+
+[GeneratedDocument38]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.EXTREP
+DItemRevisionGUID=
+
+[GeneratedDocument39]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GBL
+DItemRevisionGUID=
+
+[GeneratedDocument40]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GBO
+DItemRevisionGUID=
+
+[GeneratedDocument41]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GBP
+DItemRevisionGUID=
+
+[GeneratedDocument42]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GBS
+DItemRevisionGUID=
+
+[GeneratedDocument43]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GD1
+DItemRevisionGUID=
+
+[GeneratedDocument44]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GG1
+DItemRevisionGUID=
+
+[GeneratedDocument45]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GKO
+DItemRevisionGUID=
+
+[GeneratedDocument46]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GTL
+DItemRevisionGUID=
+
+[GeneratedDocument47]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GTO
+DItemRevisionGUID=
+
+[GeneratedDocument48]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GTP
+DItemRevisionGUID=
+
+[GeneratedDocument49]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.GTS
+DItemRevisionGUID=
+
+[GeneratedDocument50]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.LDP
+DItemRevisionGUID=
+
+[GeneratedDocument51]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.REP
+DItemRevisionGUID=
+
+[GeneratedDocument52]
+DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.RUL
+DItemRevisionGUID=
+
+[GeneratedDocument53]
 DocumentPath=Project Outputs for PrNet_v04\PrNet_v04_panel.TXT
 DItemRevisionGUID=
 

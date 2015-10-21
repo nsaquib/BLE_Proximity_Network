@@ -1,0 +1,497 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : sans-serif;
+			color : white;
+			background-color : #21489e;
+			padding: 0.3em;
+		}
+		body {
+			font-family : verdana;
+		}
+		td, th {
+			padding: 0.5em;
+			text-align : center;
+			width : 18%;
+		}
+		th {
+			background-color : #A6CAF0;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+		}
+		
+		.DRC_summary_header {							
+			padding-bottom : 0.1em;
+			border : 0px solid black;							
+			width: 100%;
+                        align: right;
+                        
+		}
+
+		.DRC_summary_header_col1, 
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3
+		{
+			color : black;
+			font-size:150%;
+                        padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2: 0em;
+			border : 0px solid black;
+			width : auto;
+			vertical-align: top;
+			font-weight: bold;				
+		}
+		
+		.DRC_summary_header_col1 	
+		{		                       
+			text-align: right;
+                        width: auto;	
+		}
+
+		.DRC_summary_header_col2 	
+		{		
+			text-align: center;	
+		}
+
+		.DRC_summary_header_col3 	
+		{		
+			text-align: left;	
+		}
+
+
+		
+		.header_holder
+		{
+		Width = 100%;
+		border = 0px solid green;
+		padding = 0;
+		}
+		
+		
+		
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+                {
+			left:0;
+			top:0;
+			padding-top : 0.1em;			
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top
+
+		}
+		.front_matter {	
+			
+			margin-top: 5px;
+ 			margin-left: 0px;					 			
+ 			horizontal-align: left;
+		}
+				
+		
+		.front_matter_column1 {
+			width : 10em;	
+			text-align  : right;
+			padding-right:0.1em;
+			
+		}
+		
+		.front_matter_column2 {
+                        width: 0.1em;
+			align: center;
+			text-align : center;
+			margin-right  : 0.1em;	
+			margin-left   : 0.1em;
+		}
+		.front_matter_column3 {
+			width         : auto;  
+			text-align    : left;	
+			margin-right  : 0.5em;				
+		}
+		
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : right;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #EEEEE0 
+		}
+		tr.onmouseout_even { 
+			background-color : #F3F3E3   
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : lightYellow
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #008000 
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script><title>Design Rule Verification Report</title>
+</head>
+<body onload=""><img ALT="Altium" src="
+			file://D:\hardware_design\Altium\AD15\Templates\AD-rgb_logo_223x64.gif
+		"><a href="dxpprocess://Client:SetupPreferences?Server=PCB|PageName=Reports" class="customize"><acronym title="dxpprocess://Client:SetupPreferences?Server=PCB|PageName=Reports">customize</acronym></a><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td Style="width:70%">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date</td>
+<td class="front_matter_column2">:</td>
+<td class="front_matter_column3">10/21/2015</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time</td>
+<td class="front_matter_column2">:</td>
+<td class="front_matter_column3">3:29:02 PM</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time</td>
+<td class="front_matter_column2">:</td>
+<td class="front_matter_column3">00:00:01</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename</td>
+<td class="front_matter_column2">:</td>
+<td class="front_matter_column3"><a href="file:///D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc" class="file"><acronym title="D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc">D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td Style="Width:30%">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings</td>
+<td class="DRC_summary_header_col2">:</td>
+<td class="DRC_summary_header_col3">0</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations</td>
+<td class="DRC_summary_header_col2">:</td>
+<td class="DRC_summary_header_col3" style="color : red">36</td></tr>
+</table>
+</td>
+</table>
+<hr><a name="ID1RDVYRWJP5DSJ4MM3YDS0QRYOTJWSB0WY1XISKQI3GO2Y5PTNAO"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">0</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDC1OEY4UM1ZYSM3G5VZJMQVT4HJ1VY0CL23PIXYCGUV34VZOQTSLE">Minimum Annular Ring (Minimum=7mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDDP0DL1TMQXOZCJD2MYPMUAYRYJECNHFKU4NZJVGEBXD1KXG4MH3">Modified Polygon (Allow modified: No), (Allow shelved: No)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDK01YBA0P1V41M15F1I3F4VCDMOGEJBLLY0LXF4N4UC50C3WMKQYO">Net Antennae (Tolerance=0mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDVKWXFF5GFHJMHQKMBHNZZ4C2ZJ1ARAY5T1PJY5F3ILEVPV1LJ31E">Silk primitive without silk layer</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDTSY11NJLRI0WILNJCD2MQC25KGDX1ULRXEOYFNDF0WJKO0CDX1F">Silk to Silk (Clearance=10mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDCXAGECSI3JLOJK1SA1VE3YJ0SC00P3M5QIKWJPCB5L2OYGPPYJ1K">Silk To Solder Mask (Clearance=7mil) (IsPad),(All)</a></td>
+<td class="column2">27</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDMK21YABR2AT1GOLKEBTER3WVPIZUUY3GO0QSFMBBOSSWULNGYZH">Minimum Solder Mask Sliver (Gap=6mil) (All),(All)</a></td>
+<td class="column2">6</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDEINQIAQOLU4JMZSMGH5HPWZNPF1IQBVX5QKNWHKHV23NI5MS0VHM">Hole To Hole Clearance (Gap=10mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDPT33RIMM302DPIPJEUA0J44ZUPHR3YH2MLUXIO4SGXR5B2SKPWJ">Hole Size Constraint (Min=13mil) (Max=100mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDVZGILVDKLXCCLEEZVZIA5CUWFEQOTGHZLQB3LZFSDR1D5WOS35AG">Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDCDEYBTHARIAFP3E3QDST45PH0O5NXKHRIOMRBLHTB53D4FTVVU1E">Width Constraint (Min=10mil) (Max=10mil) (Preferred=10mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDCM5QZ520D0NUSRE41MDFKTNMN3EQB421V2S3DM4E3F4W2CUES5D">Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDDMWXSPFWC5WBJPLJXTTZNY5TSMWXMKAK13I2YBNQTJYPRN5XGS5C">Clearance Constraint (Gap=7mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDHJD4H1FT2P4HNUFH1OVXEUQMFGL5L1DUPIAC1NDKYRTB4CBSFBOE">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">3</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDJVUVFODVV0X1ESXNO1UWX4JD2OXRTP0DP1CZSMBRZLG2IKGDHFZG">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">36</td>
+</tr>
+</table><br><hr><a name="IDCXAGECSI3JLOJK1SA1VE3YJ0SC00P3M5QIKWJPCB5L2OYGPPYJ1K"><table>
+<tr>
+<th style="text-align : left" colspan="2" class="rule">Silk To Solder Mask (Clearance=7mil) (IsPad),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3755.918mil|Location2.X=3760.918mil|Location1.Y=2102.902mil|Location2.Y=2117.902mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3755.918mil|Location2.X=3760.918mil|Location1.Y=2102.902mil|Location2.Y=2117.902mil|Absolute=True">Track (3758.418mil,2105.402mil)(3758.418mil,2115.402mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2118.402mil|Location2.Y=2132.402mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2118.402mil|Location2.Y=2132.402mil|Absolute=True">Pad U12-1(3748.574mil,2125.402mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3755.918mil|Location2.X=3760.918mil|Location1.Y=2212.114mil|Location2.Y=2226.956mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3755.918mil|Location2.X=3760.918mil|Location1.Y=2212.114mil|Location2.Y=2226.956mil|Absolute=True">Track (3758.418mil,2214.614mil)(3758.418mil,2224.456mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2197.772mil|Location2.Y=2211.772mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2197.772mil|Location2.Y=2211.772mil|Absolute=True">Pad U12-5(3748.574mil,2204.772mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3722.452mil|Location2.X=3760.918mil|Location1.Y=2221.956mil|Location2.Y=2226.956mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3722.452mil|Location2.X=3760.918mil|Location1.Y=2221.956mil|Location2.Y=2226.956mil|Absolute=True">Track (3724.952mil,2224.456mil)(3758.418mil,2224.456mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3708.11mil|Location2.X=3722.11mil|Location1.Y=2198.598mil|Location2.Y=2232.598mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3708.11mil|Location2.X=3722.11mil|Location1.Y=2198.598mil|Location2.Y=2232.598mil|Absolute=True">Pad U12-6(3715.11mil,2215.598mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3629.926mil|Location2.X=3667.926mil|Location1.Y=2221.956mil|Location2.Y=2226.956mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3629.926mil|Location2.X=3667.926mil|Location1.Y=2221.956mil|Location2.Y=2226.956mil|Absolute=True">Track (3632.426mil,2224.456mil)(3665.426mil,2224.456mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3668.426mil|Location2.X=3682.426mil|Location1.Y=2198.598mil|Location2.Y=2232.598mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3668.426mil|Location2.X=3682.426mil|Location1.Y=2198.598mil|Location2.Y=2232.598mil|Absolute=True">Pad U12-8(3675.426mil,2215.598mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3629.926mil|Location2.X=3634.926mil|Location1.Y=2212.114mil|Location2.Y=2226.956mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3629.926mil|Location2.X=3634.926mil|Location1.Y=2212.114mil|Location2.Y=2226.956mil|Absolute=True">Track (3632.426mil,2214.614mil)(3632.426mil,2224.456mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2197.772mil|Location2.Y=2211.772mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2197.772mil|Location2.Y=2211.772mil|Absolute=True">Pad U12-9(3641.426mil,2204.772mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3629.926mil|Location2.X=3634.926mil|Location1.Y=2102.902mil|Location2.Y=2117.902mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3629.926mil|Location2.X=3634.926mil|Location1.Y=2102.902mil|Location2.Y=2117.902mil|Absolute=True">Track (3632.426mil,2105.402mil)(3632.426mil,2115.402mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2118.402mil|Location2.Y=2132.402mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2118.402mil|Location2.Y=2132.402mil|Absolute=True">Pad U12-13(3641.426mil,2125.402mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3629.926mil|Location2.X=3667.926mil|Location1.Y=2102.902mil|Location2.Y=2107.902mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3629.926mil|Location2.X=3667.926mil|Location1.Y=2102.902mil|Location2.Y=2107.902mil|Absolute=True">Track (3632.426mil,2105.402mil)(3665.426mil,2105.402mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3668.426mil|Location2.X=3682.426mil|Location1.Y=2097.402mil|Location2.Y=2131.402mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3668.426mil|Location2.X=3682.426mil|Location1.Y=2097.402mil|Location2.Y=2131.402mil|Absolute=True">Pad U12-14(3675.426mil,2114.402mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3722.452mil|Location2.X=3760.918mil|Location1.Y=2102.902mil|Location2.Y=2107.902mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3722.452mil|Location2.X=3760.918mil|Location1.Y=2102.902mil|Location2.Y=2107.902mil|Absolute=True">Track (3724.952mil,2105.402mil)(3758.418mil,2105.402mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3708.11mil|Location2.X=3722.11mil|Location1.Y=2097.402mil|Location2.Y=2131.402mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3708.11mil|Location2.X=3722.11mil|Location1.Y=2097.402mil|Location2.Y=2131.402mil|Absolute=True">Pad U12-16(3715.11mil,2114.402mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2800mil|Location2.Y=2840mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2800mil|Location2.Y=2840mil|Absolute=True">Pad U13-1(3420mil,2820mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2750mil|Location2.Y=2790mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2750mil|Location2.Y=2790mil|Absolute=True">Pad U13-2(3420mil,2770mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2700mil|Location2.Y=2740mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2700mil|Location2.Y=2740mil|Absolute=True">Pad U13-3(3420mil,2720mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2550mil|Location2.Y=2590mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2550mil|Location2.Y=2590mil|Absolute=True">Pad U13-6(3420mil,2570mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2600mil|Location2.Y=2640mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2600mil|Location2.Y=2640mil|Absolute=True">Pad U13-5(3420mil,2620mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2650mil|Location2.Y=2690mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2650mil|Location2.Y=2690mil|Absolute=True">Pad U13-4(3420mil,2670mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2500mil|Location2.Y=2540mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2500mil|Location2.Y=2540mil|Absolute=True">Pad U13-7(3420mil,2520mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3384mil|Location2.X=3386mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3385mil,2275mil)(3385mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2450mil|Location2.Y=2490mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2450mil|Location2.Y=2490mil|Absolute=True">Pad U13-8(3420mil,2470mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2450mil|Location2.Y=2490mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2450mil|Location2.Y=2490mil|Absolute=True">Pad U13-12(3950mil,2470mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2500mil|Location2.Y=2540mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2500mil|Location2.Y=2540mil|Absolute=True">Pad U13-13(3950mil,2520mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2650mil|Location2.Y=2690mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2650mil|Location2.Y=2690mil|Absolute=True">Pad U13-16(3950mil,2670mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2600mil|Location2.Y=2640mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2600mil|Location2.Y=2640mil|Absolute=True">Pad U13-15(3950mil,2620mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2550mil|Location2.Y=2590mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2550mil|Location2.Y=2590mil|Absolute=True">Pad U13-14(3950mil,2570mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2700mil|Location2.Y=2740mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2700mil|Location2.Y=2740mil|Absolute=True">Pad U13-17(3950mil,2720mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2750mil|Location2.Y=2790mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2750mil|Location2.Y=2790mil|Absolute=True">Pad U13-18(3950mil,2770mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2800mil|Location2.Y=2840mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2800mil|Location2.Y=2840mil|Absolute=True">Pad U13-19(3950mil,2820mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2400mil|Location2.Y=2440mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2400mil|Location2.Y=2440mil|Absolute=True">Pad U13-11(3950mil,2420mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2350mil|Location2.Y=2390mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2350mil|Location2.Y=2390mil|Absolute=True">Pad U13-10(3950mil,2370mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3984mil|Location2.X=3986mil|Location1.Y=2274mil|Location2.Y=2876mil|Absolute=True">Track (3985mil,2275mil)(3985mil,2875mil)  Top Overlay</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2300mil|Location2.Y=2340mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3880mil|Location2.X=4020mil|Location1.Y=2300mil|Location2.Y=2340mil|Absolute=True">Pad U13-9(3950mil,2320mil)  Top Layer</acronym></a></td>
+</tr>
+</table></a><a href="#top">Back to top</a><br><br><a name="IDMK21YABR2AT1GOLKEBTER3WVPIZUUY3GO0QSFMBBOSSWULNGYZH"><table>
+<tr>
+<th style="text-align : left" colspan="2" class="rule">Minimum Solder Mask Sliver (Gap=6mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2178.086mil|Location2.Y=2192.086mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2178.086mil|Location2.Y=2192.086mil|Absolute=True">Pad U12-4(3748.574mil,2185.086mil)  Top Layer</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2158.402mil|Location2.Y=2172.402mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2158.402mil|Location2.Y=2172.402mil|Absolute=True">Pad U12-3(3748.574mil,2165.402mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2197.772mil|Location2.Y=2211.772mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2197.772mil|Location2.Y=2211.772mil|Absolute=True">Pad U12-5(3748.574mil,2204.772mil)  Top Layer</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2178.086mil|Location2.Y=2192.086mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3731.574mil|Location2.X=3765.574mil|Location1.Y=2178.086mil|Location2.Y=2192.086mil|Absolute=True">Pad U12-4(3748.574mil,2185.086mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3688.426mil|Location2.X=3702.426mil|Location1.Y=2198.598mil|Location2.Y=2232.598mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3688.426mil|Location2.X=3702.426mil|Location1.Y=2198.598mil|Location2.Y=2232.598mil|Absolute=True">Pad U12-7(3695.426mil,2215.598mil)  Top Layer</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3708.11mil|Location2.X=3722.11mil|Location1.Y=2198.598mil|Location2.Y=2232.598mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3708.11mil|Location2.X=3722.11mil|Location1.Y=2198.598mil|Location2.Y=2232.598mil|Absolute=True">Pad U12-6(3715.11mil,2215.598mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2178.086mil|Location2.Y=2192.086mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2178.086mil|Location2.Y=2192.086mil|Absolute=True">Pad U12-10(3641.426mil,2185.086mil)  Top Layer</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2197.772mil|Location2.Y=2211.772mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2197.772mil|Location2.Y=2211.772mil|Absolute=True">Pad U12-9(3641.426mil,2204.772mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2158.402mil|Location2.Y=2172.402mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2158.402mil|Location2.Y=2172.402mil|Absolute=True">Pad U12-11(3641.426mil,2165.402mil)  Top Layer</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2178.086mil|Location2.Y=2192.086mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3624.426mil|Location2.X=3658.426mil|Location1.Y=2178.086mil|Location2.Y=2192.086mil|Absolute=True">Pad U12-10(3641.426mil,2185.086mil)  Top Layer</acronym></a></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td style="width:50%; text-align:left" class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3708.11mil|Location2.X=3722.11mil|Location1.Y=2097.402mil|Location2.Y=2131.402mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3708.11mil|Location2.X=3722.11mil|Location1.Y=2097.402mil|Location2.Y=2131.402mil|Absolute=True">Pad U12-16(3715.11mil,2114.402mil)  Top Layer</acronym></a></td>
+<td style="width:50%; text-align:left" class="column2"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3688.426mil|Location2.X=3702.426mil|Location1.Y=2097.402mil|Location2.Y=2131.402mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3688.426mil|Location2.X=3702.426mil|Location1.Y=2097.402mil|Location2.Y=2131.402mil|Absolute=True">Pad U12-15(3695.426mil,2114.402mil)  Top Layer</acronym></a></td>
+</tr>
+</table></a><a href="#top">Back to top</a><br><br><a name="IDHJD4H1FT2P4HNUFH1OVXEUQMFGL5L1DUPIAC1NDKYRTB4CBSFBOE"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Un-Routed Net Constraint ( (All) )</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3775mil|Location2.X=4009.598mil|Location1.Y=2420mil|Location2.Y=2225.402mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3775mil|Location2.X=4009.598mil|Location1.Y=2420mil|Location2.Y=2225.402mil|Absolute=True">Un-Routed Net Constraint: Net VCC Between Track on layer Top Layer (3875,2520mil) And Track on layer Top Layer (3909.598,2125.402mil)</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3826.48mil|Location1.Y=2318.52mil|Location2.Y=2641.48mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3826.48mil|Location1.Y=2318.52mil|Location2.Y=2641.48mil|Absolute=True">Un-Routed Net Constraint: Net GND Between Pad U13-8 (3420,2470mil) And Pad U10-2 (3665,2480mil)</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2450mil|Location2.Y=2790mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\sclab\montessori_tech\ble_tracker\BLE_Proximity_Network\v04\board\prnet_v04_adxl362.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3350mil|Location2.X=3490mil|Location1.Y=2450mil|Location2.Y=2790mil|Absolute=True">Un-Routed Net Constraint: Net GND Between Pad U13-8 (3420,2470mil) And Pad U13-2 (3420,2770mil)</acronym></a><br></td>
+</tr>
+</table></a><a href="#top">Back to top</a><br><br></body>
+</html>
