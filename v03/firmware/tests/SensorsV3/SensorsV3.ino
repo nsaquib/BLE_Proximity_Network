@@ -5,9 +5,10 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 2
+#define MAX_DEVICES 9
+#define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 9
+#define START_HOUR 18
 #define START_MINUTE 0
 #define END_HOUR 23
 #define END_MINUTE 0
@@ -26,12 +27,12 @@
  * Start State is HOST
  * On iteration: DEVICEX = deviceID % 8
  * ID DEVICEX
- *  0 HOST
+ *  0 DEVICE0
  *  1 DEVICE1
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 0;
+const int deviceID = 8;
 
 // Serialized time from Python script
 struct timer {
@@ -124,7 +125,7 @@ void setupDevice() {
 void loop() {
   // Time is not set
   if (!timeIsSet()) {
-    Serial.println("Setting time...");
+    Serial.println("Now set the time...");
     setTimer();
   }
   // Time is  set
@@ -147,7 +148,7 @@ void loop() {
 void loopHost() {
   Serial.println("My role is HOST");
   if (inDataCollectionPeriod()) {
-    if (loopCounter >= 10) {
+    if (loopCounter >= (MAX_ROWS / MAX_DEVICES)) {
       writePage();
     }
     // Start GZZL stack from wake cycle
