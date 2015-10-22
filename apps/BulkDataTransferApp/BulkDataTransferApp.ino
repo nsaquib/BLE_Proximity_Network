@@ -14,9 +14,12 @@ packets were dropped.
 */
 
 #include <RFduinoBLE.h>
+#include <PrNetRomManager.h>
 
 // we can hold 80 rows of 12 bytes data (t, id, rssi) to be under 1K page memory
 #define lenrec 80
+
+int stop_len = STORAGE_FLASH_PAGE - 30;
 
 // send 500 20 byte buffers = 10000 bytes
 int packets = 5;
@@ -27,27 +30,15 @@ int flag = false;
 // variables used in packet generation
 int ch;
 int packet;
-
-struct data_t
-{
-  int t[lenrec] = {0};
-  // the compiler will insert 3 bytes of padding here so id is aligned on a dword boundary
-  int id[lenrec] = {0};
-  int rsval[lenrec] = {0};
-};
-struct data_t value;
-
 int start;
+
+PrNetRomManager m;
 
 void setup() {
   //Serial.begin(57600);
   RFduinoBLE.advertisementData = "Ayesha"; // shouldnt be more than 10 characters long
   RFduinoBLE.deviceName = "Ayesha device";  //  name of your RFduino. Will appear when other BLE enabled devices search for it
   RFduinoBLE.begin(); // begin
-  for (int i = 0; i < lenrec; i++)
-  {
-    value.t[i] = value.id[i] = value.rsval[i] = i*3;
-  }
   //RFduino_ULPDelay(INFINITE);
 }
 
@@ -71,25 +62,62 @@ void RFduinoBLE_onReceive(char *data, int len)
 }
 
 void startTransfer() {
+  Serial.begin(9600);
+  Serial.println("STARTING TRANSFER");
+  int i = STORAGE_FLASH_PAGE;
   while (flag)
   {
+    m.loadPage(i);
+    Serial.println("Starting page: ");
+    Serial.println(i);
+
+    char buf_t[lenrec];
+    char buf_id[lenrec];
+    char buf_rsval[lenrec];
+    
     // generate the next packet
-    char buf[lenrec];
-    for (int i = 0; i < lenrec; i++)
+    for (int j = 0; j < lenrec; j++)
     {
-      buf[i] = value.t[i];
+      sprintf(buf_t, "%d", m.table.t[j]);
+      
+      sprintf(buf_id, "%d", m.table.id[j]);
+
+      sprintf(buf_rsval, "%d", m.table.rsval[j]);
     }
+    Serial.println("Finished copying");
     
     // send is queued (the ble stack delays send to the start of the next tx window)
-    while (! RFduinoBLE.send(buf, 20))
+    while (! RFduinoBLE.send(buf_t, 20)){
+      //Serial.print(".");
+    }
+    Serial.flush();
       ;  // all tx buffers in use (can't send - try again later)
-
+    Serial.println("Sent t");
+    Serial.println(buf_t);
+    delay(20); 
+    
+    // send is queued (the ble stack delays send to the start of the next tx window)
+    //while (! RFduinoBLE.send(buf_id, 20))
+    //;  // all tx buffers in use (can't send - try again later)
+    Serial.println("Sent id");
+    Serial.println(buf_id);
+    delay(20); 
+    
+    // send is queued (the ble stack delays send to the start of the next tx window)
+    //while (! RFduinoBLE.send(buf_rsval, 20))
+    //;  // all tx buffers in use (can't send - try again later)
+    Serial.println("Sent rsval");
+    Serial.println(buf_rsval);
+    delay(2000); 
+    
+    Serial.println("Finished with loop");
     if (! start)
       start = millis();
-
-    packet++;
-    if (packet >= packets)
+      
+    i--;
+    if (i < stop_len)
     {
+      Serial.println("Ending");
       int end = millis();
       float secs = (end - start) / 1000.0;
       int bps = ((packets * 20) * 8) / secs; 
@@ -107,5 +135,5 @@ void startTransfer() {
 }
  
 void loop() {
-  RFduino_ULPDelay(INFINITE);
+  //RFduino_ULPDelay(INFINITE);
 }
