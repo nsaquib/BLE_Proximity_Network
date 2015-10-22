@@ -55,6 +55,7 @@ class PrNetRomManager
 
     PrNetRomManager();
     void printPage(int page);
+    void loadPage(int page);
     int erasePage(int page);
     int writePage(int page, struct data_t values); 
     //bool isPageAvailable(int page);
