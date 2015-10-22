@@ -94,12 +94,6 @@
             android:text="Send"
             android:layout_marginTop="5dip" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Value:"
-            android:id="@+id/textView6" />
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
@@ -117,7 +111,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send Current Time"
+                android:text="Write data"
                 android:id="@+id/sendTime"
                 android:layout_weight="1"
                 android:enabled="false" />

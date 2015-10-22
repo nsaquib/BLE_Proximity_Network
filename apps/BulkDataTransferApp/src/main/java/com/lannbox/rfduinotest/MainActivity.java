@@ -53,6 +53,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     private LinearLayout dataLayout;
 
     private String data_to_write;
+    private int page_counter;
 
     private static final String LOG_TAG = "rfduino_data_transfer";
 
@@ -162,7 +163,8 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         startTransferButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rfduinoService.send(new byte[]{0});
+                rfduinoService.send(new byte[]{1});
+                writeData(data_to_write);
             }
         });
 
@@ -345,20 +347,18 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     }
 
     private void addData(byte[] data) {
-        View view = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, dataLayout, false);
+        String str = new String(data);
+        data_to_write = data_to_write + str;
+        if (data[0] == '#') {
+            page_counter++;
+            View view = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, dataLayout, false);
 
-        TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-        text1.setText(HexAsciiHelper.bytesToHex(data));
+            TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+            text1.setText(String.valueOf(page_counter));
 
-        String ascii = HexAsciiHelper.bytesToAsciiMaybe(data);
-        data_to_write = data_to_write + HexAsciiHelper.bytesToHex(data);
-        if (ascii != null) {
-            TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-            text2.setText(ascii);
+            dataLayout.addView(
+                    view, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         }
-
-        dataLayout.addView(
-                view, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
     @Override
