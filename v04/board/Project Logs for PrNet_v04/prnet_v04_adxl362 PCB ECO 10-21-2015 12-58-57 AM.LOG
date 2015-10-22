@@ -1,0 +1,12 @@
+Added Component: Designator=U12(ADXL362)
+Added Pin To Net: NetName=VCC Pin=U12-1
+Added Pin To Net: NetName=SCLK Pin=U12-4
+Added Pin To Net: NetName=MOSI Pin=U12-6
+Added Pin To Net: NetName=MISO Pin=U12-7
+Added Pin To Net: NetName=CS Pin=U12-8
+Added Pin To Net: NetName=INT2 Pin=U12-9
+Added Pin To Net: NetName=INT1 Pin=U12-11
+Added Pin To Net: NetName=GND Pin=U12-12
+Added Pin To Net: NetName=GND Pin=U12-13
+Added Pin To Net: NetName=VCC Pin=U12-14
+Added Pin To Net: NetName=GND Pin=U12-16
