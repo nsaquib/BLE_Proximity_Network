@@ -37,10 +37,20 @@ void setup() {
 void RFduinoBLE_onReceive(char *data, int len)
 {
   // if the first byte is 0x01 / on / true
-  if (data[0])
+  if (data[0] == '1')
   {
     RFduinoBLE.send(1);
     flag = true;
+  }
+  else if(data[0] == '>')
+  {
+    //UPDATE START TIME
+    while(! RFduinoBLE.send(data, len));
+  }
+  else if(data[0] == '<')
+  {
+    //UPDATE END TIME
+    while(! RFduinoBLE.send(data, len));
   }
   else 
   {

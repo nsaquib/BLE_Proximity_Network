@@ -189,9 +189,9 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                 android.widget.EditText startHour   = (android.widget.EditText)findViewById(R.id.startHour);
                 android.widget.EditText endHour   = (android.widget.EditText)findViewById(R.id.endHour);
                 android.util.Log.e("startHour", startHour.getText().toString());
-                String startHourString = "startHour: " + startHour.getText().toString();
+                String startHourString = ">" + startHour.getText().toString();
                 android.util.Log.e("endHour", endHour.getText().toString());
-                String endHourString = "endHour: " + endHour.getText().toString();
+                String endHourString = "<" + endHour.getText().toString();
                 byte[] startBytes = startHourString.getBytes();
                 rfduinoService.send(startBytes);
                 addData(startBytes);
