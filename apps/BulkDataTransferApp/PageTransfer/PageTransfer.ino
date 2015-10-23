@@ -23,6 +23,8 @@ int stop_len = STORAGE_FLASH_PAGE - 60;
 // flag used to start sending
 int flag = false;
 
+int device_id = 5;
+
 PrNetRomManager m;
 
 int i = STORAGE_FLASH_PAGE;
@@ -30,7 +32,10 @@ int i = STORAGE_FLASH_PAGE;
 void setup() {
   Serial.begin(9600);
   RFduinoBLE.advertisementData = "Ayesha"; // shouldnt be more than 10 characters long
-  RFduinoBLE.deviceName = "Ayesha device";  //  name of your RFduino. Will appear when other BLE enabled devices search for it
+  char deviceName[15];
+  String device_str = String(device_id);
+  device_str.toCharArray(deviceName, 15);
+  RFduinoBLE.deviceName = deviceName; //  name of your RFduino. Will appear when other BLE enabled devices search for it
   RFduinoBLE.begin(); // begin
 }
 
@@ -55,7 +60,6 @@ void RFduinoBLE_onReceive(char *data, int len)
       flag = true;
     }
   }
-  
   else 
   {
     RFduinoBLE.send(0);

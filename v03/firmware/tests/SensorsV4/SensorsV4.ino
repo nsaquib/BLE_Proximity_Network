@@ -18,6 +18,7 @@
 // Device time
 #define DEVICE_LOOP_TIME 200
 #define DEVICE_SLEEP_TIME 0
+#define lenrec 80
 
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
@@ -73,7 +74,9 @@ int YEAR = 15;
 int WEEKDAY = 7;
 // ROM Managers
 PrNetRomManager m;  //for writing to flash ROM
-//PrNetRomManager m2; // for reading flash ROM and sending through BLE
+PrNetRomManager m2; // for reading flash ROM and sending through BLE
+int page_counter = STORAGE_FLASH_PAGE;
+int stop_len = STORAGE_FLASH_PAGE - 60;
 
 bool ble_setup_flag = false;
 long loopCounter = 0;
@@ -83,6 +86,8 @@ long rowcounter = 0;
 // flag used to start sending
 bool flag = false;
 int start;
+
+bool transfer_flag = false;
 
 // Variables used in packet generation
 int ch;
@@ -132,6 +137,9 @@ void loop() {
     // Set local time from phone app
     while (!timeIsSet()) {
       timeDelay(500);
+      if (transfer_flag) {
+        startTransfer();
+      }
     }
     RFduinoBLE.end();
     // Setup for specific device roles
@@ -489,6 +497,7 @@ void writePage() {
 
 void RFduinoBLE_onReceive(char *data, int len)
 {
+  Serial.println(data);
   // if the first byte is 0x01 / on / true
   if (data[0])
   {
@@ -528,12 +537,62 @@ void RFduinoBLE_onReceive(char *data, int len)
     }
     else{
       RFduinoBLE.send(1);
-      flag = true;
+      transfer_flag = true;
     }
   }
   else 
   {
     RFduinoBLE.send(0);
-    flag = false;
+    transfer_flag = false;
   }
 }
+
+void startTransfer()
+{
+  while (transfer_flag)
+  {
+    m2.loadPage(page_counter);
+    Serial.println("Starting page: ");
+    Serial.println(page_counter);
+    
+    // generate the next packet
+    for (int j = 0; j < lenrec; j++)
+    {
+      char space = ' ';
+      char buf_t[10];
+      char buf_id[10];
+      char buf_rsval[10];
+      sprintf(buf_t, "%d", m2.table.t[j]);
+      sprintf(buf_id, "%d", m2.table.id[j]);
+      sprintf(buf_rsval, "%d", m2.table.rsval[j]);
+      while (! RFduinoBLE.send(buf_t, 10));
+      //Serial.println("Sent t");
+      //Serial.println(buf_t);
+      while (! RFduinoBLE.send(space));
+      delay(20); 
+      while (! RFduinoBLE.send(buf_id, 10));
+      //Serial.println("Sent id");
+      //Serial.println(buf_id);
+      while (! RFduinoBLE.send(space));
+      delay(20);
+      while (! RFduinoBLE.send(buf_rsval, 10));
+      //Serial.println("Sent rsval");
+      //Serial.println(buf_rsval);
+      //delay(2000); 
+      while (! RFduinoBLE.send(space));
+      while (! RFduinoBLE.send('|'));
+    } 
+    Serial.println("Finished with loop");
+    while (! RFduinoBLE.send('#'));
+    delay(200);
+    page_counter--;
+    if (page_counter < stop_len)
+    {
+      Serial.println("Ending");
+      transfer_flag = false;
+      RFduinoBLE.send(0);
+      //RFduino_ULPDelay(INFINITE);
+    }
+  }
+}
+
