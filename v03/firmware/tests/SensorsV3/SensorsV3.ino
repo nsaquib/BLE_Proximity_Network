@@ -8,9 +8,9 @@
 #define MAX_DEVICES 11
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 8
-#define START_MINUTE 45
-#define END_HOUR 13
+#define START_HOUR 9
+#define START_MINUTE 0
+#define END_HOUR 23
 #define END_MINUTE 0
 // Host time
 #define HOST_LOOP_TIME 10000
@@ -32,7 +32,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 10;
+const int deviceID = 3;
 
 // Serialized time from Python script
 struct timer {
@@ -43,7 +43,7 @@ struct timer {
 };
 
 // Device loops
-const int DEVICE_LOOPS = floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME)));
+const int DEVICE_LOOPS = 0;//floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME)));
 // BLE advertisement device name
 const String BLE_NAME = "DEVICE" + deviceID;
 // Timer
@@ -72,7 +72,7 @@ int YEAR = 15;
 int WEEKDAY = 7;
 // Rom Managers
 PrNetRomManager m;  //for writing to flash ROM
-PrNetRomManager m2; // for reading flash ROM and sending through BLE
+//PrNetRomManager m2; // for reading flash ROM and sending through BLE
 
 bool ble_setup_flag = false;
 long loopCounter = 0;
@@ -126,7 +126,11 @@ void loop() {
   // Time is not set
   if (!timeIsSet()) {
     Serial.println("Now set the time...");
-    setTimer();
+    //setTimer();
+    timer.hours = 10;
+    timer.minutes = 0;
+    timer.seconds = 0;
+    timer.ms = 0;    
   }
   // Time is  set
   else {
