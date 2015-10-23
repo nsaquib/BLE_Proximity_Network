@@ -1,19 +1,20 @@
 /*
+ * Social Interaction: RFduinos continuously cycle through host/device roles and
+ * host monitors device signal strength and record value to ROM
+ * 
  * Dwyane George
  * Social Computing Group, MIT Media Lab
- * All rights reserved.
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 11
-#define MAX_ROWS 80
+#define MAX_DEVICES 2
 // Time range to perform data collection
-#define START_HOUR 8
-#define START_MINUTE 45
-#define END_HOUR 13
+#define START_HOUR 9
+#define START_MINUTE 0
+#define END_HOUR 23
 #define END_MINUTE 0
 // Host time
-#define HOST_LOOP_TIME 10000
+#define HOST_LOOP_TIME 5000
 #define HOST_LOOPS 1
 // Device time
 #define DEVICE_LOOP_TIME 200
@@ -27,12 +28,12 @@
  * Start State is HOST
  * On iteration: DEVICEX = deviceID % 8
  * ID DEVICEX
- *  0 DEVICE0
+ *  0 HOST
  *  1 DEVICE1
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 10;
+const int deviceID = 0;
 
 // Serialized time from Python script
 struct timer {
@@ -91,6 +92,8 @@ int packet;
 // so each 1K page has 960/20 = 48 packets.
 int packets = 48;
 
+////////// Setup Functions //////////
+
 void setup() {
   //Serial.println(DEVICE_LOOPS);
   pinMode(greenLED, OUTPUT);
@@ -122,10 +125,12 @@ void setupDevice() {
   RFduinoGZLL.begin(deviceRole);
 }
 
+////////// Loop Functions //////////
+
 void loop() {
   // Time is not set
   if (!timeIsSet()) {
-    Serial.println("Now set the time...");
+    Serial.println("Now setting time...");
     setTimer();
   }
   // Time is  set
@@ -146,11 +151,11 @@ void loop() {
 }
 
 void loopHost() {
-  Serial.println("My role is HOST");
+  //Serial.println("Loop Host");
   if (inDataCollectionPeriod()) {
-    if (loopCounter >= (MAX_ROWS / MAX_DEVICES)) {
+    /*if (loopCounter >= 10) {
       writePage();
-    }
+    }*/
     // Start GZZL stack from wake cycle
     RFduinoGZLL.end();
     RFduinoGZLL.hostBaseAddress = HBA;
@@ -158,23 +163,31 @@ void loopHost() {
     resetRSSI();
     collectSamplesFromDevices();
     calculateRSSIAverages();
-    updateROMTable();
-    loopCounter++;
     if (shouldBeDevice()) {
       switchToDevice();
     }
+  }
+  else {
+    sleepUntilStartTime();
   }
 }
 
 void loopDevice() {
   if (inDataCollectionPeriod()) {
+    /*RFduinoGZLL.end();
+    RFduinoGZLL.hostBaseAddress = HBA;
+    RFduinoGZLL.begin(deviceRole);*/
     // Sleep device
     //sleepDevice();
     // Send data to all other hosts
     pollHost();
+    //RFduinoGZLL.end();
     if (shouldBeHost()) {
       switchToHost();
     }
+  }
+  else {
+    sleepUntilStartTime();
   }
 }
 
@@ -234,6 +247,7 @@ void pollHost() {
 
 boolean shouldBeDevice() {
   if (hostCounter >= HOST_LOOPS - 1) {
+    Serial.println("It's time to become a DEVICE...");
     hostCounter = 0;
     return true;
   }
@@ -245,6 +259,7 @@ boolean shouldBeDevice() {
 
 boolean shouldBeHost() {
   if (deviceCounter >= DEVICE_LOOPS - 1) {
+    Serial.println("It's time to become a HOST...");
     deviceCounter = 0;
     return true;
   }
@@ -255,12 +270,15 @@ boolean shouldBeHost() {
 }
 
 void switchToHost() {
+  Serial.println("Becoming a host now...");
+  Serial.println("My role is HOST");
   deviceRole = HOST;
   setupHost();
 }
 
 void switchToDevice() {
   deviceRole = assignDeviceT();
+  Serial.println("Becoming a device now...");
   Serial.print("My role is DEVICE");
   Serial.println(deviceRole);
   setupDevice();
@@ -279,6 +297,7 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   if (deviceRole == HOST && collectSamples && (int) data[0] >= 0 && (int) data[0] < MAX_DEVICES) {
     rssiTotal[(int) data[0]] += rssi;
     rssiCount[(int) data[0]]++;
+    Serial.println("Data");
   }
 }
 
@@ -455,7 +474,6 @@ void sleepUntilStartTime() {
 }
 
 ////////// ROM Code //////////
-
 void updateROMTable() {
   // Update rows for rom table
   int i;
