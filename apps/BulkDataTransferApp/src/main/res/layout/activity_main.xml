@@ -112,16 +112,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Write data"
-                android:id="@+id/sendTime"
+                android:id="@+id/writeData"
                 android:layout_weight="1"
                 android:enabled="false" />
 
         </LinearLayout>
 
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Send Current Time"
+            android:id="@+id/sendCurrentTime"
+            android:layout_gravity="center_horizontal"
+            android:enabled="false" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start Hour:"
+            android:text="Input Time:"
             android:id="@+id/textView9" />
 
         <EditText
@@ -129,27 +137,14 @@
             android:layout_height="wrap_content"
             android:inputType="time"
             android:ems="10"
-            android:id="@+id/startHour"
-            android:layout_gravity="center_horizontal" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="End Hour:"
-            android:id="@+id/textView9" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="time"
-            android:ems="10"
-            android:id="@+id/endHour"
+            android:id="@+id/inputTime"
             android:layout_gravity="center_horizontal" />
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Send Start/End Hours"
-            android:id="@+id/sendHours"
+            android:text="Send Inputted Time"
+            android:id="@+id/sendInputTime"
             android:layout_gravity="center_horizontal"
             android:enabled="false" />
 
