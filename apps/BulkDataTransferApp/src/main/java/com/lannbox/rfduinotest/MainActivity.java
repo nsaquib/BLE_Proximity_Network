@@ -179,6 +179,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                 //rfduinoService.send(bytes);
                 //rfduinoService.send(new byte[]{2});
                 //addData(bytes);
+                rfduinoService.send(new byte[]{0});
                 writeData(data_to_write);
             }
         });
