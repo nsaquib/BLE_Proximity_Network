@@ -5,15 +5,15 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 9
+#define MAX_DEVICES 11
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 18
-#define START_MINUTE 0
-#define END_HOUR 23
+#define START_HOUR 8
+#define START_MINUTE 45
+#define END_HOUR 13
 #define END_MINUTE 0
 // Host time
-#define HOST_LOOP_TIME 5000
+#define HOST_LOOP_TIME 10000
 #define HOST_LOOPS 1
 // Device time
 #define DEVICE_LOOP_TIME 200
@@ -32,7 +32,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 8;
+const int deviceID = 10;
 
 // Serialized time from Python script
 struct timer {
