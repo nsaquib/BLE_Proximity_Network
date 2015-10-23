@@ -8,9 +8,9 @@
 #define MAX_DEVICES 11
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 8
-#define START_MINUTE 45
-#define END_HOUR 13
+#define START_HOUR 9
+#define START_MINUTE 0
+#define END_HOUR 23
 #define END_MINUTE 0
 // Host time
 #define HOST_LOOP_TIME 10000
@@ -33,7 +33,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 3;
+const int deviceID = 0;
 
 // Serialized time from Python script
 struct timer {
@@ -46,7 +46,7 @@ struct timer {
 // Device loops
 const int DEVICE_LOOPS = floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME)));
 // BLE advertisement device name
-const String BLE_NAME = "DEVICE" + deviceID;
+const String BLE_NAME = (String) deviceID;
 // Timer
 struct timer timer;
 // Host base addresses, HBA cannot be 0x55 or 0xaa
@@ -71,9 +71,9 @@ int MONTH = 10;
 int DAY = 21;
 int YEAR = 15;
 int WEEKDAY = 7;
-// Rom Managers
+// ROM Managers
 PrNetRomManager m;  //for writing to flash ROM
-PrNetRomManager m2; // for reading flash ROM and sending through BLE
+//PrNetRomManager m2; // for reading flash ROM and sending through BLE
 
 bool ble_setup_flag = false;
 long loopCounter = 0;
@@ -93,14 +93,14 @@ int packet;
 int packets = 48;
 
 void setup() {
-  //Serial.println(DEVICE_LOOPS);
   pinMode(greenLED, OUTPUT);
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 4;
+  // Set BLE parameters
+  RFduinoBLE.deviceName = "0";
+  //RFduinoBLE.advertisementData = deviceID;
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
-  // Advertise for 4 seconds in BLE mode
-  //RFduinoBLE.advertisementInterval = 4000;
   // Start the serial monitor
   Serial.begin(9600);
   
@@ -126,15 +126,13 @@ void setupDevice() {
 void loop() {
   // Time is not set
   if (!timeIsSet()) {
-    Serial.println("Now waiting to set time...");
+    Serial.println("Waiting for time from phone app...");
     RFduinoGZLL.end();
     RFduinoBLE.begin();
-    
-    // Set local time from Serial Monitor
+    // Set local time from phone app
     while (!timeIsSet()) {
-      delay(500);
+      timeDelay(500);
     }
-  
     RFduinoBLE.end();
     // Setup for specific device roles
     if (deviceRole == HOST) {
@@ -309,6 +307,15 @@ boolean timeIsSet() {
   return !(timer.hours == 0 && timer.minutes == 0 && timer.seconds == 0 && timer.ms == 0);
 }
 
+void setTimer() {
+  RFduinoBLE.begin();
+  // Set local time from phone app
+  while (!timeIsSet()) {
+    timeDelay(250);
+  }
+  RFduinoBLE.end();
+}
+
 void sleepDevice(int milliseconds) {
   //RFduinoGZLL.end();
   //RFduinoBLE.begin();
@@ -478,7 +485,7 @@ void writePage() {
   loopCounter = 0;
 }
 
-////////// BLE Code //////////
+////////// App Integration Code //////////
 
 void RFduinoBLE_onReceive(char *data, int len)
 {
