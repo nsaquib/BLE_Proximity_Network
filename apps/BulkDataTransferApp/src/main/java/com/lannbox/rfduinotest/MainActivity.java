@@ -47,8 +47,9 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     private Button connectButton;
     private EditData valueEdit;
     private Button startTransferButton;
-    private Button sendTimeButton;
-    private Button sendHoursButton;
+    private Button writeDataButton;
+    private Button sendCurrentTimeButton;
+    private Button sendInputTimeButton;
     private Button clearButton;
     private LinearLayout dataLayout;
 
@@ -168,38 +169,49 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             }
         });
 
-        sendTimeButton = (Button) findViewById(R.id.sendTime);
-        sendTimeButton.setOnClickListener(new View.OnClickListener() {
+        writeDataButton = (Button) findViewById(R.id.writeData);
+        writeDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int dateInSec = (int) (System.currentTimeMillis() / 1000);
-                byte[] bytes = java.nio.ByteBuffer.allocate(4).putInt(dateInSec).array();
-                android.util.Log.e("sending time", Integer.toString(dateInSec));
-                rfduinoService.send(bytes);
+                //int dateInSec = (int) (System.currentTimeMillis() / 1000);
+                //byte[] bytes = java.nio.ByteBuffer.allocate(4).putInt(dateInSec).array();
+                //android.util.Log.e("sending time", Integer.toString(dateInSec));
+                //rfduinoService.send(bytes);
                 //rfduinoService.send(new byte[]{2});
-                addData(bytes);
+                //addData(bytes);
                 writeData(data_to_write);
             }
         });
 
-        sendHoursButton = (Button) findViewById(R.id.sendHours);
-        sendHoursButton.setOnClickListener(new View.OnClickListener() {
+        sendCurrentTimeButton = (Button) findViewById(R.id.sendCurrentTime);
+        sendCurrentTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.widget.EditText startHour   = (android.widget.EditText)findViewById(R.id.startHour);
-                android.widget.EditText endHour   = (android.widget.EditText)findViewById(R.id.endHour);
-                android.util.Log.e("startHour", startHour.getText().toString());
-                String startHourString = ">" + startHour.getText().toString();
-                android.util.Log.e("endHour", endHour.getText().toString());
-                String endHourString = "<" + endHour.getText().toString();
-                byte[] startBytes = startHourString.getBytes();
-                rfduinoService.send(startBytes);
-                addData(startBytes);
+                long yourmilliseconds = System.currentTimeMillis();
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm:ss:SS");
+                java.util.Date resultdate = new java.util.Date(yourmilliseconds);
+                String currentTime = ">" + sdf.format(resultdate);
+
+                byte[] bytes = currentTime.getBytes();
+                android.util.Log.e("sending time", currentTime);
+                rfduinoService.send(bytes);
+                //rfduinoService.send(new byte[]{2});
+                //addData(bytes);
                 //writeData(data_to_write);
-                byte[] endBytes = endHourString.getBytes();
-                rfduinoService.send(endBytes);
-                addData(endBytes);
-                //writeData(data_to_write);
+            }
+        });
+
+        sendInputTimeButton = (Button) findViewById(R.id.sendInputTime);
+        sendInputTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.widget.EditText inputTime   = (android.widget.EditText)findViewById(R.id.inputTime);
+
+                String inputTimeString = ">" + inputTime.getText().toString();
+                android.util.Log.e("inputTime", inputTimeString);
+
+                byte[] inputTimeBytes = inputTimeString.getBytes();
+                rfduinoService.send(inputTimeBytes);
             }
         });
 
@@ -289,8 +301,9 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
 
         // Send
         startTransferButton.setEnabled(connected);
-        sendTimeButton.setEnabled(connected);
-        sendHoursButton.setEnabled(connected);
+        writeDataButton.setEnabled(connected);
+        sendCurrentTimeButton.setEnabled(connected);
+        sendInputTimeButton.setEnabled(connected);
     }
 
     /* Checks if external storage is available for read and write */
@@ -349,6 +362,24 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     private void addData(byte[] data) {
         String str = new String(data);
         data_to_write = data_to_write + str;
+        if (data[0] == '>') {
+            View view = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, dataLayout, false);
+
+            TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+            text1.setText("Set start time");
+
+            dataLayout.addView(
+                    view, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        }
+        if (data[0] == '<') {
+            View view = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, dataLayout, false);
+
+            TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+            text1.setText("Set end time");
+
+            dataLayout.addView(
+                    view, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        }
         if (data[0] == '#') {
             page_counter++;
             View view = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, dataLayout, false);
