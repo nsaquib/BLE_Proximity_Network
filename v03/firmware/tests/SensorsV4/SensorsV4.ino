@@ -8,8 +8,8 @@
 #define MAX_DEVICES 11
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 9
-#define START_MINUTE 0
+#define START_HOUR 16
+#define START_MINUTE 30
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
@@ -150,7 +150,7 @@ void loop() {
       setupDevice();
     }
   }
-  // Time is  set
+  // Time is set
   else {
     if (!inDataCollectionPeriod()) {
       sleepUntilStartTime();
@@ -552,7 +552,7 @@ void startTransfer()
   while (transfer_flag)
   {
     m2.loadPage(page_counter);
-    Serial.println("Starting page: ");
+    Serial.print("Starting page: ");
     Serial.println(page_counter);
     
     // generate the next packet
@@ -566,32 +566,24 @@ void startTransfer()
       sprintf(buf_id, "%d", m2.table.id[j]);
       sprintf(buf_rsval, "%d", m2.table.rsval[j]);
       while (! RFduinoBLE.send(buf_t, 10));
-      //Serial.println("Sent t");
-      //Serial.println(buf_t);
       while (! RFduinoBLE.send(space));
-      delay(20); 
+      timeDelay(20); 
       while (! RFduinoBLE.send(buf_id, 10));
-      //Serial.println("Sent id");
-      //Serial.println(buf_id);
       while (! RFduinoBLE.send(space));
-      delay(20);
+      timeDelay(20);
       while (! RFduinoBLE.send(buf_rsval, 10));
-      //Serial.println("Sent rsval");
-      //Serial.println(buf_rsval);
-      //delay(2000); 
       while (! RFduinoBLE.send(space));
       while (! RFduinoBLE.send('|'));
     } 
     Serial.println("Finished with loop");
     while (! RFduinoBLE.send('#'));
-    delay(200);
+    timeDelay(200);
     page_counter--;
     if (page_counter < stop_len)
     {
       Serial.println("Ending");
       transfer_flag = false;
       RFduinoBLE.send(0);
-      //RFduino_ULPDelay(INFINITE);
     }
   }
 }
