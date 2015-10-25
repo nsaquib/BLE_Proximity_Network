@@ -16,25 +16,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dcb596e-132e-4266-9f34-fbf644080ac9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/outputs/apk/BulkDataTransferApp-debug-unaligned.apk" afterPath="$PROJECT_DIR$/build/outputs/apk/BulkDataTransferApp-debug-unaligned.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/outputs/apk/BulkDataTransferApp-debug.apk" afterPath="$PROJECT_DIR$/build/outputs/apk/BulkDataTransferApp-debug.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity$10.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity$10.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity$11.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity$11.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity$12.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity$12.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity$13.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity$13.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity$9.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity$9.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity.class" afterPath="$PROJECT_DIR$/build/intermediates/classes/debug/com/lannbox/rfduinotest/MainActivity.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/cache.properties.lock" afterPath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/cache.properties.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/dex/debug/classes.dex" afterPath="$PROJECT_DIR$/build/intermediates/dex/debug/classes.dex" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.4/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/lannbox/rfduinotest/MainActivity.java" afterPath="$PROJECT_DIR$/src/main/java/com/lannbox/rfduinotest/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PageTransfer/PageTransfer.ino" afterPath="$PROJECT_DIR$/PageTransfer/PageTransfer.ino" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../v03/firmware/tests/SensorsV4/SensorsV4.ino" afterPath="$PROJECT_DIR$/../../v03/firmware/tests/SensorsV4/SensorsV4.ino" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="9dcb596e-132e-4266-9f34-fbf644080ac9" name="Default" comment="" />
     <ignored path="BulkDataTransferApp.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
