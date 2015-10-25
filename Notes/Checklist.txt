@@ -1,0 +1,5 @@
+1) Check that timestamp sent is correct
+2) Check how much current is being consumed
+3) Make sure everyone is pinging
+	 - Set a dummy time
+	 - Make sure everyone is sending a ping to one host
