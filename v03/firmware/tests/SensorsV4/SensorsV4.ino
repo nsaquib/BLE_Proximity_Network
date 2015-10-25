@@ -5,18 +5,18 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 11
+#define MAX_DEVICES 3
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 16
-#define START_MINUTE 30
+#define START_HOUR 17
+#define START_MINUTE 0
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
 #define HOST_LOOP_TIME 10000
 #define HOST_LOOPS 1
 // Device time
-#define DEVICE_LOOP_TIME 200
+#define DEVICE_LOOP_TIME 500
 #define DEVICE_SLEEP_TIME 0
 #define lenrec 80
 
@@ -34,7 +34,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 0;
+const int deviceID = 2;
 
 // Serialized time from Python script
 struct timer {
@@ -102,8 +102,7 @@ void setup() {
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 4;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "0";
-  //RFduinoBLE.advertisementData = deviceID;
+  RFduinoBLE.deviceName = "2";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
@@ -132,16 +131,7 @@ void loop() {
   // Time is not set
   if (!timeIsSet()) {
     Serial.println("Waiting for time from phone app...");
-    RFduinoGZLL.end();
-    RFduinoBLE.begin();
-    // Set local time from phone app
-    while (!timeIsSet()) {
-      timeDelay(500);
-      if (transfer_flag) {
-        startTransfer();
-      }
-    }
-    RFduinoBLE.end();
+    setTimer();
     // Setup for specific device roles
     if (deviceRole == HOST) {
       setupHost();
@@ -191,7 +181,7 @@ void loopHost() {
 void loopDevice() {
   if (inDataCollectionPeriod()) {
     // Sleep device
-    //sleepDevice();
+    sleepDevice(DEVICE_LOOP_TIME);
     // Send data to all other hosts
     pollHost();
     if (shouldBeHost()) {
@@ -247,7 +237,6 @@ void pollHost() {
   // Only a device can poll the host
   if (deviceRole != HOST) {
     // Send deviceID to host
-    timeDelay(DEVICE_LOOP_TIME);
     RFduinoGZLL.sendToHost(deviceID);
   }
 }
@@ -316,21 +305,25 @@ boolean timeIsSet() {
 }
 
 void setTimer() {
+  RFduinoGZLL.end();
   RFduinoBLE.begin();
   // Set local time from phone app
   while (!timeIsSet()) {
-    timeDelay(250);
+    timeDelay(100);
+    if (transfer_flag) {
+      startTransfer();
+    }
   }
   RFduinoBLE.end();
 }
 
 void sleepDevice(int milliseconds) {
-  //RFduinoGZLL.end();
-  //RFduinoBLE.begin();
-  //updateTime(milliseconds);
-  timeDelay(milliseconds);
-  //RFduino_ULPDelay(MILLISECONDS(milliseconds));
-  //RFduinoBLE.end();
+  RFduinoGZLL.end();
+  RFduinoBLE.begin();
+  updateTime(milliseconds);
+  RFduino_ULPDelay(MILLISECONDS(milliseconds));
+  RFduinoBLE.end();
+  RFduinoGZLL.begin(deviceRole);
 }
 
 boolean inDataCollectionPeriod() {
@@ -525,13 +518,13 @@ void RFduinoBLE_onReceive(char *data, int len)
       timer.minutes = atoi(startMin);
       timer.seconds = atoi(startSec);
       timer.ms = atoi(startMilliSec);
-      Serial.println("Start Hour:");
+      Serial.print("Start Hour: ");
       Serial.println(timer.hours);
-      Serial.println("Start Minute:");
+      Serial.print("Start Minute: ");
       Serial.println(timer.minutes);
-      Serial.println("Start Sec:");
+      Serial.print("Start Sec: ");
       Serial.println(timer.seconds);
-      Serial.println("Start MilliSec:");
+      Serial.print("Start MilliSec:");
       Serial.println(timer.ms);
       RFduinoBLE.send('>');
     }
