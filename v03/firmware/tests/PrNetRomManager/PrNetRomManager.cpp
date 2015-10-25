@@ -34,7 +34,7 @@ void PrNetRomManager::loadPage(int page)
   {
     table.t[i] = p->t[i];
     table.id[i] = p->id[i];
-    table.rsval[i] = p->rsval[i]);
+    table.rsval[i] = p->rsval[i];
   }
 }
 
