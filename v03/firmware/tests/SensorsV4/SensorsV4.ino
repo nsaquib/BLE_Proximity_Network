@@ -5,19 +5,18 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 3
+#define MAX_DEVICES 15
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 17
+#define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 23
+#define END_HOUR 13
 #define END_MINUTE 0
 // Host time
-#define HOST_LOOP_TIME 10000
+#define HOST_LOOP_TIME 5000
 #define HOST_LOOPS 1
 // Device time
-#define DEVICE_LOOP_TIME 500
-#define DEVICE_SLEEP_TIME 0
+#define DEVICE_LOOP_TIME 200
 #define lenrec 80
 
 #include <RFduinoGZLL.h>
@@ -34,7 +33,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 2;
+const int deviceID = 0;
 
 // Serialized time from Python script
 struct timer {
@@ -69,9 +68,9 @@ int collectSamples = 0;
 int greenLED = 3;
 // Date variables
 int MONTH = 10;
-int DAY = 21;
+int DAY = 26;
 int YEAR = 15;
-int WEEKDAY = 7;
+int WEEKDAY = 1;
 // ROM Managers
 PrNetRomManager m;  //for writing to flash ROM
 PrNetRomManager m2; // for reading flash ROM and sending through BLE
@@ -100,9 +99,9 @@ int packets = 48;
 void setup() {
   pinMode(greenLED, OUTPUT);
   // Adjust power output levels
-  RFduinoGZLL.txPowerLevel = 4;
+  RFduinoGZLL.txPowerLevel = 0;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "2";
+  RFduinoBLE.deviceName = "0";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
@@ -181,7 +180,8 @@ void loopHost() {
 void loopDevice() {
   if (inDataCollectionPeriod()) {
     // Sleep device
-    sleepDevice(DEVICE_LOOP_TIME);
+    //sleepDevice(DEVICE_LOOP_TIME);
+    timeDelay(DEVICE_LOOP_TIME);
     // Send data to all other hosts
     pollHost();
     if (shouldBeHost()) {
@@ -321,7 +321,7 @@ void sleepDevice(int milliseconds) {
   RFduinoGZLL.end();
   RFduinoBLE.begin();
   updateTime(milliseconds);
-  RFduino_ULPDelay(MILLISECONDS(milliseconds));
+  RFduino_ULPDelay(milliseconds);
   RFduinoBLE.end();
   RFduinoGZLL.begin(deviceRole);
 }
@@ -462,7 +462,8 @@ void sleepUntilStartTime() {
   Serial.println(ms);
   Serial.print("Offset: ");
   Serial.println(offset);
-  sleepDevice(delayTime);
+  timeDelay(delayTime);
+  //sleepDevice(delayTime);
 }
 
 ////////// ROM Code //////////
@@ -488,8 +489,7 @@ void writePage() {
 
 ////////// App Integration Code //////////
 
-void RFduinoBLE_onReceive(char *data, int len)
-{
+void RFduinoBLE_onReceive(char *data, int len) {
   Serial.println(data);
   // if the first byte is 0x01 / on / true
   if (data[0])
@@ -540,8 +540,7 @@ void RFduinoBLE_onReceive(char *data, int len)
   }
 }
 
-void startTransfer()
-{
+void startTransfer() {
   while (transfer_flag)
   {
     m2.loadPage(page_counter);
