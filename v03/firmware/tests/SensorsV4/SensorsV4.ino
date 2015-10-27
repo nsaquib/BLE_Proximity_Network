@@ -33,7 +33,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 0;
+const int deviceID = 14;
 
 // Serialized time from Python script
 struct timer {
@@ -75,7 +75,7 @@ int WEEKDAY = 1;
 PrNetRomManager m;  //for writing to flash ROM
 PrNetRomManager m2; // for reading flash ROM and sending through BLE
 int page_counter = STORAGE_FLASH_PAGE;
-int stop_len = STORAGE_FLASH_PAGE - 60;
+int stop_len = STORAGE_FLASH_PAGE - 49;
 
 bool ble_setup_flag = false;
 long loopCounter = 0;
@@ -101,7 +101,7 @@ void setup() {
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 0;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "0";
+  RFduinoBLE.deviceName = "14";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
@@ -143,6 +143,9 @@ void loop() {
   else {
     if (!inDataCollectionPeriod()) {
       sleepUntilStartTime();
+      if (transfer_flag) {
+        startTransfer();
+      }
     }
     else {
       // Loop for specific device roles
