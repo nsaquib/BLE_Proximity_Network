@@ -3,7 +3,7 @@
 void setup() {
   // put your setup code here, to run once:
   PrNetRomManager m;
-  Serial.begin(9600);
+  Serial.begin(250000);
 
   // iterate over pages
   for(int i = STORAGE_FLASH_PAGE; i > STORAGE_FLASH_PAGE - 70; i--)

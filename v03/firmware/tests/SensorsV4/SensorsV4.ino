@@ -8,8 +8,8 @@
 #define MAX_DEVICES 15
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 9
-#define START_MINUTE 0
+#define START_HOUR 8
+#define START_MINUTE 45
 #define END_HOUR 13
 #define END_MINUTE 0
 // Host time
