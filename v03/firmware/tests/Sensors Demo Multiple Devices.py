@@ -1,7 +1,9 @@
-import serial
-import numpy as np
+import csv
 import matplotlib.pyplot as plt
 from matplotlib import animation
+import numpy as np
+import serial
+import time
 
 connected = False;
 ser = serial.Serial("/dev/cu.usbserial-DN0073UM", 9600)
@@ -25,6 +27,15 @@ for index in range(PLOT_LINES):
     lines.append(lobj)
 plt.legend(loc='upper left', bbox_to_anchor=(1, 1.02))
 fig.subplots_adjust(right=0.75)
+
+# Create CSV file for data output
+filename = "Sensor Data " + time.strftime("%m%d%y %H%M%S") + ".csv"
+with open(filename, "w") as file:
+    writer = csv.writer(file)
+    row = []
+    for i in range(0, PLOT_LINES):
+        row.append("DEVICE"+str(i))
+    writer.writerow(row)
 
 while not connected:
     reponse = ser.read()
@@ -58,6 +69,14 @@ def process(xlist, ylist, index, i):
     ylist.append(y)
     # Return updated x and y lists
     return {"xlist": xlist, "ylist": ylist}
+
+def writeCSVRow():
+    with open(filename, "a") as file:
+        writer = csv.writer(file)
+        row = []
+        for i in range(0,PLOT_LINES):
+            row.append(yData[i][-1])
+        writer.writerow(row)
 
 def animate(i):
     xlist = []
@@ -93,6 +112,7 @@ def animate(i):
     ax.relim()
     # Rescale axes view
     ax.autoscale()
+    writeCSVRow()
     # Return calculated lines
     return lines
 
