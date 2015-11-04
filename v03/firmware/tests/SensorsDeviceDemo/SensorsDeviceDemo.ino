@@ -4,7 +4,7 @@
  * Social Computing Group, MIT Media Lab
  */
 
-#define sleep_time 50 // 200 milliseconds
+#define sleep_time 250 // 250 milliseconds
 
 #include <RFduinoGZLL.h>
 

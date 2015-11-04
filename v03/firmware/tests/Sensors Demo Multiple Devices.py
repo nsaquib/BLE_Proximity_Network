@@ -32,7 +32,7 @@ fig.subplots_adjust(right=0.75)
 filename = "Sensor Data " + time.strftime("%m%d%y %H%M%S") + ".csv"
 with open(filename, "w") as file:
     writer = csv.writer(file)
-    row = []
+    row = ["Timestamp"]
     for i in range(0, PLOT_LINES):
         row.append("DEVICE"+str(i))
     writer.writerow(row)
@@ -73,7 +73,7 @@ def process(xlist, ylist, index, i):
 def writeCSVRow():
     with open(filename, "a") as file:
         writer = csv.writer(file)
-        row = []
+        row = [time.time()]
         for i in range(0,PLOT_LINES):
             row.append(yData[i][-1])
         writer.writerow(row)
