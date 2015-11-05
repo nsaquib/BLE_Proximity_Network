@@ -11,11 +11,9 @@ Checklist for tonight:
 Cellphone App Improvements:
 ------------------------------------------
 1) Sleeping for x mins display
-2) 
 
 Checklist for deploying in the morning:
 ------------------------------------------
 1) Program each sensor
 2) Set the time for each sensor
 3) Place the sensors in the shoes
-4) 
