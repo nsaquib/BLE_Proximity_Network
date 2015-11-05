@@ -11,14 +11,14 @@ ser = serial.Serial("/dev/cu.usbserial-DN0073UM", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN00B1WO", 9600)
 
 win = 300
-PLOT_LINES = 3
+PLOT_LINES = 2
 yData = [[], [], [], [], [], [], [], []]
 lines = []
 fig, ax = plt.subplots()
 line, = ax.plot([], [], 'k-')
 ax.set_title('Ping Count of PrNet Devices', fontsize = 16)
 ax.set_xlabel('Time Steps', fontsize = 14)
-ax.set_ylabel('Ping Count, fontsize = 14)
+ax.set_ylabel('Ping Count', fontsize = 14)
 ax.margins(0.05)
 plotlays = [PLOT_LINES]
 plotcols = ["red", "orange", "yellow", "green", "blue", "violet", "brown", "black"]
@@ -50,9 +50,9 @@ def process(xlist, ylist, index, i):
     # Read line from serial port
     data = ser.readline().rstrip()
     # Strip newline charcter and split along commas
-    data = data.decode("ascii").split(',')
+    data = data.decode(encoding="ascii").split(',')
     # Add data point to list
-    yData[index].append(int(data[2]))
+    yData[index].append(float(data[2]))
     # Use numpy array for manipulation
     y = np.asarray(yData[index]);
     # X axis is length of y data
@@ -82,10 +82,10 @@ def animate(i):
     xlist = []
     ylist = []
     data = ser.readline().rstrip()
-    data = data.decode("ascii").split(',')
+    data = data.decode(encoding="ascii").split(',')
     # Check to process DEVICE0 first
     if (len(data) == 3 and data[0] == '0'):
-        yData[0].append(int(data[2]))
+        yData[0].append(float(data[2]))
         y = np.asarray(yData[0]);
         x = np.arange(y.size) + 1
         imin = min(max(0, i - win), x.size - win)

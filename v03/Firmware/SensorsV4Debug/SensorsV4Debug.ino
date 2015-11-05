@@ -8,8 +8,8 @@
 #define MAX_DEVICES 2
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 17
-#define START_MINUTE 55
+#define START_HOUR 18
+#define START_MINUTE 20
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
@@ -160,7 +160,7 @@ void loop() {
 }
 
 void loopHost() {
-  Serial.println("My role is HOST");
+  //Serial.println("My role is HOST");
   if (inDataCollectionPeriod()) {
     if (loopCounter >= (MAX_ROWS / MAX_DEVICES)) {
       writePage();
@@ -207,11 +207,10 @@ void calculateRSSIAverages() {
     else {
       rssiAverages[i] = rssiTotal[i] / rssiCount[i];
     }
-    Serial.print("DEVICE");
     Serial.print(i);
-    Serial.print(" ");
+    Serial.print(",");
     Serial.print(rssiAverages[i]);
-    Serial.print(" ");
+    Serial.print(",");
     Serial.println(rssiCount[i]);
   }
 }
@@ -275,8 +274,8 @@ void switchToHost() {
 
 void switchToDevice() {
   deviceRole = assignDeviceT();
-  Serial.print("My role is DEVICE");
-  Serial.println(deviceRole);
+  //Serial.print("My role is DEVICE");
+  //Serial.println(deviceRole);
   setupDevice();
 }
 
@@ -347,22 +346,22 @@ boolean inDataCollectionPeriod() {
 
 void displayClockTime() {
   displayDate();
-  Serial.print(timer.hours);
+  /*Serial.print(timer.hours);
   Serial.print(":");
   Serial.print(timer.minutes);
   Serial.print(":");
   Serial.print(timer.seconds);
   Serial.print(":");
-  Serial.println(timer.ms);
+  Serial.println(timer.ms);*/
 }
 
 void displayDate() {
-  Serial.print(MONTH);
+  /*Serial.print(MONTH);
   Serial.print("-");
   Serial.print(DAY);
   Serial.print("-");
   Serial.print(YEAR);
-  Serial.print(" ");
+  Serial.print(" ");*/
 }
 
 void updateTime(int ms) {
@@ -455,7 +454,7 @@ void sleepUntilStartTime() {
   // Add additional offset for each device
   int offset = HOST_LOOP_TIME*HOST_LOOPS*deviceID;
   delayTime += offset;
-  Serial.print("Sleeping for ");
+  /*Serial.print("Sleeping for ");
   Serial.print(hours);
   Serial.print(":");
   Serial.print(minutes);
@@ -464,7 +463,7 @@ void sleepUntilStartTime() {
   Serial.print(":");
   Serial.println(ms);
   Serial.print("Offset: ");
-  Serial.println(offset);
+  Serial.println(offset);*/
   timeDelay(delayTime);
   //sleepDevice(delayTime);
 }
@@ -521,14 +520,14 @@ void RFduinoBLE_onReceive(char *data, int len) {
       timer.minutes = atoi(startMin);
       timer.seconds = atoi(startSec);
       timer.ms = atoi(startMilliSec);
-      Serial.print("Start Hour: ");
+      /*Serial.print("Start Hour: ");
       Serial.println(timer.hours);
       Serial.print("Start Minute: ");
       Serial.println(timer.minutes);
       Serial.print("Start Sec: ");
       Serial.println(timer.seconds);
       Serial.print("Start MilliSec:");
-      Serial.println(timer.ms);
+      Serial.println(timer.ms);*/
       RFduinoBLE.send('>');
     }
     else{
@@ -547,8 +546,8 @@ void startTransfer() {
   while (transfer_flag)
   {
     m2.loadPage(page_counter);
-    Serial.print("Starting page: ");
-    Serial.println(page_counter);
+    //Serial.print("Starting page: ");
+    //Serial.println(page_counter);
     
     // generate the next packet
     for (int j = 0; j < lenrec; j++)
@@ -570,13 +569,13 @@ void startTransfer() {
       while (! RFduinoBLE.send(space));
       while (! RFduinoBLE.send('|'));
     } 
-    Serial.println("Finished with loop");
+    //Serial.println("Finished with loop");
     while (! RFduinoBLE.send('#'));
     timeDelay(200);
     page_counter--;
     if (page_counter < stop_len)
     {
-      Serial.println("Ending");
+      //Serial.println("Ending");
       transfer_flag = false;
       RFduinoBLE.send(0);
     }
