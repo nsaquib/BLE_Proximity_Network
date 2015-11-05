@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/res/values/dimens.xml -->
+    <!-- From: file:/Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <!-- From: file:/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_name">RFDuino Test</string>
-    <!-- From: file:/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppTheme" parent="android:Theme.Holo">
         <!-- Customize your theme here. -->

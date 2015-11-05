@@ -11,7 +11,7 @@ ser = serial.Serial("/dev/cu.usbserial-DN0073UM", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN00B1WO", 9600)
 
 win = 300
-PLOT_LINES = 8
+PLOT_LINES = 3
 yData = [[], [], [], [], [], [], [], []]
 lines = []
 fig, ax = plt.subplots()

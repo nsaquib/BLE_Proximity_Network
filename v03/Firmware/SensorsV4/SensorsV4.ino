@@ -8,8 +8,8 @@
 #define MAX_DEVICES 2
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 14
-#define START_MINUTE 15
+#define START_HOUR 16
+#define START_MINUTE 30
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
@@ -101,7 +101,7 @@ void setup() {
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 0;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "14";
+  RFduinoBLE.deviceName = "0";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
