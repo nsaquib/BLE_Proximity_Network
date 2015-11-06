@@ -12,6 +12,7 @@
 #define START_MINUTE 35
 #define END_HOUR 23
 #define END_MINUTE 0
+#define PINGS_TO_SEND 25
 // Host time
 #define HOST_LOOP_TIME 2500
 #define HOST_LOOPS 1
@@ -64,6 +65,10 @@ float rssiCount[MAX_DEVICES];
 float rssiAverages[MAX_DEVICES];
 // Collect samples flag
 int collectSamples = 0;
+// Count acknowledgement packets
+int acknowledgments = 0;
+// Flag for all devices turning on
+boolean devicesOn = false;
 // Pin for the green LED
 int greenLED = 3;
 // Date variables
@@ -154,12 +159,19 @@ void loop() {
 
 void loopHost() {
   Serial.println("My role is HOST");
+  Serial.println(acknowledgments);
+  acknowledgments = 0;
   if (inDataCollectionPeriod()) {
     if (loopCounter >= (MAX_ROWS / MAX_DEVICES)) {
       writePage();
     }
     resetRSSI();
-    collectSamplesFromDevices();
+    if (devicesOn) {
+      collectSamplesFromDevices();
+    } else {
+      timeDelay(HOST_LOOP_TIME);
+      devicesOn = true;
+    }
     calculateRSSIAverages();
     updateROMTable();
     loopCounter++;
@@ -209,7 +221,10 @@ void collectSamplesFromDevices() {
   // Start collecting RSSI samples
   collectSamples = 1;
   // Wait for designate host time/HBA
-  timeDelay(HOST_LOOP_TIME);
+  //timeDelay(HOST_LOOP_TIME);
+  while (packetsRecieved() < (MAX_DEVICES - 1) * PINGS_TO_SEND) {
+    // do nothing (or wait maybe?)
+  }
   // Stop collecting RSSI samples
   collectSamples = 0;
 }
@@ -221,6 +236,14 @@ void resetRSSI() {
     rssiTotal[i] = 0;
     rssiCount[i] = 0;
   }
+}
+
+int packetsReceived() {
+  int sum = 0;
+  for (i = 0; i < MAX_DEVICES; i++) {
+    sum += rssiCount[i];
+  }
+  return sum;
 }
 
 ////////// Device Functions //////////
@@ -236,6 +259,7 @@ void pollHost() {
 ////////// Role Switch Functions //////////
 
 boolean shouldBeDevice() {
+  //return (pingsReceived <= (MAX_DEVICES - 1) * PINGS_TO_SEND)
   if (hostCounter >= HOST_LOOPS - 1) {
     hostCounter = 0;
     return true;
@@ -247,14 +271,15 @@ boolean shouldBeDevice() {
 }
 
 boolean shouldBeHost() {
-  if (deviceCounter >= DEVICE_LOOPS - 1) {
+  return (acknowledgments < PINGS_TO_SEND);
+  /*if (deviceCounter >= DEVICE_LOOPS - 1) {
     deviceCounter = 0;
     return true;
   }
   else {
     deviceCounter++;
     return false;
-  }
+  }*/
 }
 
 void switchToHost() {
@@ -282,6 +307,10 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   if (deviceRole == HOST && collectSamples && (int) data[0] >= 0 && (int) data[0] < MAX_DEVICES) {
     rssiTotal[(int) data[0]] += rssi;
     rssiCount[(int) data[0]]++;
+  }
+  // Count number of acknowledgment packets recieved
+  if (deviceRole != HOST) {
+    acknowledgments++;
   }
 }
 
