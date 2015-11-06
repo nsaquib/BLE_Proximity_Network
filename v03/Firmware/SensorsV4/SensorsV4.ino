@@ -5,18 +5,18 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 2
+#define MAX_DEVICES 3
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 17
-#define START_MINUTE 55
+#define START_HOUR 14
+#define START_MINUTE 30
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
-#define HOST_LOOP_TIME 5000
+#define HOST_LOOP_TIME 2500
 #define HOST_LOOPS 1
 // Device time
-#define DEVICE_LOOP_TIME 200
+#define DEVICE_LOOP_TIME 100
 #define lenrec 80
 
 #include <RFduinoGZLL.h>
@@ -33,7 +33,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 1;
+const int deviceID = 2;
 
 // Serialized time from Python script
 struct timer {
@@ -67,10 +67,10 @@ int collectSamples = 0;
 // Pin for the green LED
 int greenLED = 3;
 // Date variables
-int MONTH = 10;
-int DAY = 26;
+int MONTH = 11;
+int DAY = 6;
 int YEAR = 15;
-int WEEKDAY = 1;
+int WEEKDAY = 5;
 // ROM Managers
 PrNetRomManager m;  //for writing to flash ROM
 PrNetRomManager m2; // for reading flash ROM and sending through BLE
@@ -101,7 +101,7 @@ void setup() {
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 0;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "1";
+  RFduinoBLE.deviceName = "2";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
@@ -131,13 +131,6 @@ void loop() {
   if (!timeIsSet()) {
     Serial.println("Waiting for time from phone app...");
     setTimer();
-    // Setup for specific device roles
-    if (deviceRole == HOST) {
-      setupHost();
-    }
-    else {
-      setupDevice();
-    }
   }
   // Time is set
   else {
@@ -165,10 +158,6 @@ void loopHost() {
     if (loopCounter >= (MAX_ROWS / MAX_DEVICES)) {
       writePage();
     }
-    // Start GZZL stack from wake cycle
-    RFduinoGZLL.end();
-    RFduinoGZLL.hostBaseAddress = HBA;
-    RFduinoGZLL.begin(HOST);
     resetRSSI();
     collectSamplesFromDevices();
     calculateRSSIAverages();
