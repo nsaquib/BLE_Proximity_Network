@@ -5,11 +5,11 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 3
+#define MAX_DEVICES 2
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 14
-#define START_MINUTE 35
+#define START_HOUR 17
+#define START_MINUTE 0
 #define END_HOUR 23
 #define END_MINUTE 0
 #define PINGS_TO_SEND 25
@@ -34,11 +34,11 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 2;
+const int deviceID = 1;
 
 // Serialized time from Python script
 struct timer {
-  int hours = 0;
+  int hours = 17;
   int minutes = 0;
   int seconds = 0;
   int ms = 0;
@@ -68,7 +68,7 @@ int collectSamples = 0;
 // Count acknowledgement packets
 int acknowledgments = 0;
 // Flag for all devices turning on
-boolean devicesOn = false;
+boolean devicesOn = true;
 // Pin for the green LED
 int greenLED = 3;
 // Date variables
@@ -106,7 +106,7 @@ void setup() {
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 0;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "2";
+  RFduinoBLE.deviceName = "1";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
@@ -135,7 +135,7 @@ void loop() {
   // Time is not set
   if (!timeIsSet()) {
     Serial.println("Waiting for time from phone app...");
-    setTimer();
+    //setTimer();
   }
   // Time is set
   else {
@@ -166,12 +166,7 @@ void loopHost() {
       writePage();
     }
     resetRSSI();
-    if (devicesOn) {
-      collectSamplesFromDevices();
-    } else {
-      timeDelay(HOST_LOOP_TIME);
-      devicesOn = true;
-    }
+    collectSamplesFromDevices();
     calculateRSSIAverages();
     updateROMTable();
     loopCounter++;
@@ -220,10 +215,12 @@ void calculateRSSIAverages() {
 void collectSamplesFromDevices() {
   // Start collecting RSSI samples
   collectSamples = 1;
-  // Wait for designate host time/HBA
-  //timeDelay(HOST_LOOP_TIME);
-  while (packetsRecieved() < (MAX_DEVICES - 1) * PINGS_TO_SEND) {
-    // do nothing (or wait maybe?)
+  int counter = 0;
+  while (packetsReceived() < (MAX_DEVICES - 1) * PINGS_TO_SEND && counter < 500) {
+    // Wait for packets
+    Serial.println(packetsReceived());
+    timeDelay(10);
+    counter++;
   }
   // Stop collecting RSSI samples
   collectSamples = 0;
@@ -240,6 +237,7 @@ void resetRSSI() {
 
 int packetsReceived() {
   int sum = 0;
+  int i;
   for (i = 0; i < MAX_DEVICES; i++) {
     sum += rssiCount[i];
   }
@@ -259,7 +257,6 @@ void pollHost() {
 ////////// Role Switch Functions //////////
 
 boolean shouldBeDevice() {
-  //return (pingsReceived <= (MAX_DEVICES - 1) * PINGS_TO_SEND)
   if (hostCounter >= HOST_LOOPS - 1) {
     hostCounter = 0;
     return true;
@@ -271,15 +268,14 @@ boolean shouldBeDevice() {
 }
 
 boolean shouldBeHost() {
-  return (acknowledgments < PINGS_TO_SEND);
-  /*if (deviceCounter >= DEVICE_LOOPS - 1) {
+  if (deviceCounter >= 2*(DEVICE_LOOPS - 1) || acknowledgments >= PINGS_TO_SEND) {
     deviceCounter = 0;
     return true;
   }
   else {
     deviceCounter++;
     return false;
-  }*/
+  }
 }
 
 void switchToHost() {
