@@ -9,7 +9,7 @@
 #define MAX_ROWS 80
 // Time range to perform data collection
 #define START_HOUR 18
-#define START_MINUTE 20
+#define START_MINUTE 45
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
@@ -33,7 +33,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 1;
+const int deviceID = 0;
 
 // Serialized time from Python script
 struct timer {
@@ -101,7 +101,7 @@ void setup() {
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 0;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "1";
+  RFduinoBLE.deviceName = "0";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
