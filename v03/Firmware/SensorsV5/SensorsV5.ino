@@ -9,7 +9,7 @@
 #define MAX_ROWS 80
 // Time range to perform data collection
 #define START_HOUR 14
-#define START_MINUTE 35
+#define START_MINUTE 48
 #define END_HOUR 23
 #define END_MINUTE 0
 #define PINGS_TO_SEND 100
@@ -159,7 +159,6 @@ void loop() {
 
 void loopHost() {
   Serial.println("My role is HOST");
-  Serial.println(acknowledgments);
   acknowledgments = 0;
   if (inDataCollectionPeriod()) {
     if (loopCounter >= (MAX_ROWS / MAX_DEVICES)) {
@@ -223,12 +222,14 @@ void collectSamplesFromDevices() {
   // Start collecting RSSI samples
   collectSamples = 1;
   int counter = 0;
-  while (packetsReceived() < (MAX_DEVICES - 1) * PINGS_TO_SEND && counter < DEVICE_LOOPS) {
+  while (packetsReceived() < ((MAX_DEVICES - 1) * PINGS_TO_SEND) && counter < (DEVICE_LOOPS/(MAX_DEVICES - 1))) {
     // Wait for packets
-    Serial.println(packetsReceived());
+    //Serial.println(packetsReceived());
     timeDelay(DEVICE_LOOP_TIME);
     counter++;
   }
+  Serial.print("Host Internal Loop: ");
+  Serial.println(counter);
   // Stop collecting RSSI samples
   collectSamples = 0;
 }
@@ -278,6 +279,8 @@ boolean shouldBeHost() {
   if (deviceCounter >= DEVICE_LOOPS - 1 || acknowledgments >= PINGS_TO_SEND) {
     Serial.print("Device Loop Counter: ");
     Serial.println(deviceCounter);
+    Serial.print("Acks: ");
+    Serial.println(acknowledgements);
     deviceCounter = 0;
     return true;
   }
