@@ -5,11 +5,11 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 2
+#define MAX_DEVICES 3
 #define MAX_ROWS 80
 // Time range to perform data collection
 #define START_HOUR 17
-#define START_MINUTE 0
+#define START_MINUTE 2
 #define END_HOUR 23
 #define END_MINUTE 0
 #define PINGS_TO_SEND 25
@@ -216,10 +216,10 @@ void collectSamplesFromDevices() {
   // Start collecting RSSI samples
   collectSamples = 1;
   int counter = 0;
-  while (packetsReceived() < (MAX_DEVICES - 1) * PINGS_TO_SEND && counter < 500) {
+  while (packetsReceived() < (MAX_DEVICES - 1) * PINGS_TO_SEND && counter < 2*DEVICE_LOOPS) {
     // Wait for packets
     Serial.println(packetsReceived());
-    timeDelay(10);
+    timeDelay(DEVICE_LOOP_TIME);
     counter++;
   }
   // Stop collecting RSSI samples
@@ -268,7 +268,7 @@ boolean shouldBeDevice() {
 }
 
 boolean shouldBeHost() {
-  if (deviceCounter >= 2*(DEVICE_LOOPS - 1) || acknowledgments >= PINGS_TO_SEND) {
+  if (deviceCounter >= DEVICE_LOOPS - 1 || acknowledgments >= PINGS_TO_SEND) {
     deviceCounter = 0;
     return true;
   }
