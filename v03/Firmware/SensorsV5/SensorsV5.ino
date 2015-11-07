@@ -280,7 +280,7 @@ boolean shouldBeHost() {
     Serial.print("Device Loop Counter: ");
     Serial.println(deviceCounter);
     Serial.print("Acks: ");
-    Serial.println(acknowledgements);
+    Serial.println(acknowledgments);
     deviceCounter = 0;
     return true;
   }
