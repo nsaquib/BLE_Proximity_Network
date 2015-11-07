@@ -8,13 +8,13 @@
 #define MAX_DEVICES 3
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 14
-#define START_MINUTE 48
+#define START_HOUR 15
+#define START_MINUTE 12
 #define END_HOUR 23
 #define END_MINUTE 0
 #define PINGS_TO_SEND 100
 // Host time
-#define HOST_LOOP_TIME 10000
+#define HOST_LOOP_TIME 1000
 #define HOST_LOOPS 1
 // Device time
 #define DEVICE_LOOP_TIME 100
@@ -158,6 +158,7 @@ void loop() {
 }
 
 void loopHost() {
+  displayClockTime()
   Serial.println("My role is HOST");
   acknowledgments = 0;
   if (inDataCollectionPeriod()) {
