@@ -8,13 +8,13 @@
 #define MAX_DEVICES 3
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 17
-#define START_MINUTE 2
+#define START_HOUR 14
+#define START_MINUTE 35
 #define END_HOUR 23
 #define END_MINUTE 0
-#define PINGS_TO_SEND 25
+#define PINGS_TO_SEND 100
 // Host time
-#define HOST_LOOP_TIME 2500
+#define HOST_LOOP_TIME 10000
 #define HOST_LOOPS 1
 // Device time
 #define DEVICE_LOOP_TIME 100
@@ -34,11 +34,11 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 1;
+const int deviceID = 2;
 
 // Serialized time from Python script
 struct timer {
-  int hours = 17;
+  int hours = 0;
   int minutes = 0;
   int seconds = 0;
   int ms = 0;
@@ -68,7 +68,7 @@ int collectSamples = 0;
 // Count acknowledgement packets
 int acknowledgments = 0;
 // Flag for all devices turning on
-boolean devicesOn = true;
+boolean devicesOn = false;
 // Pin for the green LED
 int greenLED = 3;
 // Date variables
@@ -106,7 +106,7 @@ void setup() {
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 0;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "1";
+  RFduinoBLE.deviceName = "2";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
@@ -135,7 +135,7 @@ void loop() {
   // Time is not set
   if (!timeIsSet()) {
     Serial.println("Waiting for time from phone app...");
-    //setTimer();
+    setTimer();
   }
   // Time is set
   else {
@@ -166,9 +166,16 @@ void loopHost() {
       writePage();
     }
     resetRSSI();
-    collectSamplesFromDevices();
-    calculateRSSIAverages();
-    updateROMTable();
+    if (devicesOn) {
+      collectSamplesFromDevices();
+      calculateRSSIAverages();
+      updateROMTable();
+    } else {
+      collectSamples = 1;
+      timeDelay(HOST_LOOP_TIME);
+      collectSamples = 0;
+      devicesOn = true;
+    }
     loopCounter++;
     if (shouldBeDevice()) {
       switchToDevice();
@@ -216,7 +223,7 @@ void collectSamplesFromDevices() {
   // Start collecting RSSI samples
   collectSamples = 1;
   int counter = 0;
-  while (packetsReceived() < (MAX_DEVICES - 1) * PINGS_TO_SEND && counter < 2*DEVICE_LOOPS) {
+  while (packetsReceived() < (MAX_DEVICES - 1) * PINGS_TO_SEND && counter < DEVICE_LOOPS) {
     // Wait for packets
     Serial.println(packetsReceived());
     timeDelay(DEVICE_LOOP_TIME);
@@ -269,6 +276,8 @@ boolean shouldBeDevice() {
 
 boolean shouldBeHost() {
   if (deviceCounter >= DEVICE_LOOPS - 1 || acknowledgments >= PINGS_TO_SEND) {
+    Serial.print("Device Loop Counter: ");
+    Serial.println(deviceCounter);
     deviceCounter = 0;
     return true;
   }
