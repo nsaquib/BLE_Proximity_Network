@@ -8,12 +8,12 @@
 #define MAX_DEVICES 3
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 14
+#define START_HOUR 17
 #define START_MINUTE 35
 #define END_HOUR 23
 #define END_MINUTE 0
 // Host time
-#define HOST_LOOP_TIME 2500
+#define HOST_LOOP_TIME 1000
 #define HOST_LOOPS 1
 // Device time
 #define DEVICE_LOOP_TIME 100
@@ -173,7 +173,8 @@ void loopDevice() {
   if (inDataCollectionPeriod()) {
     // Sleep device
     //sleepDevice(DEVICE_LOOP_TIME);
-    timeDelay(DEVICE_LOOP_TIME);
+    //timeDelay(DEVICE_LOOP_TIME);
+    sleepDevice(DEVICE_LOOP_TIME);
     // Send data to all other hosts
     pollHost();
     if (shouldBeHost()) {
@@ -454,8 +455,8 @@ void sleepUntilStartTime() {
   Serial.println(ms);
   Serial.print("Offset: ");
   Serial.println(offset);
-  timeDelay(delayTime);
-  //sleepDevice(delayTime);
+  //timeDelay(delayTime);
+  sleepDevice(delayTime);
 }
 
 ////////// ROM Code //////////
