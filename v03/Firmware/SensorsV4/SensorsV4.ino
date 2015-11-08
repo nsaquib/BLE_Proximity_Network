@@ -99,7 +99,7 @@ int packets = 48;
 void setup() {
   pinMode(greenLED, OUTPUT);
   // Adjust power output levels
-  RFduinoGZLL.txPowerLevel = 0;
+  RFduinoGZLL.txPowerLevel = 4;
   // Set BLE parameters
   RFduinoBLE.deviceName = "0";
   // Set host base address
