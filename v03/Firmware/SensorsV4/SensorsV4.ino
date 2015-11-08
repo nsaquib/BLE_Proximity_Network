@@ -6,11 +6,11 @@
 
 // Maximum devices in network
 #define MAX_DEVICES 14
-#define MAX_ROWS 80
+#define MAX_ROWS 80 
 // Time range to perform data collection
-#define START_HOUR 9
+#define START_HOUR 17
 #define START_MINUTE 0
-#define END_HOUR 13
+#define END_HOUR 20
 #define END_MINUTE 0
 // Host time
 #define HOST_LOOP_TIME 2500
@@ -551,13 +551,13 @@ void startTransfer() {
       sprintf(buf_id, "%d", m2.table.id[j]);
       sprintf(buf_rsval, "%d", m2.table.rsval[j]);
       while (! RFduinoBLE.send(buf_t, 10));
-      while (! RFduinoBLE.send(space));
-      timeDelay(20); 
+      //while (! RFduinoBLE.send(space));
+      timeDelay(5); 
       while (! RFduinoBLE.send(buf_id, 10));
-      while (! RFduinoBLE.send(space));
-      timeDelay(20);
+      //while (! RFduinoBLE.send(space));
+      timeDelay(5);
       while (! RFduinoBLE.send(buf_rsval, 10));
-      while (! RFduinoBLE.send(space));
+      //while (! RFduinoBLE.send(space));
       while (! RFduinoBLE.send('|'));
     } 
     Serial.println("Finished with loop");
