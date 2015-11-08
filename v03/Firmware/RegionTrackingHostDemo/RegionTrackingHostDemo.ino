@@ -56,7 +56,7 @@ void loop()
     int i;
   
     Serial.println("beginning as host");
-    RFduino.hostBaseAddress = HBA;
+    RFduinoGZLL.hostBaseAddress = HBA;
     RFduinoGZLL.begin(HOST);
     // reset the RSSI averaging for each device
     for (i = 0; i < MAX_DEVICES; i++)
