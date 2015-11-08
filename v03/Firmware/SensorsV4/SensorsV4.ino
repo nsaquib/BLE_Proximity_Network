@@ -5,18 +5,18 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 3
+#define MAX_DEVICES 14
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 17
-#define START_MINUTE 35
-#define END_HOUR 23
+#define START_HOUR 9
+#define START_MINUTE 0
+#define END_HOUR 13
 #define END_MINUTE 0
 // Host time
-#define HOST_LOOP_TIME 1000
+#define HOST_LOOP_TIME 2500
 #define HOST_LOOPS 1
 // Device time
-#define DEVICE_LOOP_TIME 100
+#define DEVICE_LOOP_TIME 250
 #define lenrec 80
 
 #include <RFduinoGZLL.h>
@@ -33,9 +33,9 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 2;
+const int deviceID = 0;
 
-// Serialized time from Python script
+// Global timer
 struct timer {
   int hours = 0;
   int minutes = 0;
@@ -101,7 +101,7 @@ void setup() {
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 0;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "2";
+  RFduinoBLE.deviceName = "0";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
@@ -173,8 +173,8 @@ void loopDevice() {
   if (inDataCollectionPeriod()) {
     // Sleep device
     //sleepDevice(DEVICE_LOOP_TIME);
-    //timeDelay(DEVICE_LOOP_TIME);
-    sleepDevice(DEVICE_LOOP_TIME);
+    timeDelay(DEVICE_LOOP_TIME);
+    //sleepDevice(DEVICE_LOOP_TIME);
     // Send data to all other hosts
     pollHost();
     if (shouldBeHost()) {
@@ -313,8 +313,8 @@ void setTimer() {
 void sleepDevice(int milliseconds) {
   RFduinoGZLL.end();
   RFduinoBLE.begin();
-  updateTime(milliseconds);
   RFduino_ULPDelay(milliseconds);
+  updateTime(milliseconds);
   RFduinoBLE.end();
   RFduinoGZLL.begin(deviceRole);
 }
