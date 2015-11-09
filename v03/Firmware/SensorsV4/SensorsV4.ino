@@ -511,13 +511,13 @@ void RFduinoBLE_onReceive(char *data, int len) {
       timer.minutes = atoi(startMin);
       timer.seconds = atoi(startSec);
       timer.ms = atoi(startMilliSec);
-      Serial.print("Start Hour: ");
+      Serial.print("Hour: ");
       Serial.println(timer.hours);
-      Serial.print("Start Minute: ");
+      Serial.print("Minute: ");
       Serial.println(timer.minutes);
-      Serial.print("Start Sec: ");
+      Serial.print("Second: ");
       Serial.println(timer.seconds);
-      Serial.print("Start MilliSec:");
+      Serial.print("Millisecond:");
       Serial.println(timer.ms);
       RFduinoBLE.send('>');
     }
@@ -540,9 +540,10 @@ void startTransfer() {
     Serial.print("Starting page: ");
     Serial.println(page_counter);
     
-    // generate the next packet
+    // Generate the next packet
     for (int j = 0; j < lenrec; j++)
     {
+      Serial.println(m2.table.t[j]);
       char space = ' ';
       char buf_t[10];
       char buf_id[10];
