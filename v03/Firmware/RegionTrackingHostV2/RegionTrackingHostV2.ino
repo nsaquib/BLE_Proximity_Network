@@ -5,10 +5,10 @@
  * Social Computing Group, MIT Media Lab
  */
 
-#define MAX_DEVICES 8
+#define MAX_DEVICES 9
 #define MAX_ROWS 80
-#define HOST_LOOP_TIME 10000
-#define HOST_SLEEP_TIME 10000
+#define HOST_LOOP_TIME 1000
+#define HOST_SLEEP_TIME 20000
 
 #include <RFduinoBLE.h>
 #include <RFduinoGZLL.h>
@@ -21,17 +21,24 @@ float rssiAverages[MAX_DEVICES];
 
 // Collect samples flag
 int collectSamples = 0;
-long loopCounter = 0;
+// Counter for the number of nonzero rows in the current PrNetRomManager table
+int rowCounter = 0;
 // Time elapsed
-long timePassed = 0; // in seconds
+long timePassed = 0; // in milliseconds
 // Designated time to run
-const long timeToRun = 10800; // in seconds
+const long timeToRun = 14400000; // 4 hours in milliseconds
 // Host base address
 const int HBA = 0x000;
 // Pin for the green LED
 int greenLED = 3;
 
+boolean transferFlag = false;
+
+int pageCounter = STORAGE_FLASH_PAGE;
+int stopLen = STORAGE_FLASH_PAGE - 49;
+
 PrNetRomManager m;
+PrNetRomManager m2;
 
 void setup() {
   pinMode(greenLED, OUTPUT);
@@ -44,16 +51,11 @@ void setup() {
 void loop() {
   if (timePassed < timeToRun) {
     Serial.println("My role is HOST");
-    if(loopCounter >= (MAX_ROWS / MAX_DEVICES)) {
-      writePage();
-    }
     resetRSSI();
     collectSamplesFromDevices();
     calculateRSSIAverages();
     updateROMTable();
-    loopCounter++;
     sleepHost(HOST_SLEEP_TIME);
-    timePassed += HOST_SLEEP_TIME/1000;
   } else {
     sleepForever();
   }
@@ -69,8 +71,7 @@ void calculateRSSIAverages() {
     // Prevents division by zero
     if (rssiCount[i] == 0) {
       rssiAverages[i] = -128;
-    }
-    else {
+    } else {
       rssiAverages[i] = rssiTotal[i] / rssiCount[i];
     }
     Serial.print("DEVICE");
@@ -87,6 +88,7 @@ void collectSamplesFromDevices() {
   collectSamples = 1;
   // Wait for designate host time/HBA
   delay(HOST_LOOP_TIME);
+  timePassed += HOST_LOOP_TIME;
   // Stop collecting RSSI samples
   collectSamples = 0;
 }
@@ -102,18 +104,23 @@ void resetRSSI() {
 
 void sleepHost(int milliseconds) {
   // sleep for some time
-    Serial.println("Entering sleep");
-    RFduinoBLE.begin();
-    RFduino_ULPDelay(milliseconds);
-    RFduinoBLE.end();
+  timePassed += milliseconds;
+  Serial.println("Entering sleep");
+  RFduinoGZLL.end();
+  RFduinoBLE.begin();
+  RFduino_ULPDelay(milliseconds);
+  RFduinoBLE.end();
+  RFduinoGZLL.begin(HOST);
 }
 
 void sleepForever() {
   // Sleep host indefinitely
   Serial.println("Sleeping forever...");
+  RFduinoGZLL.end();
   RFduinoBLE.begin();
   RFduino_ULPDelay(INFINITE);
   RFduinoBLE.end();
+  RFduinoGZLL.begin(HOST);
 }
 
 ////////// Callback Functions //////////
@@ -133,9 +140,15 @@ void updateROMTable() {
   // Update rows for rom table
   int i;
   for (i = 0; i < MAX_DEVICES; i++) {
-    m.table.t[i + loopCounter * MAX_DEVICES] = millis();
-    m.table.id[i + loopCounter * MAX_DEVICES] = i;
-    m.table.rsval[i + loopCounter * MAX_DEVICES] = rssiAverages[i];
+    if (rssiAverages[i] != -128) {
+      if (rowCounter >= MAX_ROWS) {
+        writePage();
+      }
+      m.table.t[rowCounter] = millis();
+      m.table.id[rowCounter] = i;
+      m.table.rsval[rowCounter] = rssiAverages[i];
+      rowCounter++;
+    }
   }
 }
 
@@ -145,5 +158,5 @@ void writePage() {
   // Write to rom memory
   int success = m.writePage(STORAGE_FLASH_PAGE - m.pagecounter, m.table);
   Serial.println(success);
-  loopCounter = 0;
+  rowCounter = 0;
 }

@@ -8,7 +8,7 @@
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
 
-#define DEVICE_LOOP_TIME 1000
+#define DEVICE_LOOP_TIME 100
 
 /*
  * ID DEVICEX
@@ -17,7 +17,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 0;
+const int deviceID = 2;
 // Device roles
 const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 device_t role = assignDeviceT();
@@ -38,11 +38,8 @@ void loop() {
 }
 
 void pollHost() {
-  // Only a device can poll the host
-  if (deviceRole != HOST) {
-    // Send deviceID to host
-    RFduinoGZLL.sendToHost(deviceID);
-  }
+  // Send deviceID to host
+  RFduinoGZLL.sendToHost(deviceID);
 }
 
 device_t assignDeviceT() {
