@@ -5,9 +5,8 @@ void setup() {
   PrNetRomManager m;
   Serial.begin(250000);
 
-  // iterate over pages
-  for(int i = STORAGE_FLASH_PAGE; i > STORAGE_FLASH_PAGE - 8; i--)
-  {
+  // Iterate over pages
+  for (int i = STORAGE_FLASH_PAGE; i > STORAGE_FLASH_PAGE - 2; i--) {
     m.printPage(i);
   }
 }
