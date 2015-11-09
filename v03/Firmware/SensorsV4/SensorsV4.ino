@@ -79,18 +79,8 @@ int rowCounter = 0;
 boolean transferFlag = false;
 // Counter for current page to write to
 int pageCounter = STORAGE_FLASH_PAGE;
-int stop_len = STORAGE_FLASH_PAGE - 49;
-boolean ble_setup_flag = false;
-
-// Flag used to start sending
-//boolean flag = false;
-//int start;
-// Variables used in packet generation
-//int ch;
-//int packet;
-// 1K page with 12 bytes rows and 80 rows = 960 bytes.
-// so each 1K page has 960/20 = 48 packets.
-//int packets = 48;
+// Last page to send to cell phone app
+int stopLen = STORAGE_FLASH_PAGE - 49;
 
 void setup() {
   pinMode(greenLED, OUTPUT);
@@ -531,7 +521,7 @@ void startTransfer() {
     Serial.println(pageCounter);
     
     // Generate the next packet
-    for (int i = 0; i < lenrec; i++) {
+    for (int i = 0; i < MAX_ROWS; i++) {
       Serial.println(m2.table.t[i]);
       char space = ' ';
       char buf_t[10];
@@ -551,7 +541,7 @@ void startTransfer() {
     while (!RFduinoBLE.send('#'));
     timeDelay(200);
     pageCounter--;
-    if (pageCounter < stop_len) {
+    if (pageCounter < stopLen) {
       Serial.println("Ending");
       transferFlag = false;
       RFduinoBLE.send(0);
