@@ -96,8 +96,7 @@ void setup() {
   // Setup for specific device roles
   if (deviceRole == HOST) {
     setupHost();
-  }
-  else {
+  } else {
     setupDevice();
   }
 }
@@ -117,21 +116,18 @@ void loop() {
   if (!timeIsSet()) {
     Serial.println("Waiting for time from phone app...");
     setTimer();
-  }
   // Time is set
-  else {
+  } else {
     if (!inDataCollectionPeriod()) {
       sleepUntilStartTime();
       if (transferFlag) {
         startTransfer();
       }
-    }
-    else {
+    } else {
       // Loop for specific device roles
       if (deviceRole == HOST) {
         loopHost();
-      }
-      else {
+      } else {
         loopDevice();
       }
     }
@@ -175,8 +171,7 @@ void calculateRSSIAverages() {
     // Prevents division by zero
     if (rssiCount[i] == 0) {
       rssiAverages[i] = -128;
-    }
-    else {
+    } else {
       rssiAverages[i] = rssiTotal[i] / rssiCount[i];
     }
     Serial.print("DEVICE");
@@ -222,8 +217,7 @@ boolean shouldBeDevice() {
   if (hostCounter >= HOST_LOOPS - 1) {
     hostCounter = 0;
     return true;
-  }
-  else {
+  } else {
     hostCounter++;
     return false;
   }
@@ -305,14 +299,12 @@ boolean inDataCollectionPeriod() {
   // Collect data while within range
   if ((timer.hours > START_HOUR) && (timer.hours < END_HOUR)) {
     return true;
-  }
   // Inclusive on START_MINUTE and exclusive on END_MINUTE
-  else if (((timer.hours == START_HOUR) && (timer.minutes >= START_MINUTE))
+  } else if (((timer.hours == START_HOUR) && (timer.minutes >= START_MINUTE))
             || ((timer.hours == END_HOUR) && (timer.minutes < END_MINUTE))) {
     return true;
-  }
   // Otherwise, do not collect data
-  else {
+  } else {
     return false;
   }
 }
@@ -388,37 +380,30 @@ void sleepUntilStartTime() {
   if (timer.hours == START_HOUR) {
     if (timer.minutes < START_MINUTE) {
       hours = 0;
-    }
-    else {
+    } else {
       hours = 23;
     }
-  }
-  else if (timer.hours < START_HOUR) {
+  } else if (timer.hours < START_HOUR) {
     if (timer.minutes < START_MINUTE) {
        hours = START_HOUR - timer.hours;
-    }
-    else {
+    } else {
       hours = START_HOUR - timer.hours - 1;
     }
-  }
-  else {
+  } else {
     if (timer.minutes < START_MINUTE) {
       hours = 24 - timer.hours + START_HOUR;
-    }
-    else {
+    } else {
       hours = 24 - timer.hours + START_HOUR - 1; 
     }
   }
   if (timer.seconds <= 0) {
     minutes = (60 - timer.minutes + START_MINUTE) % 60;
-  }
-  else {
+  } else {
     minutes = (60 - timer.minutes + START_MINUTE - 1) % 60;
   }
   if (timer.ms <= 0) {
     seconds = (60 - timer.seconds) % 60;
-  }
-  else {
+  } else {
     seconds = (60 - timer.seconds - 1) % 60;
   }
   ms = (1000 - timer.ms) % 1000;
@@ -473,7 +458,7 @@ void writePage() {
 void RFduinoBLE_onReceive(char *data, int len) {
   // If the first byte exists
   if (data[0]) {
-    if(data[0] == '>') {
+    if (data[0] == '>') {
       //Update start time
       char startHour[2];
       startHour[0] = data[1];
