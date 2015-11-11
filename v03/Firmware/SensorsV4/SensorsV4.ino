@@ -5,18 +5,18 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 2
-#define MAX_ROWS 80 
+#define MAX_DEVICES 15
+#define MAX_ROWS 80
 // Time range to perform data collection
 #define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 20
+#define END_HOUR 13
 #define END_MINUTE 0
 // Host time
-#define HOST_LOOP_TIME 2500
+#define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
 // Device time
-#define DEVICE_LOOP_TIME 250
+#define DEVICE_LOOP_TIME 100
 
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
@@ -32,11 +32,11 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 0;
+const int deviceID = 12;
 
 // Global timer
 struct timer {
-  int hours = 10;
+  int hours = 0;
   int minutes = 0;
   int seconds = 0;
   int ms = 0;
@@ -87,7 +87,7 @@ void setup() {
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 4;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "0";
+  RFduinoBLE.deviceName = "12";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
@@ -152,7 +152,6 @@ void loopDevice() {
     // Sleep device
     //sleepDevice(DEVICE_LOOP_TIME);
     timeDelay(DEVICE_LOOP_TIME);
-    //sleepDevice(DEVICE_LOOP_TIME);
     // Send data to all other hosts
     pollHost();
     if (shouldBeHost()) {
