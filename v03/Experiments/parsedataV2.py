@@ -1,7 +1,7 @@
 # Open file with data source
-f = open("data13.txt",'r')
+f = open("host10.txt",'r')
 # Set the maximum number of devices
-MAX_DEVICES = 15
+MAX_DEVICES = 10
 
 # Get data from file
 lines = f.readlines()

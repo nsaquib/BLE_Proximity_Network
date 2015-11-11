@@ -17,25 +17,40 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 2;
+const int deviceID = 0;
 // Device roles
 const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 device_t role = assignDeviceT();
-
+// Time elapsed
+long timePassed = 0; // in milliseconds
+// Designated time to run
+const long timeToRun = 14400000; // 4 hours in milliseconds
+// Host base address
+const int HBA = 0x000;
 // pin for the Green Led
-int green_led = 3;
+int greenLED = 3;
 
 void setup() {
-  pinMode(green_led, OUTPUT);
+  pinMode(greenLED, OUTPUT);
   RFduinoGZLL.txPowerLevel = 4;
-  RFduinoGZLL.hostBaseAddress = 0x000;
+  RFduinoGZLL.hostBaseAddress = HBA;
   RFduinoGZLL.begin(role);
+  Serial.begin(9600);
 }
 
 void loop() {
-  delay(DEVICE_LOOP_TIME);
-  pollHost();
+  if (timePassed < timeToRun) {
+    Serial.print("My role is DEVICE");
+    Serial.println(role);
+    pollHost();
+    //sleepDevice(DEVICE_LOOP_TIME);
+    timeDelay(DEVICE_LOOP_TIME);
+  } else {
+    sleepForever();
+  }
 }
+
+////////// Device Functions //////////
 
 void pollHost() {
   // Send deviceID to host
@@ -45,4 +60,32 @@ void pollHost() {
 device_t assignDeviceT() {
   int deviceNum = (int) (deviceID % 8);
   return deviceRoles[deviceNum];
+}
+
+void timeDelay(int milliseconds) {
+  timePassed += milliseconds;
+  delay(milliseconds);
+}
+
+////////// Sleep Functions //////////
+
+void sleepDevice(int milliseconds) {
+  // Sleep for some time
+  timePassed += milliseconds;
+  Serial.println("Entering sleep");
+  RFduinoGZLL.end();
+  RFduinoBLE.begin();
+  RFduino_ULPDelay(milliseconds);
+  RFduinoBLE.end();
+  RFduinoGZLL.begin(role);
+}
+
+void sleepForever() {
+  // Sleep host indefinitely
+  Serial.println("Sleeping forever...");
+  RFduinoGZLL.end();
+  RFduinoBLE.begin();
+  RFduino_ULPDelay(INFINITE);
+  RFduinoBLE.end();
+  RFduinoGZLL.begin(role);
 }
