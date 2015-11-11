@@ -15,15 +15,16 @@ repositories {
 android {
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
-
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 16
         targetSdkVersion 19
     }
     buildTypes {
         debug {
             debuggable true
         }
+    }
+    productFlavors {
     }
 }
 

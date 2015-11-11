@@ -121,6 +121,14 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="Start Region Tracking"
+            android:id="@+id/startRegionTracking"
+            android:layout_gravity="center_horizontal"
+            android:enabled="false" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="Send Current Time"
             android:id="@+id/sendCurrentTime"
             android:layout_gravity="center_horizontal"
