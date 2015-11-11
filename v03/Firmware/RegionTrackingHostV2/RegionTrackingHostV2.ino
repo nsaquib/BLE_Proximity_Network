@@ -7,8 +7,8 @@
 
 #define MAX_DEVICES 10
 #define MAX_ROWS 80
-#define HOST_LOOP_TIME 1000
-#define HOST_SLEEP_TIME 20000
+#define HOST_COLLECTION_TIME 1000
+#define HOST_SLEEP_TIME 1000
 
 #include <RFduinoBLE.h>
 #include <RFduinoGZLL.h>
@@ -43,7 +43,7 @@ PrNetRomManager m2;
 void setup() {
   pinMode(greenLED, OUTPUT);
   RFduinoGZLL.txPowerLevel = 4;
-  RFduinoGZLL.hostBaseAddress = 0x000;
+  RFduinoGZLL.hostBaseAddress = HBA;
   RFduinoGZLL.begin(HOST);
   Serial.begin(9600);
 }
@@ -87,8 +87,7 @@ void collectSamplesFromDevices() {
   // Start collecting RSSI samples
   collectSamples = 1;
   // Wait for designate host time/HBA
-  delay(HOST_LOOP_TIME);
-  timePassed += HOST_LOOP_TIME;
+  timeDelay(HOST_COLLECTION_TIME);
   // Stop collecting RSSI samples
   collectSamples = 0;
 }
@@ -102,8 +101,15 @@ void resetRSSI() {
   }
 }
 
+void timeDelay(int milliseconds) {
+  timePassed += milliseconds;
+  delay(milliseconds);
+}
+
+////////// Sleep Functions //////////
+
 void sleepHost(int milliseconds) {
-  // sleep for some time
+  // Sleep for some time
   timePassed += milliseconds;
   Serial.println("Entering sleep");
   RFduinoGZLL.end();

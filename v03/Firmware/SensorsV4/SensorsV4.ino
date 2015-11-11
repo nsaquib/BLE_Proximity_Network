@@ -5,19 +5,18 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 14
-#define MAX_ROWS 80 
+#define MAX_DEVICES 15
+#define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 17
+#define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 20
+#define END_HOUR 13
 #define END_MINUTE 0
 // Host time
-#define HOST_LOOP_TIME 2500
+#define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
 // Device time
-#define DEVICE_LOOP_TIME 250
-#define lenrec 80
+#define DEVICE_LOOP_TIME 100
 
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
@@ -33,7 +32,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 0;
+const int deviceID = 12;
 
 // Global timer
 struct timer {
@@ -44,7 +43,7 @@ struct timer {
 };
 
 // Device loops
-const int DEVICE_LOOPS = floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME)));
+const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME)));
 // BLE advertisement device name
 const String BLE_NAME = (String) deviceID;
 // Timer
@@ -74,34 +73,21 @@ int WEEKDAY = 5;
 // ROM Managers
 PrNetRomManager m;  //for writing to flash ROM
 PrNetRomManager m2; // for reading flash ROM and sending through BLE
-int page_counter = STORAGE_FLASH_PAGE;
-int stop_len = STORAGE_FLASH_PAGE - 49;
-
-bool ble_setup_flag = false;
-long loopCounter = 0;
-long rowcounter = 0;
-
-// send to phone vars
-// flag used to start sending
-bool flag = false;
-int start;
-
-bool transfer_flag = false;
-
-// Variables used in packet generation
-int ch;
-int packet;
-
-// 1K page with 12 bytes rows and 80 rows = 960 bytes.
-// so each 1K page has 960/20 = 48 packets.
-int packets = 48;
+// Counter for current ROM page row
+int rowCounter = 0;
+// Flag to transfer data to cell phone app
+boolean transferFlag = false;
+// Counter for current page to write to
+int pageCounter = STORAGE_FLASH_PAGE;
+// Last page to send to cell phone app
+int stopLen = STORAGE_FLASH_PAGE - 49;
 
 void setup() {
   pinMode(greenLED, OUTPUT);
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 4;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "0";
+  RFduinoBLE.deviceName = "12";
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
@@ -110,8 +96,7 @@ void setup() {
   // Setup for specific device roles
   if (deviceRole == HOST) {
     setupHost();
-  }
-  else {
+  } else {
     setupDevice();
   }
 }
@@ -131,21 +116,18 @@ void loop() {
   if (!timeIsSet()) {
     Serial.println("Waiting for time from phone app...");
     setTimer();
-  }
   // Time is set
-  else {
+  } else {
     if (!inDataCollectionPeriod()) {
       sleepUntilStartTime();
-      if (transfer_flag) {
+      if (transferFlag) {
         startTransfer();
       }
-    }
-    else {
+    } else {
       // Loop for specific device roles
       if (deviceRole == HOST) {
         loopHost();
-      }
-      else {
+      } else {
         loopDevice();
       }
     }
@@ -155,14 +137,10 @@ void loop() {
 void loopHost() {
   Serial.println("My role is HOST");
   if (inDataCollectionPeriod()) {
-    if (loopCounter >= (MAX_ROWS / MAX_DEVICES)) {
-      writePage();
-    }
     resetRSSI();
     collectSamplesFromDevices();
     calculateRSSIAverages();
     updateROMTable();
-    loopCounter++;
     if (shouldBeDevice()) {
       switchToDevice();
     }
@@ -174,7 +152,6 @@ void loopDevice() {
     // Sleep device
     //sleepDevice(DEVICE_LOOP_TIME);
     timeDelay(DEVICE_LOOP_TIME);
-    //sleepDevice(DEVICE_LOOP_TIME);
     // Send data to all other hosts
     pollHost();
     if (shouldBeHost()) {
@@ -193,8 +170,7 @@ void calculateRSSIAverages() {
     // Prevents division by zero
     if (rssiCount[i] == 0) {
       rssiAverages[i] = -128;
-    }
-    else {
+    } else {
       rssiAverages[i] = rssiTotal[i] / rssiCount[i];
     }
     Serial.print("DEVICE");
@@ -240,8 +216,7 @@ boolean shouldBeDevice() {
   if (hostCounter >= HOST_LOOPS - 1) {
     hostCounter = 0;
     return true;
-  }
-  else {
+  } else {
     hostCounter++;
     return false;
   }
@@ -303,7 +278,7 @@ void setTimer() {
   // Set local time from phone app
   while (!timeIsSet()) {
     timeDelay(100);
-    if (transfer_flag) {
+    if (transferFlag) {
       startTransfer();
     }
   }
@@ -323,14 +298,12 @@ boolean inDataCollectionPeriod() {
   // Collect data while within range
   if ((timer.hours > START_HOUR) && (timer.hours < END_HOUR)) {
     return true;
-  }
   // Inclusive on START_MINUTE and exclusive on END_MINUTE
-  else if (((timer.hours == START_HOUR) && (timer.minutes >= START_MINUTE))
+  } else if (((timer.hours == START_HOUR) && (timer.minutes >= START_MINUTE))
             || ((timer.hours == END_HOUR) && (timer.minutes < END_MINUTE))) {
     return true;
-  }
   // Otherwise, do not collect data
-  else {
+  } else {
     return false;
   }
 }
@@ -406,37 +379,30 @@ void sleepUntilStartTime() {
   if (timer.hours == START_HOUR) {
     if (timer.minutes < START_MINUTE) {
       hours = 0;
-    }
-    else {
+    } else {
       hours = 23;
     }
-  }
-  else if (timer.hours < START_HOUR) {
+  } else if (timer.hours < START_HOUR) {
     if (timer.minutes < START_MINUTE) {
        hours = START_HOUR - timer.hours;
-    }
-    else {
+    } else {
       hours = START_HOUR - timer.hours - 1;
     }
-  }
-  else {
+  } else {
     if (timer.minutes < START_MINUTE) {
       hours = 24 - timer.hours + START_HOUR;
-    }
-    else {
+    } else {
       hours = 24 - timer.hours + START_HOUR - 1; 
     }
   }
   if (timer.seconds <= 0) {
     minutes = (60 - timer.minutes + START_MINUTE) % 60;
-  }
-  else {
+  } else {
     minutes = (60 - timer.minutes + START_MINUTE - 1) % 60;
   }
   if (timer.ms <= 0) {
     seconds = (60 - timer.seconds) % 60;
-  }
-  else {
+  } else {
     seconds = (60 - timer.seconds - 1) % 60;
   }
   ms = (1000 - timer.ms) % 1000;
@@ -465,9 +431,15 @@ void updateROMTable() {
   // Update rows for rom table
   int i;
   for (i = 0; i < MAX_DEVICES; i++) {
-    m.table.t[i + loopCounter * MAX_DEVICES] = millis();
-    m.table.id[i + loopCounter * MAX_DEVICES] = i;
-    m.table.rsval[i + loopCounter * MAX_DEVICES] = rssiAverages[i];
+    if (rssiAverages[i] != -128) {
+      if (rowCounter >= MAX_ROWS) {
+        writePage();
+      }
+      m.table.t[rowCounter] = millis();
+      m.table.id[rowCounter] = i;
+      m.table.rsval[rowCounter] = rssiAverages[i];
+      rowCounter++;
+    }
   }
 }
 
@@ -477,20 +449,16 @@ void writePage() {
   // Write to rom memory
   int success = m.writePage(STORAGE_FLASH_PAGE - m.pagecounter, m.table);
   Serial.println(success);
-  loopCounter = 0;
+  rowCounter = 0;
 }
 
 ////////// App Integration Code //////////
 
 void RFduinoBLE_onReceive(char *data, int len) {
-  //Serial.println(data);
-  // if the first byte is 0x01 / on / true
-  if (data[0])
-  {
-    //Serial.println(data[0]);
-    if(data[0] == '>')
-    {
-      //UPDATE START TIME
+  // If the first byte exists
+  if (data[0]) {
+    if (data[0] == '>') {
+      //Update start time
       char startHour[2];
       startHour[0] = data[1];
       startHour[1] = data[2];
@@ -520,57 +488,47 @@ void RFduinoBLE_onReceive(char *data, int len) {
       Serial.print("Millisecond:");
       Serial.println(timer.ms);
       RFduinoBLE.send('>');
-    }
-    else{
+    } else {
       RFduinoBLE.send(1);
-      transfer_flag = true;
+      transferFlag = true;
     }
-  }
-  else 
-  {
+  } else {
     RFduinoBLE.send(0);
-    transfer_flag = false;
+    transferFlag = false;
   }
 }
 
 void startTransfer() {
-  while (transfer_flag)
-  {
-    m2.loadPage(page_counter);
+  while (transferFlag) {
+    m2.loadPage(pageCounter);
     Serial.print("Starting page: ");
-    Serial.println(page_counter);
+    Serial.println(pageCounter);
     
     // Generate the next packet
-    for (int j = 0; j < lenrec; j++)
-    {
-      Serial.println(m2.table.t[j]);
+    for (int i = 0; i < MAX_ROWS; i++) {
+      Serial.println(m2.table.t[i]);
       char space = ' ';
       char buf_t[10];
       char buf_id[10];
       char buf_rsval[10];
-      sprintf(buf_t, "%d", m2.table.t[j]);
-      sprintf(buf_id, "%d", m2.table.id[j]);
-      sprintf(buf_rsval, "%d", m2.table.rsval[j]);
-      while (! RFduinoBLE.send(buf_t, 10));
-      //while (! RFduinoBLE.send(space));
+      sprintf(buf_t, "%d", m2.table.t[i]);
+      sprintf(buf_id, "%d", m2.table.id[i]);
+      sprintf(buf_rsval, "%d", m2.table.rsval[i]);
+      while (!RFduinoBLE.send(buf_t, 10));
       timeDelay(5); 
-      while (! RFduinoBLE.send(buf_id, 10));
-      //while (! RFduinoBLE.send(space));
+      while (!RFduinoBLE.send(buf_id, 10));
       timeDelay(5);
-      while (! RFduinoBLE.send(buf_rsval, 10));
-      //while (! RFduinoBLE.send(space));
-      while (! RFduinoBLE.send('|'));
+      while (!RFduinoBLE.send(buf_rsval, 10));
+      while (!RFduinoBLE.send('|'));
     } 
     Serial.println("Finished with loop");
-    while (! RFduinoBLE.send('#'));
+    while (!RFduinoBLE.send('#'));
     timeDelay(200);
-    page_counter--;
-    if (page_counter < stop_len)
-    {
+    pageCounter--;
+    if (pageCounter < stopLen) {
       Serial.println("Ending");
-      transfer_flag = false;
+      transferFlag = false;
       RFduinoBLE.send(0);
     }
   }
 }
-
