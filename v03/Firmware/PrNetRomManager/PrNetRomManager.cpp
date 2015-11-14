@@ -22,7 +22,7 @@ void PrNetRomManager::printPage(int page)
   data_t *p = (data_t*)ADDRESS_OF_PAGE(page);
   for(int i = 0; i < lenrec; i++)
   {
-    printf("%d,%d,%d\n",p->t[i],p->id[i],p->rsval[i]);
+    printf("%d\n",p->t[i]);
   }
 }
 
@@ -33,8 +33,8 @@ void PrNetRomManager::loadPage(int page)
   for(int i = 0; i < lenrec; i++)
   {
     table.t[i] = p->t[i];
-    table.id[i] = p->id[i];
-    table.rsval[i] = p->rsval[i];
+    //table.id[i] = p->id[i];
+    //table.rsval[i] = p->rsval[i];
   }
 }
 

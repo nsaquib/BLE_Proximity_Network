@@ -6,10 +6,9 @@
  */
 
 #define MAX_DEVICES 10
-#define MAX_ROWS 80
+#define MAX_ROWS 240
 #define HOST_LOOP_TIME 1000
 #define HOST_SLEEP_TIME 200
-#define lenrec 80
 
 #include <RFduinoBLE.h>
 #include <RFduinoGZLL.h>
@@ -145,13 +144,14 @@ void updateROMTable() {
   // Update rows for rom table
   int i;
   for (i = 0; i < MAX_DEVICES; i++) {
-    if (rssiAverages[i] != -128) {
+    if (rssiAverages[i] > -100) {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }
-      m.table.t[rowCounter] = millis();
-      m.table.id[rowCounter] = i;
-      m.table.rsval[rowCounter] = rssiAverages[i];
+      int data = millis()/1000;
+      data += abs(int(rssiAverages[i])) * 1000000;
+      data += i * 100000000;
+      m.table.t[rowCounter] = data;
       rowCounter++;
     }
   }
@@ -218,8 +218,6 @@ void startTransfer() {
       char buf_id[10];
       char buf_rsval[10];
       sprintf(buf_t, "%d", m2.table.t[j]);
-      sprintf(buf_id, "%d", m2.table.id[j]);
-      sprintf(buf_rsval, "%d", m2.table.rsval[j]);
       while (! RFduinoBLE.send(buf_t, 10));
       //while (! RFduinoBLE.send(space));
       delay(5); 

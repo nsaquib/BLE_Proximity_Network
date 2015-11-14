@@ -5,8 +5,8 @@
  * Social Computing Group, MIT Media Lab
  */
 
-#define MAX_DEVICES 7
-#define MAX_ROWS 80
+#define MAX_DEVICES 12
+#define MAX_ROWS 240
 #define HOST_COLLECTION_TIME 1000
 #define HOST_SLEEP_TIME 50
 
@@ -147,13 +147,14 @@ void updateROMTable() {
   // Update rows for rom table
   int i;
   for (i = 0; i < MAX_DEVICES; i++) {
-    if (rssiAverages[i] != -128) {
+    if (rssiAverages[i] > -100) {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }
-      m.table.t[rowCounter] = millis();
-      m.table.id[rowCounter] = i;
-      m.table.rsval[rowCounter] = rssiAverages[i];
+      int data = millis()/1000;
+      data += abs(int(rssiAverages[i])) * 1000000;
+      data += i * 100000000;
+      m.table.t[rowCounter] = data;
       rowCounter++;
     }
   }

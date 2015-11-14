@@ -5,8 +5,8 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 2
-#define MAX_ROWS 80
+#define MAX_DEVICES 7
+#define MAX_ROWS 2400
 // Time range to perform data collection
 #define START_HOUR 16
 #define START_MINUTE 15
@@ -36,7 +36,7 @@ const int deviceID = 0;
 
 // Global timer
 struct timer {
-  int hours = 0;
+  int hours = 20;
   int minutes = 0;
   int seconds = 0;
   int ms = 0;
@@ -105,11 +105,13 @@ void setup() {
 
 void setupHost() {
   RFduinoGZLL.end();
+  //RFduinoGZLL.hostBaseAddress = 0x000;
   RFduinoGZLL.begin(deviceRole);
 }
 
 void setupDevice() {
   RFduinoGZLL.end();
+  //RFduinoGZLL.hostBaseAddress = 0x001;
   RFduinoGZLL.begin(deviceRole);
 }
 
@@ -139,7 +141,6 @@ void loop() {
 void loopHost() {
   //Serial.println("My role is HOST");
   if (inDataCollectionPeriod()) {
-    RFduinoGZLL.hostBaseAddress = 0x000;
     resetRSSI();
     collectSamplesFromDevices();
     calculateRSSIAverages();
@@ -209,7 +210,6 @@ void pollHost() {
   // Only a device can poll the host
   if (deviceRole != HOST) {
     // Send deviceID to host
-    RFduinoGZLL.hostBaseAddress = 0x001;
     RFduinoGZLL.sendToHost(deviceID);
   }
 }
@@ -435,13 +435,14 @@ void updateROMTable() {
   // Update rows for rom table
   int i;
   for (i = 0; i < MAX_DEVICES; i++) {
-    if (rssiAverages[i] != -128) {
+    if (rssiAverages[i] > -100) {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }
-      m.table.t[rowCounter] = millis();
-      m.table.id[rowCounter] = i;
-      m.table.rsval[rowCounter] = rssiAverages[i];
+      int data = millis()/1000;
+      data += abs(int(rssiAverages[i])) * 1000000;
+      data += i * 100000000;
+      m.table.t[rowCounter] = data;
       rowCounter++;
     }
   }
