@@ -5,10 +5,10 @@
  * Social Computing Group, MIT Media Lab
  */
 
-#define MAX_DEVICES 10
+#define MAX_DEVICES 7
 #define MAX_ROWS 80
 #define HOST_COLLECTION_TIME 1000
-#define HOST_SLEEP_TIME 1000
+#define HOST_SLEEP_TIME 50
 
 #include <RFduinoBLE.h>
 #include <RFduinoGZLL.h>
@@ -28,7 +28,7 @@ long timePassed = 0; // in milliseconds
 // Designated time to run
 const long timeToRun = 14400000; // 4 hours in milliseconds
 // Host base address
-const int HBA = 0x000;
+const int HBA = 0x001;
 // Pin for the green LED
 int greenLED = 3;
 
@@ -50,12 +50,13 @@ void setup() {
 
 void loop() {
   if (timePassed < timeToRun) {
-    Serial.println("My role is HOST");
+    //Serial.println("My role is HOST");
     resetRSSI();
     collectSamplesFromDevices();
     calculateRSSIAverages();
     updateROMTable();
-    sleepHost(HOST_SLEEP_TIME);
+    delay(HOST_SLEEP_TIME);
+    //sleepHost(HOST_SLEEP_TIME);
   } else {
     sleepForever();
   }
@@ -74,11 +75,11 @@ void calculateRSSIAverages() {
     } else {
       rssiAverages[i] = rssiTotal[i] / rssiCount[i];
     }
-    Serial.print("DEVICE");
+    //Serial.print("DEVICE");
     Serial.print(i);
-    Serial.print(" ");
+    Serial.print(",");
     Serial.print(rssiAverages[i]);
-    Serial.print(" ");
+    Serial.print(",");
     Serial.println(rssiCount[i]);
   }
 }
