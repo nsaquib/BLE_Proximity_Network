@@ -5,13 +5,13 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 7
+#define MAX_DEVICES 8
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 0
-#define START_MINUTE 10
-#define END_HOUR 17
-#define END_MINUTE 0
+#define START_HOUR 19
+#define START_MINUTE 45
+#define END_HOUR 23
+#define END_MINUTE 59
 // Host time
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
@@ -32,7 +32,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 6;
+const int deviceID = 0;
 
 // Global timer
 struct timer {
@@ -89,7 +89,7 @@ void setup() {
   //String deviceIDString = String(deviceID);
   //char BLE_NAME[2];
   //deviceIDString.toCharArray(BLE_NAME, 2);
-  RFduinoBLE.deviceName = "6";//BLE_NAME;
+  RFduinoBLE.deviceName = "0";//BLE_NAME;
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor

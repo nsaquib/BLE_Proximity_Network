@@ -11,14 +11,14 @@ ser = serial.Serial("/dev/cu.usbserial-DN0073UM", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN00B1WO", 9600)
 
 win = 25
-PLOT_LINES = 3
+PLOT_LINES = 8
 yData = [[], [], [], [], [], [], [], []]
 lines = []
 fig, ax = plt.subplots()
 line, = ax.plot([], [], 'k-')
-ax.set_title('RSSI Signal Strength of PrNet Devices', fontsize = 16)
+ax.set_title('Ping Count of PrNet Devices', fontsize = 16)
 ax.set_xlabel('Time Steps', fontsize = 14)
-ax.set_ylabel('RSSI Signal Strength', fontsize = 14)
+ax.set_ylabel('Ping Count', fontsize = 14)
 ax.margins(0.05)
 plotlays = [PLOT_LINES]
 plotcols = ["red", "orange", "yellow", "green", "blue", "violet", "brown", "black"]
@@ -29,7 +29,7 @@ plt.legend(loc='upper left', bbox_to_anchor=(1, 1.02))
 fig.subplots_adjust(right=0.75)
 
 # Create CSV file for data output
-filename = "Sensor RSSI Data " + time.strftime("%m%d%y %H%M%S") + ".csv"
+filename = "Sensor Ping Count Data " + time.strftime("%m%d%y %H%M%S") + ".csv"
 with open(filename, "w") as file:
     writer = csv.writer(file)
     row = ["Timestamp"]
@@ -52,7 +52,7 @@ def process(xlist, ylist, index, i):
     # Strip newline charcter and split along commas
     data = data.decode("ascii").split(',')
     # Add data point to list
-    yData[index].append(int(data[1]))
+    yData[index].append(int(data[2]))
     # Use numpy array for manipulation
     y = np.asarray(yData[index]);
     # X axis is length of y data
@@ -85,7 +85,7 @@ def animate(i):
     data = data.decode("ascii").split(',')
     # Check to process DEVICE0 first
     if (len(data) == 3 and data[0] == '0'):
-        yData[0].append(int(data[1]))
+        yData[0].append(int(data[2]))
         y = np.asarray(yData[0]);
         x = np.arange(y.size) + 1
         imin = min(max(0, i - win), x.size - win)
