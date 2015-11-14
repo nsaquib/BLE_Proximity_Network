@@ -5,12 +5,12 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 15
+#define MAX_DEVICES 7
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 9
-#define START_MINUTE 0
-#define END_HOUR 13
+#define START_HOUR 0
+#define START_MINUTE 10
+#define END_HOUR 17
 #define END_MINUTE 0
 // Host time
 #define HOST_LOOP_TIME 2000
@@ -32,7 +32,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 12;
+const int deviceID = 6;
 
 // Global timer
 struct timer {
@@ -44,8 +44,7 @@ struct timer {
 
 // Device loops
 const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME)));
-// BLE advertisement device name
-const String BLE_NAME = (String) deviceID;
+//char* BLE_NAME = sprintf(BLE_NAME, "%d", deviceID);
 // Timer
 struct timer timer;
 // Host base addresses, HBA cannot be 0x55 or 0xaa
@@ -87,7 +86,10 @@ void setup() {
   // Adjust power output levels
   RFduinoGZLL.txPowerLevel = 4;
   // Set BLE parameters
-  RFduinoBLE.deviceName = "12";
+  //String deviceIDString = String(deviceID);
+  //char BLE_NAME[2];
+  //deviceIDString.toCharArray(BLE_NAME, 2);
+  RFduinoBLE.deviceName = "6";//BLE_NAME;
   // Set host base address
   RFduinoGZLL.hostBaseAddress = HBA;
   // Start the serial monitor
@@ -135,7 +137,7 @@ void loop() {
 }
 
 void loopHost() {
-  Serial.println("My role is HOST");
+  //Serial.println("My role is HOST");
   if (inDataCollectionPeriod()) {
     resetRSSI();
     collectSamplesFromDevices();
@@ -173,11 +175,11 @@ void calculateRSSIAverages() {
     } else {
       rssiAverages[i] = rssiTotal[i] / rssiCount[i];
     }
-    Serial.print("DEVICE");
+    //Serial.print("DEVICE");
     Serial.print(i);
-    Serial.print(" ");
+    Serial.print(",");
     Serial.print(rssiAverages[i]);
-    Serial.print(" ");
+    Serial.print(",");
     Serial.println(rssiCount[i]);
   }
 }
@@ -240,8 +242,8 @@ void switchToHost() {
 
 void switchToDevice() {
   deviceRole = assignDeviceT();
-  Serial.print("My role is DEVICE");
-  Serial.println(deviceRole);
+  //Serial.print("My role is DEVICE");
+  //Serial.println(deviceRole);
   setupDevice();
 }
 
