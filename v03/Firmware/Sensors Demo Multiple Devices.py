@@ -6,12 +6,13 @@ import serial
 import time
 
 connected = False;
-ser = serial.Serial("/dev/cu.usbserial-DN0073UM", 9600)
+ser = serial.Serial("/dev/cu.usbserial-DN00D0ZF", 9600)
+#ser = serial.Serial("/dev/cu.usbserial-DN0073UM", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN00B462", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN00B1WO", 9600)
 
 win = 25
-PLOT_LINES = 3
+PLOT_LINES = 8
 yData = [[], [], [], [], [], [], [], []]
 lines = []
 fig, ax = plt.subplots()

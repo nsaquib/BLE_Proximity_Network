@@ -6,7 +6,8 @@ import serial
 import time
 
 connected = False;
-ser = serial.Serial("/dev/cu.usbserial-DN0073UM", 9600)
+ser = serial.Serial("/dev/cu.usbserial-DN00D0ZF", 9600)
+#ser = serial.Serial("/dev/cu.usbserial-DN0073UM", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN00B462", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN00B1WO", 9600)
 
@@ -37,9 +38,9 @@ with open(filename, "w") as file:
         row.append("DEVICE"+str(i))
     writer.writerow(row)
 
-while not connected:
-    reponse = ser.read()
-    connected = True
+#while not connected:
+#    reponse = ser.read()
+#    connected = True
     
 def init():
     for line in lines:

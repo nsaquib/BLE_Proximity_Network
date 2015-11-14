@@ -36,7 +36,7 @@ const int deviceID = 0;
 
 // Global timer
 struct timer {
-  int hours = 0;
+  int hours = 20;
   int minutes = 0;
   int seconds = 0;
   int ms = 0;
