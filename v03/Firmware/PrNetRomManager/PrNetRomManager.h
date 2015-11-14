@@ -15,7 +15,7 @@
 #define STORAGE_FLASH_PAGE 250
 // we can hold 80 rows of 12 bytes data (t, id, rssi) to be under 1K page memory
 // or we can hold 125 rows of 8 bytes data (t + id, rssi) to be under 1K page memory
-#define lenrec 80
+#define lenrec 240
 
 // double level of indirection required to get gcc
 // to apply the stringizing operator correctly
@@ -24,9 +24,9 @@
 
 struct data_t
 {
-  int t[lenrec] = {0};
-  int id[lenrec] = {0};
-  int rsval[lenrec] = {0};
+  unsigned int t[lenrec] = {0};
+  //unsigned int id[lenrec] = {0};
+  //unsigned int rsval[lenrec] = {0};
 };
 
 struct prnet_config

@@ -17,7 +17,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 0;
+const int deviceID = 1;
 // Device roles
 const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 device_t role = assignDeviceT();
@@ -40,8 +40,8 @@ void setup() {
 
 void loop() {
   if (timePassed < timeToRun) {
-    Serial.print("My role is DEVICE");
-    Serial.println(role);
+    //Serial.print("My role is DEVICE");
+    //Serial.println(role);
     pollHost();
     //sleepDevice(DEVICE_LOOP_TIME);
     timeDelay(DEVICE_LOOP_TIME);

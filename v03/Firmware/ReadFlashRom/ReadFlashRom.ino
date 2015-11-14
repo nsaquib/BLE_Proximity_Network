@@ -5,9 +5,9 @@ void setup() {
   Serial.begin(250000);
 
   // Iterate over pages
-  for (int i = STORAGE_FLASH_PAGE; i > STORAGE_FLASH_PAGE - 120; i--) {
+  for (int i = STORAGE_FLASH_PAGE; i > STORAGE_FLASH_PAGE - 1; i--) {
     m.printPage(i);
-    m.erasePage(i);
+    //m.erasePage(i);
   }
 }
 
