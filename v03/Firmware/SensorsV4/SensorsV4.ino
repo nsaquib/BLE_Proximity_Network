@@ -5,15 +5,15 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 8
+#define MAX_DEVICES 2
 #define MAX_ROWS 80
 // Time range to perform data collection
-#define START_HOUR 19
-#define START_MINUTE 45
+#define START_HOUR 16
+#define START_MINUTE 15
 #define END_HOUR 23
 #define END_MINUTE 59
 // Host time
-#define HOST_LOOP_TIME 2000
+#define HOST_LOOP_TIME 1000
 #define HOST_LOOPS 1
 // Device time
 #define DEVICE_LOOP_TIME 100
@@ -36,7 +36,7 @@ const int deviceID = 0;
 
 // Global timer
 struct timer {
-  int hours = 20;
+  int hours = 0;
   int minutes = 0;
   int seconds = 0;
   int ms = 0;
@@ -139,6 +139,7 @@ void loop() {
 void loopHost() {
   //Serial.println("My role is HOST");
   if (inDataCollectionPeriod()) {
+    RFduinoGZLL.hostBaseAddress = 0x000;
     resetRSSI();
     collectSamplesFromDevices();
     calculateRSSIAverages();
@@ -208,6 +209,7 @@ void pollHost() {
   // Only a device can poll the host
   if (deviceRole != HOST) {
     // Send deviceID to host
+    RFduinoGZLL.hostBaseAddress = 0x001;
     RFduinoGZLL.sendToHost(deviceID);
   }
 }

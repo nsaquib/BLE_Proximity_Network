@@ -12,7 +12,7 @@ ser = serial.Serial("/dev/cu.usbserial-DN00D0ZF", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN00B1WO", 9600)
 
 win = 25
-PLOT_LINES = 8
+PLOT_LINES = 7
 yData = [[], [], [], [], [], [], [], []]
 lines = []
 fig, ax = plt.subplots()
@@ -53,7 +53,7 @@ def process(xlist, ylist, index, i):
     # Strip newline charcter and split along commas
     data = data.decode("ascii").split(',')
     # Add data point to list
-    yData[index].append(int(data[2]))
+    yData[index].append(float(data[2]))
     # Use numpy array for manipulation
     y = np.asarray(yData[index]);
     # X axis is length of y data
@@ -86,7 +86,7 @@ def animate(i):
     data = data.decode("ascii").split(',')
     # Check to process DEVICE0 first
     if (len(data) == 3 and data[0] == '0'):
-        yData[0].append(int(data[2]))
+        yData[0].append(float(data[2]))
         y = np.asarray(yData[0]);
         x = np.arange(y.size) + 1
         imin = min(max(0, i - win), x.size - win)
