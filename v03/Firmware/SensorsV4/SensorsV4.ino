@@ -5,8 +5,8 @@
  */
 
 // Maximum devices in network
-#define MAX_DEVICES 7
-#define MAX_ROWS 2400
+#define MAX_DEVICES 8
+#define MAX_ROWS 240
 // Time range to perform data collection
 #define START_HOUR 16
 #define START_MINUTE 15
@@ -17,6 +17,7 @@
 #define HOST_LOOPS 1
 // Device time
 #define DEVICE_LOOP_TIME 100
+#define BLE_AD_INTERVAL 5000
 
 #include <RFduinoGZLL.h>
 #include <RFduinoBLE.h>
@@ -36,7 +37,7 @@ const int deviceID = 0;
 
 // Global timer
 struct timer {
-  int hours = 20;
+  int hours = 9;
   int minutes = 0;
   int seconds = 0;
   int ms = 0;
@@ -105,13 +106,11 @@ void setup() {
 
 void setupHost() {
   RFduinoGZLL.end();
-  //RFduinoGZLL.hostBaseAddress = 0x000;
   RFduinoGZLL.begin(deviceRole);
 }
 
 void setupDevice() {
   RFduinoGZLL.end();
-  //RFduinoGZLL.hostBaseAddress = 0x001;
   RFduinoGZLL.begin(deviceRole);
 }
 
@@ -291,6 +290,7 @@ void setTimer() {
 
 void sleepDevice(int milliseconds) {
   RFduinoGZLL.end();
+  RFduinoBLE.advertisementInterval = BLE_AD_INTERVAL;
   RFduinoBLE.begin();
   RFduino_ULPDelay(milliseconds);
   updateTime(milliseconds);
@@ -425,7 +425,6 @@ void sleepUntilStartTime() {
   Serial.println(ms);
   Serial.print("Offset: ");
   Serial.println(offset);
-  //timeDelay(delayTime);
   sleepDevice(delayTime);
 }
 
@@ -514,16 +513,9 @@ void startTransfer() {
       Serial.println(m2.table.t[i]);
       char space = ' ';
       char buf_t[10];
-      char buf_id[10];
-      char buf_rsval[10];
       sprintf(buf_t, "%d", m2.table.t[i]);
-      sprintf(buf_id, "%d", m2.table.id[i]);
-      sprintf(buf_rsval, "%d", m2.table.rsval[i]);
       while (!RFduinoBLE.send(buf_t, 10));
-      timeDelay(5); 
-      while (!RFduinoBLE.send(buf_id, 10));
       timeDelay(5);
-      while (!RFduinoBLE.send(buf_rsval, 10));
       while (!RFduinoBLE.send('|'));
     } 
     Serial.println("Finished with loop");
