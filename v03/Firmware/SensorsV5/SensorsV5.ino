@@ -7,10 +7,11 @@
 #define TX_POWER_LEVEL 4
 #define BLE_AD_INTERVAL 5000
 #define PAGES_TO_TRANSFER 50
+#define HBA 0x000
 // Configuration Parameters
-#define MAX_DEVICES 8
+#define MAX_DEVICES 2
 #define EXPECTED_HOSTS 1
-#define START_HOUR 9
+#define START_HOUR 0
 #define START_MINUTE 0
 #define END_HOUR 13
 #define END_MINUTE 0
@@ -28,8 +29,6 @@
 const int deviceID = 0;
 // Device loops
 const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)/(DEVICE_LOOP_TIME);
-// Host base addresses, HBA cannot be 0x55 or 0xaa
-const int HBA = 0x000;
 // Device roles
 const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 // Pin for the green LED
@@ -55,6 +54,7 @@ boolean transferFlag = false;
 int pageCounter = STORAGE_FLASH_PAGE;
 
 void setup() {
+  timer.isTimeSet = true;
   pinMode(greenLED, OUTPUT);
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
   //String deviceIDString = String(deviceID);
@@ -78,7 +78,7 @@ void setupHost() {
 }
 
 void setupDevice() {
-  deviceRole = deviceRoles[(int) (deviceID % 8)];
+  deviceRole = (device_t) (deviceID % 8);
   RFduinoGZLL.end();
   RFduinoGZLL.begin(deviceRole);
 }
