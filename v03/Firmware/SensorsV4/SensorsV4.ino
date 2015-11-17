@@ -26,7 +26,7 @@
 // Unique device ID
 const int deviceID = 0;
 // Device loops
-const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : floor(((HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME)));
+const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
 // Host base addresses, HBA cannot be 0x55 or 0xaa
 const int HBA = 0x000;
 // Device roles
@@ -35,9 +35,6 @@ const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEV
 const int greenLED = 3;
 // Initial role
 device_t deviceRole = HOST;
-// Loop counters
-int hostCounter = 0;
-int deviceCounter = 0;
 // RSSI total and count for each device
 int rssiTotal[MAX_DEVICES];
 int rssiCount[MAX_DEVICES];
@@ -58,19 +55,13 @@ int pageCounter = STORAGE_FLASH_PAGE;
 
 void setup() {
   pinMode(greenLED, OUTPUT);
-  // Adjust power output levels
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
-  // Set BLE parameters
   //String deviceIDString = String(deviceID);
   //char BLE_NAME[2];
   //deviceIDString.toCharArray(BLE_NAME, 2);
-  RFduinoBLE.deviceName = "0";//BLE_NAME;
-  // Set host base address
+  RFduinoBLE.deviceName = "0"; //BLE_NAME;
   RFduinoGZLL.hostBaseAddress = HBA;
-  // Start the serial monitor
   Serial.begin(9600);
-  
-  // Setup for specific device roles
   if (deviceRole == HOST) {
     setupHost();
   } else {
@@ -111,22 +102,22 @@ void loop() {
 
 void loopHost() {
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
-    collectSamplesFromDevices();
-    updateROMTable();
-    if (shouldBeDevice()) {
-      setupDevice();
+    for (int i = 0; i < HOST_LOOPS; i++) {
+      collectSamplesFromDevices();
+      updateROMTable();
     }
+    setupDevice();
   }
 }
 
 void loopDevice() {
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
-    //sleepDevice(DEVICE_LOOP_TIME);
-    timer.delayTime(DEVICE_LOOP_TIME);
-    pollHost();
-    if (shouldBeHost()) {
-      setupHost();
+    for (int i = 0; i < DEVICE_LOOPS; i++) {
+      //sleepDevice(DEVICE_LOOP_TIME);
+      timer.delayTime(DEVICE_LOOP_TIME);
+      pollHost();
     }
+    setupHost();
   }
 }
 
@@ -143,29 +134,6 @@ void collectSamplesFromDevices() {
 void pollHost() {
   if (deviceRole != HOST) {
     RFduinoGZLL.sendToHost(deviceID);
-  }
-}
-
-////////// Role Switch Functions //////////
-
-boolean shouldBeDevice() {
-  if (hostCounter >= HOST_LOOPS - 1) {
-    hostCounter = 0;
-    return true;
-  } else {
-    hostCounter++;
-    return false;
-  }
-}
-
-boolean shouldBeHost() {
-  if (deviceCounter >= DEVICE_LOOPS - 1) {
-    deviceCounter = 0;
-    return true;
-  }
-  else {
-    deviceCounter++;
-    return false;
   }
 }
 
