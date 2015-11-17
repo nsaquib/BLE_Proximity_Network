@@ -7,6 +7,7 @@
 #define TX_POWER_LEVEL 4
 #define BLE_AD_INTERVAL 5000
 #define PAGES_TO_TRANSFER 50
+#define HBA 0x000
 // Configuration Parameters
 #define MAX_DEVICES 8
 #define START_HOUR 9
@@ -27,13 +28,9 @@
 const int deviceID = 0;
 // Device loops
 const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
-// Host base addresses, HBA cannot be 0x55 or 0xaa
-const int HBA = 0x000;
-// Device roles
-const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 // Pin for the green LED
 const int greenLED = 3;
-// Initial role
+// Initial device role
 device_t deviceRole = HOST;
 // RSSI total and count for each device
 int rssiTotal[MAX_DEVICES];
@@ -76,7 +73,7 @@ void setupHost() {
 }
 
 void setupDevice() {
-  deviceRole = deviceRoles[(int) (deviceID % 8)];
+  deviceRole = (device_t) (deviceID % 8);
   RFduinoGZLL.end();
   RFduinoGZLL.begin(deviceRole);
 }
