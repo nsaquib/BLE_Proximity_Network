@@ -7,6 +7,11 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleHome" value="$APPLICATION_HOME_DIR$/gradle/gradle-2.4" />
         <option name="gradleJvm" value="1.7" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>
