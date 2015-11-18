@@ -9,12 +9,12 @@
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 // Configuration Parameters
-#define MAX_DEVICES 8
+#define MAX_DEVICES 17
 #define START_HOUR 9
 #define START_MINUTE 0
 #define END_HOUR 13
 #define END_MINUTE 0
-#define HOST_LOOP_TIME 1000
+#define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
 
