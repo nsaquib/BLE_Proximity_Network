@@ -17,6 +17,8 @@
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
+// Flag for Serial monitor debug
+#define VERBOSE_FLAG false
 
 #include <PrNetRomManager.h>
 #include <RFduinoBLE.h>
@@ -58,7 +60,9 @@ void setup() {
   //deviceIDString.toCharArray(BLE_NAME, 2);
   RFduinoBLE.deviceName = "0"; //BLE_NAME;
   RFduinoGZLL.hostBaseAddress = HBA;
-  //Serial.begin(9600);
+  if (VERBOSE_FLAG) {
+    Serial.begin(9600);
+  }
   if (deviceRole == HOST) {
     setupHost();
   } else {
