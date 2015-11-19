@@ -9,16 +9,16 @@
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 // Configuration Parameters
-#define MAX_DEVICES 12
-#define START_HOUR 9
+#define MAX_DEVICES 2
+#define START_HOUR 0
 #define START_MINUTE 0
 #define END_HOUR 13
 #define END_MINUTE 0
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
-// Flag for Serial monitor debug
-#define VERBOSE_FLAG false
+// Flag for Serial monitor debug output
+#define VERBOSE_FLAG true
 
 #include <PrNetRomManager.h>
 #include <RFduinoBLE.h>
@@ -45,6 +45,12 @@ Time timer;
 PrNetRomManager romManager;
 // ROM Manager for reading flash ROM and sending through BLE
 PrNetRomManager romManager2;
+// Loop counters
+int hostLoopCounter = 0;
+int deviceLoopCounter = 0;
+// Millis at start of data collection
+boolean startMillisSet = false;
+unsigned long startDataCollectionMillis;
 // Counter for current ROM page row
 int rowCounter = 0;
 // Flag to transfer data to cell phone app
@@ -53,6 +59,8 @@ boolean transferFlag = false;
 int pageCounter = STORAGE_FLASH_PAGE;
 
 void setup() {
+  timer.initialMillis = millis();
+  timer.isTimeSet = true;
   pinMode(greenLED, OUTPUT);
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
   //String deviceIDString = String(deviceID);
@@ -63,6 +71,7 @@ void setup() {
   if (VERBOSE_FLAG) {
     Serial.begin(9600);
   }
+  
   if (deviceRole == HOST) {
     setupHost();
   } else {
@@ -92,6 +101,7 @@ void loop() {
         startTransfer();
       }
     } else {
+      setDataCollectionMillis();
       if (deviceRole == HOST) {
         loopHost();
       } else {
@@ -106,6 +116,7 @@ void loopHost() {
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < HOST_LOOPS; i++) {
       collectSamplesFromDevices();
+      Serial.println(millis());
       updateROMTable();
     }
     setupDevice();
@@ -119,16 +130,54 @@ void loopDevice() {
       //sleepDevice(DEVICE_LOOP_TIME);
       timer.delayTime(DEVICE_LOOP_TIME);
       pollHost();
+      Serial.println(millis());
     }
     setupHost();
   }
 }
 
+/*void loopHost() {
+  Serial.println("HOST");
+  timer.displayTime();
+  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+    int loopCount = 0;
+    while (millis() - startDataCollectionMillis < (HOST_LOOPS*HOST_LOOP_TIME*(hostLoopCounter+1)) + (DEVICE_LOOPS*DEVICE_LOOP_TIME)*deviceLoopCounter) {
+      Serial.print(loopCount);
+      Serial.print(" ");
+      Serial.println(millis());
+      collectSamplesFromDevices();
+      updateROMTable();
+      loopCount++;
+    }
+    hostLoopCounter++;
+    setupDevice();
+  }
+}
+
+void loopDevice() {
+  Serial.println("DEVICE");
+  timer.displayTime();
+  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+    int loopCount = 0;
+    while (millis() - startDataCollectionMillis < (HOST_LOOPS*HOST_LOOP_TIME*(hostLoopCounter)) + (DEVICE_LOOPS*DEVICE_LOOP_TIME)*(deviceLoopCounter+1)) {
+      //sleepDevice(DEVICE_LOOP_TIME);
+      Serial.print(loopCount);
+      Serial.print(" ");
+      Serial.println(millis());
+      timer.delayTime(DEVICE_LOOP_TIME - (millis() % 10));
+      pollHost();
+      loopCount++;
+    }
+    deviceLoopCounter++;
+    setupHost();
+  }
+}*/
+
 ////////// Host Functions //////////
 
 void collectSamplesFromDevices() {
   collectSamples = true;
-  timer.delayTime(HOST_LOOP_TIME);
+  timer.delayTime(HOST_LOOP_TIME - (millis() % 10));
   collectSamples = false;
 }
 
@@ -166,12 +215,19 @@ void waitForTime() {
   RFduinoBLE.end();
 }
 
+void setDataCollectionMillis() {
+  if (!startMillisSet) {
+    startDataCollectionMillis = millis();
+    startMillisSet = true;
+  }
+}
+
 ////////// Sleep Functions //////////
 
 void sleepDevice(int milliseconds) {
   RFduinoGZLL.end();
   RFduino_ULPDelay(milliseconds);
-  timer.updateTime(milliseconds);
+  timer.updateTime();
   RFduinoGZLL.begin(deviceRole);
 }
 
@@ -232,22 +288,43 @@ void RFduinoBLE_onReceive(char *data, int len) {
   if (data[0]) {
     if (data[0] == '>') {
       // Update start time
-      char startHour[2];
-      char startMinute[2];
-      char startSecond[2];
-      char startMS[2];
-      startHour[0] = data[1];
-      startHour[1] = data[2];
-      startMinute[0] = data[4];
-      startMinute[1] = data[5];
-      startSecond[0] = data[7];
-      startSecond[1] = data[8];
-      startMS[0] = data[10];
-      startMS[1] = data[11];
-      // Set time
-      timer.setTime(atoi(startHour), atoi(startMinute), atoi(startSecond), atoi(startMS));
+      char month[2];
+      char day[2];
+      char year[2];
+      char weekday[1];
+      char hour[2];
+      char minute[2];
+      char second[2];
+      char ms[2];
+      // Remove below lines
+      hour[0] = data[1];
+      hour[1] = data[2];
+      minute[0] = data[4];
+      minute[1] = data[5];
+      second[0] = data[7];
+      second[1] = data[8];
+      ms[0] = data[10];
+      ms[1] = data[11];
+      // Uncomment following lines
+      /*month[0] = data[1];
+      month[1] = data[2];
+      day[0] = data[3];
+      day[1] = data[4];
+      year[0] = data[5];
+      year[1] = data[6];
+      weekday[0] = data[7];
+      hour[0] = data[8];
+      hour[1] = data[9];
+      minute[0] = data[10];
+      minute[1] = data[11];
+      second[0] = data[12];
+      second[1] = data[13];
+      ms[0] = data[14];
+      ms[1] = data[15];*/
       // TODO: get date from app and set date
-      timer.setDate(0, 0, 0, 0);
+      timer.setInitialTime(0, 0, 0, 0, atoi(hour), atoi(minute), atoi(second), atoi(ms));
+      timer.initialMillis = millis();
+      //timer.setInitialTime(atoi(month), atoi(day), atoi(year), atoi(weekday), atoi(hour), atoi(minute), atoi(second), atoi(ms));
       timer.isTimeSet = true;
       timer.displayDateTime();
       RFduinoBLE.send('>');

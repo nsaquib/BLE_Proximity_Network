@@ -1,71 +1,69 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:2:1-35:12
-	xmlns:android
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:2:11-69
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:2:1-32:12
 	package
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:3:5-38
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:3:5-38
 	android:versionName
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:5:5-30
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:5:5-30
 	android:versionCode
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:4:5-28
-		INJECTED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
-		INJECTED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
-uses-sdk
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:7:5-9:41
-	android:targetSdkVersion
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:9:9-38
-		INJECTED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
-		INJECTED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
-	android:minSdkVersion
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:8:9-35
-		INJECTED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
-		INJECTED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:4:5-28
+		INJECTED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
+		INJECTED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:2:11-69
 uses-permission#android.permission.BLUETOOTH
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:11:5-68
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:8:5-68
 	android:name
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:11:22-65
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:8:22-65
 uses-permission#android.permission.BLUETOOTH_ADMIN
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:12:5-74
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:9:5-74
 	android:name
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:12:22-71
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:9:22-71
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:13:5-81
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:10:5-81
 	android:name
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:13:22-78
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:10:22-78
 uses-feature#android.hardware.bluetooth_le
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:15:5-90
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:12:5-90
 	android:required
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:15:64-87
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:12:64-87
 	android:name
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:15:19-63
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:12:19-63
 application
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:17:5-34:19
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:14:5-31:19
 	android:label
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:20:9-41
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:17:9-41
 	android:allowBackup
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:18:9-35
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:15:9-35
 	android:icon
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:19:9-45
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:16:9-45
 	android:theme
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:21:9-40
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:18:9-40
 activity#com.lannbox.rfduinotest.MainActivity
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:22:9-31:20
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:19:9-28:20
 	android:label
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:24:13-45
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:21:13-45
 	android:name
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:23:13-41
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:20:13-41
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:26:13-30:29
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:23:13-27:29
 action#android.intent.action.MAIN
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:27:17-69
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:24:17-69
 	android:name
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:27:25-66
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:24:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:29:17-77
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:26:17-77
 	android:name
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:29:27-74
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:26:27-74
 service#com.lannbox.rfduinotest.RFduinoService
-ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:33:9-51
+ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:30:9-51
 	android:name
-		ADDED from /Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:33:18-48
+		ADDED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml:30:18-48
+uses-sdk
+INJECTED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml reason: use-sdk injection requested
+	android:targetSdkVersion
+		INJECTED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
+		INJECTED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
+		INJECTED from /Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/AndroidManifest.xml
