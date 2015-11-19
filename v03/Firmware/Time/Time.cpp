@@ -83,13 +83,13 @@ int Time::getTimeUntilStartTime(int startHour, int startMinute) {
       hours = 23;
     }
   } else if (timer.hours < startHour) {
-    if (timer.minutes < startMinute) {
+    if (timer.minutes <= startMinute) {
        hours = startHour - timer.hours;
     } else {
       hours = startHour - timer.hours - 1;
     }
   } else {
-    if (timer.minutes < startMinute) {
+    if (timer.minutes <= startMinute) {
       hours = 24 - timer.hours + startHour;
     } else {
       hours = 24 - timer.hours + startHour - 1; 

@@ -9,8 +9,8 @@
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 // Configuration Parameters
-#define MAX_DEVICES 2
-#define EXPECTED_HOSTS 1
+#define MAX_DEVICES 8
+#define EXPECTED_HOSTS 2
 #define START_HOUR 0
 #define START_MINUTE 0
 #define END_HOUR 13
@@ -26,11 +26,9 @@
 #include <Time.h>
 
 // Unique device ID
-const int deviceID = 0;
+const int deviceID = 1;
 // Device loops
 const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)/(DEVICE_LOOP_TIME);
-// Device roles
-const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 // Pin for the green LED
 const int greenLED = 3;
 // Initial role
@@ -60,7 +58,7 @@ void setup() {
   //String deviceIDString = String(deviceID);
   //char BLE_NAME[2];
   //deviceIDString.toCharArray(BLE_NAME, 2);
-  RFduinoBLE.deviceName = "0"; //BLE_NAME;
+  RFduinoBLE.deviceName = "1"; //BLE_NAME;
   RFduinoGZLL.hostBaseAddress = HBA;
   randomSeed(analogRead(0));
   Serial.begin(9600);
