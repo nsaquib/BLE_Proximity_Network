@@ -5,11 +5,11 @@
  */
 
 #define TX_POWER_LEVEL 4
-#define BLE_AD_INTERVAL 5000
+#define BLE_AD_INTERVAL 2000
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 // Configuration Parameters
-#define MAX_DEVICES 17
+#define MAX_DEVICES 12
 #define START_HOUR 9
 #define START_MINUTE 0
 #define END_HOUR 13
@@ -58,7 +58,7 @@ void setup() {
   //deviceIDString.toCharArray(BLE_NAME, 2);
   RFduinoBLE.deviceName = "0"; //BLE_NAME;
   RFduinoGZLL.hostBaseAddress = HBA;
-  Serial.begin(9600);
+  //Serial.begin(9600);
   if (deviceRole == HOST) {
     setupHost();
   } else {
@@ -98,6 +98,7 @@ void loop() {
 }
 
 void loopHost() {
+  Serial.println("HOST");
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < HOST_LOOPS; i++) {
       collectSamplesFromDevices();
@@ -108,6 +109,7 @@ void loopHost() {
 }
 
 void loopDevice() {
+  Serial.println("DEVICE");
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < DEVICE_LOOPS; i++) {
       //sleepDevice(DEVICE_LOOP_TIME);
@@ -148,9 +150,9 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
 
 void waitForTime() {
   RFduinoGZLL.end();
+  RFduinoBLE.advertisementInterval = BLE_AD_INTERVAL;
   RFduinoBLE.begin();
   Serial.println("Waiting for time...");
-  // Wait for time
   while (!timer.isTimeSet) {
     timer.delayTime(10);
     if (transferFlag) {
@@ -164,11 +166,8 @@ void waitForTime() {
 
 void sleepDevice(int milliseconds) {
   RFduinoGZLL.end();
-  RFduinoBLE.advertisementInterval = BLE_AD_INTERVAL;
-  RFduinoBLE.begin();
   RFduino_ULPDelay(milliseconds);
   timer.updateTime(milliseconds);
-  RFduinoBLE.end();
   RFduinoGZLL.begin(deviceRole);
 }
 
