@@ -9,8 +9,8 @@
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 // Configuration Parameters
-#define MAX_DEVICES 2
-#define START_HOUR 0
+#define MAX_DEVICES 15
+#define START_HOUR 9
 #define START_MINUTE 0
 #define END_HOUR 13
 #define END_MINUTE 0
@@ -18,7 +18,7 @@
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
 // Flag for Serial monitor debug output
-#define VERBOSE_FLAG true
+#define VERBOSE_FLAG false
 
 #include <PrNetRomManager.h>
 #include <RFduinoBLE.h>
@@ -48,9 +48,6 @@ PrNetRomManager romManager2;
 // Loop counters
 int hostLoopCounter = 0;
 int deviceLoopCounter = 0;
-// Millis at start of data collection
-boolean startMillisSet = false;
-unsigned long startDataCollectionMillis;
 // Counter for current ROM page row
 int rowCounter = 0;
 // Flag to transfer data to cell phone app
@@ -59,8 +56,6 @@ boolean transferFlag = false;
 int pageCounter = STORAGE_FLASH_PAGE;
 
 void setup() {
-  timer.initialMillis = millis();
-  timer.isTimeSet = true;
   pinMode(greenLED, OUTPUT);
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
   //String deviceIDString = String(deviceID);
@@ -71,7 +66,6 @@ void setup() {
   if (VERBOSE_FLAG) {
     Serial.begin(9600);
   }
-  
   if (deviceRole == HOST) {
     setupHost();
   } else {
@@ -101,7 +95,6 @@ void loop() {
         startTransfer();
       }
     } else {
-      setDataCollectionMillis();
       if (deviceRole == HOST) {
         loopHost();
       } else {
@@ -112,6 +105,7 @@ void loop() {
 }
 
 void loopHost() {
+  timer.displayDateTime();
   Serial.println("HOST");
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < HOST_LOOPS; i++) {
@@ -124,60 +118,24 @@ void loopHost() {
 }
 
 void loopDevice() {
+  timer.displayDateTime();
   Serial.println("DEVICE");
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < DEVICE_LOOPS; i++) {
       //sleepDevice(DEVICE_LOOP_TIME);
-      timer.delayTime(DEVICE_LOOP_TIME);
+      timer.delayTime(DEVICE_LOOP_TIME - (millis() % DEVICE_LOOP_TIME));
       pollHost();
       Serial.println(millis());
     }
     setupHost();
   }
 }
-
-/*void loopHost() {
-  Serial.println("HOST");
-  timer.displayTime();
-  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
-    int loopCount = 0;
-    while (millis() - startDataCollectionMillis < (HOST_LOOPS*HOST_LOOP_TIME*(hostLoopCounter+1)) + (DEVICE_LOOPS*DEVICE_LOOP_TIME)*deviceLoopCounter) {
-      Serial.print(loopCount);
-      Serial.print(" ");
-      Serial.println(millis());
-      collectSamplesFromDevices();
-      updateROMTable();
-      loopCount++;
-    }
-    hostLoopCounter++;
-    setupDevice();
-  }
-}
-
-void loopDevice() {
-  Serial.println("DEVICE");
-  timer.displayTime();
-  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
-    int loopCount = 0;
-    while (millis() - startDataCollectionMillis < (HOST_LOOPS*HOST_LOOP_TIME*(hostLoopCounter)) + (DEVICE_LOOPS*DEVICE_LOOP_TIME)*(deviceLoopCounter+1)) {
-      //sleepDevice(DEVICE_LOOP_TIME);
-      Serial.print(loopCount);
-      Serial.print(" ");
-      Serial.println(millis());
-      timer.delayTime(DEVICE_LOOP_TIME - (millis() % 10));
-      pollHost();
-      loopCount++;
-    }
-    deviceLoopCounter++;
-    setupHost();
-  }
-}*/
 
 ////////// Host Functions //////////
 
 void collectSamplesFromDevices() {
   collectSamples = true;
-  timer.delayTime(HOST_LOOP_TIME - (millis() % 10));
+  timer.delayTime(HOST_LOOP_TIME - (millis() % HOST_LOOP_TIME));
   collectSamples = false;
 }
 
@@ -215,13 +173,6 @@ void waitForTime() {
   RFduinoBLE.end();
 }
 
-void setDataCollectionMillis() {
-  if (!startMillisSet) {
-    startDataCollectionMillis = millis();
-    startMillisSet = true;
-  }
-}
-
 ////////// Sleep Functions //////////
 
 void sleepDevice(int milliseconds) {
@@ -253,11 +204,11 @@ void updateROMTable() {
   // Update rows for ROM table and clear collected values
   for (int i = 0; i < MAX_DEVICES; i++) {
     int rssiAverage = (rssiCount[i] == 0) ? -128 : rssiTotal[i] / rssiCount[i];
-    Serial.print(i);
+    /*Serial.print(i);
     Serial.print(",");
     Serial.print(rssiAverage);
     Serial.print(",");
-    Serial.println(rssiCount[i]);
+    Serial.println(rssiCount[i]);*/
     if (rssiAverage > -100) {
       if (rowCounter >= MAX_ROWS) {
         writePage();

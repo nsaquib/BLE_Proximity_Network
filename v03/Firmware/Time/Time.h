@@ -9,32 +9,41 @@
 
 #include "Arduino.h"
 
-// Time structure
-struct timer {
+// Initial time structure
+struct initialTime {
+  int month = 0;
+  int date = 0;
+  int year = 0;
+  int day = 0;
   int hours = 0;
   int minutes = 0;
   int seconds = 0;
   int ms = 0;
 };
 
-// Date structure
-struct date {
+// Time structure
+struct currentTime {
   int month = 0;
-  int day = 0;
+  int date = 0;
   int year = 0;
-  int weekday = 0;
+  int day = 0;
+  int hours = 0;
+  int minutes = 0;
+  int seconds = 0;
+  int ms = 0;
 };
+
 
 class Time {
   public:
-    struct timer timer;
-    struct date date;
+    struct initialTime initialTime;
+    struct currentTime currentTime;
+    unsigned long initialMillis = 0;
     boolean isTimeSet;
     Time();
     void delayTime(int ms);
-    void setTime(int hours, int minutes, int seconds, int milliseconds);
-    void setDate(int month, int day, int year, int weekday);
-    void updateTime(int ms);
+    void setInitialTime(int month, int date, int year, int day, int hours, int minutes, int seconds, int ms);
+    void updateTime();
     int getTimeUntilStartTime(int startHour, int startMinute);
     boolean inDataCollectionPeriod(int startHour, int startMinute, int endHour, int endMinute);
     void displayDate();
