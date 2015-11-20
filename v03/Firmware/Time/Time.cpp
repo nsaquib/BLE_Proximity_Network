@@ -108,6 +108,12 @@ int Time::getTimeUntilStartTime(int startHour, int startMinute) {
     days += 2;
     delayTime += 172800000;
   }
+  // If its Saturday, sleep through Sunday
+  if (currentTime.day == 6) {
+    // Add 24 hours to delayTime in milliseconds
+    days += 1;
+    delayTime += 86400000;
+  }
   Serial.print("Sleeping for ");
   Serial.print(days);
   Serial.print(":");
