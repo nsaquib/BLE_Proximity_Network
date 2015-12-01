@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Heatmap Test Code</title>
+	<script src='heatmap_source/build/heatmap.min.js'></script>
+	<script src="static/javascripts/d3.v3.min.js"></script>
+	<script src="static/javascripts/topojson.v1.min.js"></script>
+	<script src="static/javascripts/jquery.min.js"></script>
+	<script src="static/javascripts/d3.tip.v0.6.3.js"></script>
+	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+	<script src="static/javascripts/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="static/stylesheets/jquery-ui.css" />
+	<link rel="stylesheet" href="static/bootstrap-3.1.1-dist/css/bootstrap.min.css">
+	<script src="static/javascripts/jquery-ui.min.js"></script>
+	<link href="static/bootstrap-3.1.1-dist/css/bootstrap-glyphicons.css" rel="stylesheet">
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+	<link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+	<script src="http://d3js.org/topojson.v1.min.js"></script>
+	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+	<link rel="stylesheet" type="text/css" href="static/stylesheets/heatmap_style.css"> </style>
+	
+</head>
+<body>
+<div id = "title">Heatmap of Classroom
+	<select name="child" id="child" onchange="passData(this)">
+		<option value="select">Select</option>
+	    <option value="dash">Dash</option>
+	    <option value="uriah">Uriah</option>
+	    <option value="dario">Dario</option>
+	</select>
+</div>
+<div id = "floorplan">
+<img src="floorplan.jpg" alt="classroom space" height="250"></div>
+  <div id='heatMap'>
+    <canvas width="1200" height="300" style="position:absolute; left: 0; top: 500"></canvas>
+  </div>
+<div id="timeline-controls">
+	<p class="play">Play</p>
+	<p class="stop">Stop</p>
+</div>
+<div id="name-filter">
+
+</div>
+<div id="timeline"></div>
+</body>
+
+<script src="dashboard_heatmap2.js"></script>
+<script> 
+
+  
+  
+</script>
+</html>
