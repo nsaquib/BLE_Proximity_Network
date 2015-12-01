@@ -1,0 +1,50 @@
+body{font-family: Arial, sans-serif;font-size:12px; padding:20px;}
+
+#title{
+	font-size:18px;
+	color:#aaa;
+	position:absolute;
+	left:40px;
+	top:40px;
+}
+#chart{
+	height:600px;
+	width:600px;
+	position:absolute;
+	left:120px;
+	top:80px;
+}
+
+#notes{
+	height:350px;
+	width:600px;
+	border:1px solid #aaa;
+	position:absolute;
+	left:620px;
+	top:440px;
+	padding:20px;
+	fill:#aaa;
+	color:#aaa;
+	font-size:16px;
+}
+#materialImage{
+	height:300px;
+	width:300px;
+	position:absolute;
+	left:620px;
+	top:100px;
+	fill:#aaa;
+	color:#aaa;
+	font-size:16px;
+}
+#materialnotes{
+	height:300px;
+	width:280px;
+	position:absolute;
+	left:940px;
+	top:100px;
+	padding:20px;
+	fill:#aaa;
+	color:#aaa;
+	font-size:16px;
+}
