@@ -1,14 +1,14 @@
 import collections
 
-f_w = open("data/uriah.json",'r+')
+f_w = open("data/wildflower_2/json/beatrice.json",'r+')
 
 data = {}
 
-kid = '1'
+kid = '0'
 
-f = open("data0.txt",'r')
+f = open("data/wildflower_2/host10.txt",'r')
 lines = f.readlines()
-loc0 = [1230,1100]
+loc0 = [3400,0]
 for line in lines:
     a = line.split(',')
     if len(a) > 2:
@@ -19,9 +19,9 @@ for line in lines:
           data[long(a[0])] = [loc0[0],loc0[1]-value]  
 f.close()
 
-f = open("data1.txt",'r')
+f = open("data/wildflower_2/host11.txt",'r')
 lines = f.readlines()
-loc1 = [1230,0]
+loc1 = [3200,1100]
 for line in lines:
     a = line.split(',')
     if len(a) > 2:
@@ -31,9 +31,9 @@ for line in lines:
           data[long(a[0])] = [loc1[0],loc1[1]+value]  
 f.close()
 
-f = open("data2.txt",'r')
+f = open("data/wildflower_2/host12.txt",'r')
 lines = f.readlines()
-loc2 = [2350,0]
+loc2 = [1500,800]
 for line in lines:
     a = line.split(',')
     if len(a) > 2:
@@ -43,9 +43,9 @@ for line in lines:
           data[long(a[0])] = [loc2[0],loc2[1]+value]  
 f.close()
 
-f = open("data3.txt",'r')
+f = open("data/wildflower_2/host13.txt",'r')
 lines = f.readlines()
-loc3 = [2350,1100]
+loc3 = [1230,0]
 for line in lines:
     a = line.split(',')
     if len(a) > 2:
@@ -55,9 +55,9 @@ for line in lines:
           data[long(a[0])] = [loc3[0],loc3[1]-value]  
 f.close()
 
-f = open("data4.txt",'r')
+f = open("data/wildflower_2/host14.txt",'r')
 lines = f.readlines()
-loc4 = [3400,0]
+loc4 = [1230,1100]
 for line in lines:
     a = line.split(',')
     if len(a) > 2:
@@ -67,9 +67,9 @@ for line in lines:
           data[long(a[0])] = [loc4[0],loc4[1]+value]  
 f.close()
 
-f = open("data5.txt",'r')
+f = open("data/wildflower_2/host15.txt",'r')
 lines = f.readlines()
-loc5 = [0,1100]
+loc5 = [1230,0]
 for line in lines:
     a = line.split(',')
     if len(a) > 2:
@@ -77,6 +77,18 @@ for line in lines:
         if a[2] > -80:
           value = (long(a[2]) / -128.0) * 100
           data[long(a[0])] = [loc5[0],loc5[1]-value]  
+f.close()
+
+f = open("data/wildflower_2/host17.txt",'r')
+lines = f.readlines()
+loc6 = [100,1100]
+for line in lines:
+    a = line.split(',')
+    if len(a) > 2:
+      if a[1] == kid: 
+        if a[2] > -80:
+          value = (long(a[2]) / -128.0) * 100
+          data[long(a[0])] = [loc6[0],loc6[1]-value]  
 f.close()
 
 
