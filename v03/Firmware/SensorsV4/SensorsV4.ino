@@ -10,8 +10,8 @@
 #define HBA 0x000
 // Configuration Parameters
 #define MAX_DEVICES 3
-#define START_HOUR 15
-#define START_MINUTE 1
+#define START_HOUR 18
+#define START_MINUTE 24
 #define END_HOUR 23
 #define END_MINUTE 0
 #define HOST_LOOP_TIME 1000
@@ -51,13 +51,17 @@ int rowCounter = 0;
 boolean transferFlag = false;
 // Counter for current page to write to
 int pageCounter = STORAGE_FLASH_PAGE;
+// Update start time
+char month[2];
+char day[2];
+char year[2];
+char weekday[1];
+char hour[2];
+char minute[2];
+char second[2];
+char ms[2];
 
 void setup() {
-  timer.isTimeSet = true;
-  timer.initialTime.hours = 15;
-  timer.initialTime.minutes = 0;
-  timer.initialTime.seconds = 50;
-  timer.initialTime.ms = 55;
   pinMode(greenLED, OUTPUT);
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
 
@@ -130,6 +134,7 @@ void loopDevice() {
     for (int i = 0; i < DEVICE_LOOPS; i++) {
       timer.displayDateTime();
       //timer.updateTime();
+      //Serial.println(DEVICE_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
       timer.delayTime(DEVICE_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
       pollHost();
     }
@@ -142,6 +147,7 @@ void loopDevice() {
 void collectSamplesFromDevices() {
   collectSamples = true;
   timer.updateTime();
+  Serial.println(HOST_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % HOST_LOOP_TIME));
   timer.delayTime(HOST_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % HOST_LOOP_TIME));
   collectSamples = false;
 }
@@ -245,15 +251,6 @@ void RFduinoBLE_onReceive(char *data, int len) {
   // Check if the first byte exists
   if (data[0]) {
     if (data[0] == '>') {
-      // Update start time
-      char month[2];
-      char day[2];
-      char year[2];
-      char weekday[1];
-      char hour[2];
-      char minute[2];
-      char second[2];
-      char ms[2];
       // Remove below lines
       hour[0] = data[1];
       hour[1] = data[2];
