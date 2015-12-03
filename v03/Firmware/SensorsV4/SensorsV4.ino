@@ -53,6 +53,11 @@ boolean transferFlag = false;
 int pageCounter = STORAGE_FLASH_PAGE;
 
 void setup() {
+  timer.isTimeSet = true;
+  timer.initialTime.hours = 15;
+  timer.initialTime.minutes = 0;
+  timer.initialTime.seconds = 50;
+  timer.initialTime.ms = 55;
   pinMode(greenLED, OUTPUT);
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
 
