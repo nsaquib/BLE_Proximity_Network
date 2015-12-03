@@ -31,6 +31,11 @@ function passData(select_object) {
 		.defer(d3.json, "data/dario.json")
 		.await(dataDidLoad);
 	}
+	else if (child == 'beatrice') {
+		queue()
+		.defer(d3.json, "data/wildflower_2/json/beatrice.json")
+		.await(dataDidLoad);
+	}
 }
 
 var heatmapInstance = h337.create({
