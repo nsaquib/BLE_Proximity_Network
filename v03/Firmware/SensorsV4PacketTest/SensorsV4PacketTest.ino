@@ -117,10 +117,10 @@ void loop() {
 }
 
 void loopHost() {
-  Serial.println("HOST");
+  //Serial.println("HOST");
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < HOST_LOOPS; i++) {
-      timer.displayDateTime();
+      //timer.displayDateTime();
       collectSamplesFromDevices();
       updateROMTable();
     }
@@ -129,11 +129,11 @@ void loopHost() {
 }
 
 void loopDevice() {
-  Serial.println("DEVICE");
+  //Serial.println("DEVICE");
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < DEVICE_LOOPS; i++) {
-      timer.displayDateTime();
-      //timer.updateTime();
+      //timer.displayDateTime();
+      timer.updateTime();
       timer.delayTime(DEVICE_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
       pollHost();
     }
@@ -239,7 +239,7 @@ void writePage() {
   // Erase existing data in the current rom page and write page to memory
   romManager.erasePage(STORAGE_FLASH_PAGE - romManager.pagecounter);
   int success = romManager.writePage(STORAGE_FLASH_PAGE - romManager.pagecounter, romManager.table);
-  Serial.println(success);
+  //Serial.println(success);
   rowCounter = 0;
 }
 
