@@ -11,9 +11,9 @@
 // Configuration Parameters
 #define MAX_DEVICES 10
 #define START_HOUR 14
-#define START_MINUTE 30
+#define START_MINUTE 45
 #define END_HOUR 23
-#define END_MINUTE 0
+#define END_MINUTE 59
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
@@ -27,7 +27,7 @@
 #include <Time.h>
 
 // Unique device ID
-const int deviceID = 0;
+const int deviceID = 9;
 // Device loops
 const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
 // Pin for the green LED
@@ -71,7 +71,7 @@ void setup() {
   BLE_NAME[0] = char(32);
   BLE_NAME[1] = char(33);
   //int id = snprintf(BLE_NAME, 10, "%d", deviceID);*/
-  RFduinoBLE.deviceName = "0";
+  RFduinoBLE.deviceName = "9";
   //RFduinoBLE.advertisementData = BLE_NAME;
   
   RFduinoGZLL.hostBaseAddress = HBA;
