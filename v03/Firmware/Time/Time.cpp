@@ -76,26 +76,8 @@ int Time::getTimeUntilStartTime(int startHour, int startMinute) {
   seconds = (60 - currentTime.seconds - carryOver) % 60;
   carryOver = (seconds > 0 || ms > 0) ? 1 : 0;
   minutes = (60 - currentTime.minutes + startMinute - carryOver) % 60;
-  carryOver = ((currentTime.minutes + carryOver) % 60 > startMinute || seconds > 0 || ms > 0) ? 1 : 0;
-  if (currentTime.hours == startHour) {
-    if (currentTime.minutes + carryOver < startMinute) {
-      hours = 0;
-    } else {
-      hours = 23;
-    }
-  } else if (currentTime.hours < startHour) {
-    if (currentTime.minutes + carryOver <= startMinute) {
-       hours = startHour - currentTime.hours;
-    } else {
-      hours = startHour - currentTime.hours - 1;
-    }
-  } else {
-    if (currentTime.minutes + carryOver <= startMinute) {
-      hours = 24 - currentTime.hours + startHour;
-    } else {
-      hours = 24 - currentTime.hours + startHour - 1; 
-    }
-  }
+  carryOver = (minutes > startMinute) ? 1 : 0;  // ((currentTime.minutes + carryOver) % 60 > startMinute || (currentTime.minutes + carryOver)) ? 1 : 0; 
+  hours = (currentTime.hours + carryOver <= startHour) ? startHour - currentTime.hours - carryOver : 24 - currentTime.hours - carryOver + startHour;
   // If its Friday, sleep through Saturday and Sunday
   if (currentTime.day == 5) {
     days += 2;
@@ -130,9 +112,8 @@ boolean Time::inDataCollectionPeriod(int startHour, int startMinute, int endHour
   // If start and end hour if the same, check minute on both endpoints
   } else if ((startHour == endHour) && ((currentTime.minutes < startMinute) || (currentTime.minutes >= endMinute))) {
     return false;
-  // Inclusive on startMinute with check on seconds and milliseconds and exclusive on endMinute
-  } else if (((currentTime.hours == startHour) && (currentTime.minutes > startMinute))
-  			|| ((currentTime.hours == startHour) && (currentTime.minutes == startMinute) && currentTime.seconds == 0 && currentTime.ms == 0)
+  // Inclusive on startMinute and exclusive on endMinute
+  } else if (((currentTime.hours == startHour) && (currentTime.minutes >= startMinute))
             || ((currentTime.hours == endHour) && (currentTime.minutes < endMinute))) {
 	return true;
   // Otherwise, do not collect data
