@@ -10,10 +10,10 @@
 #define HBA 0x000
 // Configuration Parameters
 #define MAX_DEVICES 3
-#define START_HOUR 18
-#define START_MINUTE 24
+#define START_HOUR 23
+#define START_MINUTE 50
 #define END_HOUR 23
-#define END_MINUTE 0
+#define END_MINUTE 59
 #define HOST_LOOP_TIME 1000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
@@ -64,7 +64,7 @@ char ms[2];
 void setup() {
   pinMode(greenLED, OUTPUT);
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
-
+  
   //String deviceIDString = String(deviceID);
   //char BLE_NAME[deviceIDString.length() + 1];
   //deviceIDString.toCharArray(BLE_NAME, deviceIDString.length() + 1);
@@ -134,7 +134,6 @@ void loopDevice() {
     for (int i = 0; i < DEVICE_LOOPS; i++) {
       timer.displayDateTime();
       //timer.updateTime();
-      //Serial.println(DEVICE_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
       timer.delayTime(DEVICE_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
       pollHost();
     }
@@ -147,7 +146,6 @@ void loopDevice() {
 void collectSamplesFromDevices() {
   collectSamples = true;
   timer.updateTime();
-  Serial.println(HOST_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % HOST_LOOP_TIME));
   timer.delayTime(HOST_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % HOST_LOOP_TIME));
   collectSamples = false;
 }

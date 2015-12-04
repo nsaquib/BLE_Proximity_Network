@@ -69,51 +69,43 @@ int Time::getTimeUntilStartTime(int startHour, int startMinute) {
   int minutes = 0;
   int seconds = 0;
   int ms = 0;
+  int carryOver;
   updateTime();
+  ms = (1000 - currentTime.ms) % 1000;
+  carryOver = (ms > 0) ? 1 : 0;
+  seconds = (60 - currentTime.seconds - carryOver) % 60;
+  carryOver = (seconds > 0 || ms > 0) ? 1 : 0;
+  minutes = (60 - currentTime.minutes + startMinute - carryOver) % 60;
+  carryOver = ((currentTime.minutes + carryOver) % 60 > startMinute || seconds > 0 || ms > 0) ? 1 : 0;
   if (currentTime.hours == startHour) {
-    if (currentTime.minutes < startMinute) {
+    if (currentTime.minutes + carryOver < startMinute) {
       hours = 0;
     } else {
       hours = 23;
     }
   } else if (currentTime.hours < startHour) {
-    if (currentTime.minutes <= startMinute) {
+    if (currentTime.minutes + carryOver <= startMinute) {
        hours = startHour - currentTime.hours;
     } else {
       hours = startHour - currentTime.hours - 1;
     }
   } else {
-    if (currentTime.minutes <= startMinute) {
+    if (currentTime.minutes + carryOver <= startMinute) {
       hours = 24 - currentTime.hours + startHour;
     } else {
       hours = 24 - currentTime.hours + startHour - 1; 
     }
   }
-  if (currentTime.seconds <= 0) {
-    minutes = (60 - currentTime.minutes + startMinute) % 60;
-  } else {
-    minutes = (60 - currentTime.minutes + startMinute - 1) % 60;
-  }
-  if (currentTime.ms <= 0) {
-    seconds = (60 - currentTime.seconds) % 60;
-  } else {
-    seconds = (60 - currentTime.seconds - 1) % 60;
-  }
-  ms = (1000 - currentTime.ms) % 1000;
-  // Calculate time to startHour:startMinute by converting higher order time units to ms
-  int delayTime = ms + (1000 * seconds) + (60000 * minutes) + (3600000 * hours);
   // If its Friday, sleep through Saturday and Sunday
   if (currentTime.day == 5) {
-    // Add 48 hours to delayTime in milliseconds
     days += 2;
-    delayTime += 172800000;
   }
   // If its Saturday, sleep through Sunday
   if (currentTime.day == 6) {
-    // Add 24 hours to delayTime in milliseconds
     days += 1;
-    delayTime += 86400000;
   }
+  // Calculate time to startHour:startMinute by converting higher order time units to ms
+  int delayTime = ms + (1000 * seconds) + (60000 * minutes) + (3600000 * hours) + (86400000 * days);
   Serial.print("Sleeping for ");
   Serial.print(days);
   Serial.print(":");
@@ -138,10 +130,11 @@ boolean Time::inDataCollectionPeriod(int startHour, int startMinute, int endHour
   // If start and end hour if the same, check minute on both endpoints
   } else if ((startHour == endHour) && ((currentTime.minutes < startMinute) || (currentTime.minutes >= endMinute))) {
     return false;
-  // Inclusive on startMinute and exclusive on endMinute
-  } else if (((currentTime.hours == startHour) && (currentTime.minutes >= startMinute))
+  // Inclusive on startMinute with check on seconds and milliseconds and exclusive on endMinute
+  } else if (((currentTime.hours == startHour) && (currentTime.minutes > startMinute))
+  			|| ((currentTime.hours == startHour) && (currentTime.minutes == startMinute) && currentTime.seconds == 0 && currentTime.ms == 0)
             || ((currentTime.hours == endHour) && (currentTime.minutes < endMinute))) {
-    return true;
+	return true;
   // Otherwise, do not collect data
   } else {
     return false;
