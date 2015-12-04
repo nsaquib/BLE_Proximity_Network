@@ -10,9 +10,9 @@
 #define HBA 0x000
 // Configuration Parameters
 #define MAX_DEVICES 3
-#define START_HOUR 9
-#define START_MINUTE 0
-#define END_HOUR 13
+#define START_HOUR 13
+#define START_MINUTE 50
+#define END_HOUR 23
 #define END_MINUTE 0
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
@@ -174,7 +174,7 @@ void waitForTime() {
   RFduinoGZLL.end();
   RFduinoBLE.advertisementInterval = BLE_AD_INTERVAL;
   RFduinoBLE.begin();
-  Serial.println("Waiting for time...");
+  //Serial.println("Waiting for time...");
   while (!timer.isTimeSet) {
     timer.delayTime(5);
     if (transferFlag) {
@@ -197,8 +197,8 @@ void sleepUntilStartTime() {
   int delayTime = timer.getTimeUntilStartTime(START_HOUR, START_MINUTE);
   // Add additional offset to shift each device's initial start time
   delayTime += HOST_LOOP_TIME * HOST_LOOPS * deviceID;
-  Serial.print("Offset: ");
-  Serial.println(HOST_LOOP_TIME * HOST_LOOPS * deviceID);
+  //Serial.print("Offset: ");
+  //Serial.println(HOST_LOOP_TIME * HOST_LOOPS * deviceID);
   sleepDevice(delayTime);
 }
 
