@@ -10,10 +10,10 @@
 #define HBA 0x000
 // Configuration Parameters
 #define MAX_DEVICES 3
-#define START_HOUR 23
+#define START_HOUR 1
 #define START_MINUTE 50
-#define END_HOUR 23
-#define END_MINUTE 59
+#define END_HOUR 13
+#define END_MINUTE 0
 #define HOST_LOOP_TIME 1000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
