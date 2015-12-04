@@ -10,11 +10,11 @@
 #define HBA 0x000
 // Configuration Parameters
 #define MAX_DEVICES 3
-#define START_HOUR 1
-#define START_MINUTE 50
+#define START_HOUR 9
+#define START_MINUTE 0
 #define END_HOUR 13
 #define END_MINUTE 0
-#define HOST_LOOP_TIME 1000
+#define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
 // Flag for Serial monitor debug output
@@ -65,13 +65,13 @@ void setup() {
   pinMode(greenLED, OUTPUT);
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
   
-  //String deviceIDString = String(deviceID);
-  //char BLE_NAME[deviceIDString.length() + 1];
-  //deviceIDString.toCharArray(BLE_NAME, deviceIDString.length() + 1);
-  //BLE_NAME[0] = '2';
-  //BLE_NAME[1] = '3';
-  //int id = snprintf(BLE_NAME, 10, "%d", deviceID);
-  RFduinoBLE.deviceName = "2"; // BLE_NAME;
+  /*String deviceIDString = String(deviceID);
+  char BLE_NAME[2];
+  deviceIDString.toCharArray(BLE_NAME, deviceIDString.length() + 1);
+  BLE_NAME[0] = char(32);
+  BLE_NAME[1] = char(33);
+  //int id = snprintf(BLE_NAME, 10, "%d", deviceID);*/
+  RFduinoBLE.deviceName = "2";
   //RFduinoBLE.advertisementData = BLE_NAME;
   
   RFduinoGZLL.hostBaseAddress = HBA;
