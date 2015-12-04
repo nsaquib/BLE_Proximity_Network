@@ -6,13 +6,14 @@ import serial
 import time
 
 connected = False;
-ser = serial.Serial("/dev/cu.usbserial-DN00D0ZF", 9600)
+ser = serial.Serial("/dev/cu.usbserial-DN00BOCJ", 9600)
+#ser = serial.Serial("/dev/cu.usbserial-DN00D0ZF", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN0073UM", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN00B462", 9600)
 #ser = serial.Serial("/dev/cu.usbserial-DN00B1WO", 9600)
 
 win = 25
-PLOT_LINES = 7
+PLOT_LINES = 2
 yData = [[], [], [], [], [], [], [], []]
 lines = []
 fig, ax = plt.subplots()
@@ -53,23 +54,24 @@ def process(xlist, ylist, index, i):
     # Strip newline charcter and split along commas
     data = data.decode("ascii").split(',')
     # Add data point to list
-    yData[index].append(float(data[2]))
-    # Use numpy array for manipulation
-    y = np.asarray(yData[index]);
-    # X axis is length of y data
-    x = np.arange(y.size) + 1
-    # Function for gating the amount of data to plot
-    imin = min(max(0, i - win), x.size - win)
-    # Resize x data
-    x = x[imin:i]
-    # Resize y data
-    y = y[imin:i]
-    # Add x data
-    xlist.append(x)
-    # Add y data
-    ylist.append(y)
-    # Return updated x and y lists
-    return {"xlist": xlist, "ylist": ylist}
+    if len(data) == 3:
+        yData[index].append(float(data[2]))
+        # Use numpy array for manipulation
+        y = np.asarray(yData[index]);
+        # X axis is length of y data
+        x = np.arange(y.size) + 1
+        # Function for gating the amount of data to plot
+        imin = min(max(0, i - win), x.size - win)
+        # Resize x data
+        x = x[imin:i]
+        # Resize y data
+        y = y[imin:i]
+        # Add x data
+        xlist.append(x)
+        # Add y data
+        ylist.append(y)
+        # Return updated x and y lists
+        return {"xlist": xlist, "ylist": ylist}
 
 def writeCSVRow():
     with open(filename, "a") as file:
