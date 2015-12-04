@@ -9,9 +9,9 @@
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 // Configuration Parameters
-#define MAX_DEVICES 3
-#define START_HOUR 13
-#define START_MINUTE 50
+#define MAX_DEVICES 10
+#define START_HOUR 14
+#define START_MINUTE 30
 #define END_HOUR 23
 #define END_MINUTE 0
 #define HOST_LOOP_TIME 2000
@@ -27,7 +27,7 @@
 #include <Time.h>
 
 // Unique device ID
-const int deviceID = 2;
+const int deviceID = 0;
 // Device loops
 const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
 // Pin for the green LED
@@ -51,7 +51,7 @@ int rowCounter = 0;
 boolean transferFlag = false;
 // Counter for current page to write to
 int pageCounter = STORAGE_FLASH_PAGE;
-// Update start time
+// Initial time arrays
 char month[2];
 char day[2];
 char year[2];
@@ -71,7 +71,7 @@ void setup() {
   BLE_NAME[0] = char(32);
   BLE_NAME[1] = char(33);
   //int id = snprintf(BLE_NAME, 10, "%d", deviceID);*/
-  RFduinoBLE.deviceName = "2";
+  RFduinoBLE.deviceName = "0";
   //RFduinoBLE.advertisementData = BLE_NAME;
   
   RFduinoGZLL.hostBaseAddress = HBA;
