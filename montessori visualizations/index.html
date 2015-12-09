@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="static/javascripts/d3.v3.min.js"></script>
+	<script src="static/javascripts/topojson.v1.min.js"></script>
+	<script src="static/javascripts/jquery.min.js"></script>
+	<script src="static/javascripts/d3.tip.v0.6.3.js"></script>
+	<script src="static/javascripts/fisheye.js"></script>
+	<script src="static/javascripts/underscore.js"></script>
+	<script src='heatmap_source/build/heatmap.min.js'></script>
+  
+	<link rel="stylesheet" type="text/css" href="heatmap_style.css"> </style>
+
+	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+	<script src="static/javascripts/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="static/stylesheets/jquery-ui.css" />
+	<link rel="stylesheet" href="static/bootstrap-3.1.1-dist/css/bootstrap.min.css">
+	<script src="static/javascripts/jquery-ui.min.js"></script>
+	<link href="static/bootstrap-3.1.1-dist/css/bootstrap-glyphicons.css" rel="stylesheet">
+	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+	<link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+	<script src="http://d3js.org/topojson.v1.min.js"></script>
+	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script src="//d3js.org/d3.v3.min.js"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Montessori Visualization Demo</title>
+
+        <link href="data:image/gif;" rel="icon" type="image/x-icon" />
+
+        <!-- Bootstrap -->
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="css/style.css" />
+        <!-- <link rel="stylesheet" href="../css/ribbon.css" />-->
+        <link rel="stylesheet" href="css/elan.css" />
+        <link rel="screenshot" itemprop="screenshot" href="http://katspaugh.github.io/wavesurfer.js/example/screenshot.png" />
+
+        <!-- wavesurfer.js -->
+        <script src="build/wavesurfer.min.js"></script>
+
+        <!-- regions plugin -->
+        <script src="plugin/wavesurfer.regions.js"></script>
+
+        <!-- ELAN format renderer -->
+        <script src="plugin/wavesurfer.elan.js"></script>
+
+        <!-- App -->
+        <script src="app.js"></script>
+        <script src="trivia.js"></script>
+    <style type="text/css">
+        .link { stroke: #ccc; }
+        textarea, input { outline: none; }
+        .nodetext { pointer-events: none; font: 10px sans-serif; }
+        body { width:100%; height:100%; margin:none; padding:none; }
+        #graph { width:800px;height:600px;z-index:-1;}
+        #button {width:800px; height:20px;padding:5px;}
+        #time{width:100px;}
+        #play{padding:5px;height:28px;width:100px;margin-top:5px;}
+        #chart{position:absolute;left:600px;top:270px;z-index:999}
+        #chartTitle{position:absolute;left:600px;top:250px;}
+        .button {
+        	background-color:#fff;
+          border:1px solid #aaa;
+        	cursor:pointer;
+        	color:#aaa;
+        	font-family:Baskerville;
+        	font-size:14px;
+          letter-spacing:2px;
+          height:110px;
+          width:110px;
+          border-radius:50%;
+        }
+        .button:hover {
+        	background-color:#ccc;
+        }
+        .active {
+         background: #dedede;
+        }
+        .button:active {
+        	background-color:#ccc;
+        }
+        #mainTitle{ font-size:24px;color:#aaa;letter-spacing:2px;padding:20px;}
+        #subTitle{font-size:14px;color:#aaa;padding:10px;}
+        
+        #mainMenu{padding:10px;}
+        #social{padding:20px;}
+        #sound{position:absolute;left:0;display:none;padding:20px;}
+        #location{padding:20px;position:absolute;left:0;display:none;}
+        #materials{display:none;padding:20px;}
+        #materialImage{position:absolute;left:500px;top:250px;}
+        #notes{width:300px;position:absolute;left:500px;top:600px;}
+        #video1{padding:20px;position:absolute;left:10px;top:260px;display:none;}
+        #video2{padding:20px;position:absolute;left:530px;top:260px;display:none;}
+        #video{padding:20px;display:none;}
+        #dots{width:600px;}
+        #chord{border:0px;width:500px;height:500px;position:absolute;left:600px;top:330px;z-index:1}
+    </style>
+</head>
+<body>
+<div id="mainMenu">
+<div id="mainTitle">Classroom Visualizations Demo</div>
+<input type='button' class = 'button' id='Interaction' value='Interaction'>
+<!--<input type='button' class = 'button' id='Sound' value='Sound'>-->
+<input type='button' class = 'button' id='Location' value='Location'>
+<input type='button' class = 'button' id='Material' value='Materials'>
+<input type='button' class = 'button' id='Video' value='Video'>
+
+
+</div>
+  <div id="social">
+    <div id="subTitle">Network graph based on sensor data demo</div>
+    <div id="button"></div>
+    <div id="play"></div>
+    <div id="time"></div>
+    <div id="graph"></div>
+    <div id="chartTitle"></div>
+    <div id="chart"></div>
+    <iframe src="chord/chord.html" id="chord">
+      <p>Your browser does not support iframes.</p>
+    </iframe>
+    <script type="text/javascript" src="network.js"></script>
+  </div>
+
+<div id="location">
+  <div id="subTitle">heatmap of classroom movement</div>
+  <div id = "floorplan">
+  <img src="floorplan_old.jpg" alt="classroom space" height="250"></div>
+  <div id='heatMap'>
+    <canvas width="1200" height="300" style="position:absolute; left: 0; top: 0"></canvas>
+  </div>
+  <div id="timeline-controls">
+  	<p class="play">Play</p>
+  	<p class="stop">Stop</p>
+  </div>
+  <div id="name-filter">
+  </div>
+  <div id="timeline"></div>
+  <script src="dashboard_heatmap2.js"></script>
+  
+</div>
+<div id "video">
+  
+<div id="video1">
+<iframe src="https://player.vimeo.com/video/147881807" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen ></iframe> <p><a href="https://vimeo.com/147881807">Mask of movement in Wildflower</a> from <a href="https://vimeo.com/user46128800">Ayesha Bose</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+  </div>
+  <div id="video2">
+  
+<iframe src="https://player.vimeo.com/video/147881808" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href="https://vimeo.com/147881808">Bounding boxes of movement in Wildflower</a> from <a href="https://vimeo.com/user46128800">Ayesha Bose</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+  </div>
+  
+</div>
+<div id ="materials">
+  <div id="dots">
+  <div id="subTitle">materials used by a child over the course of a season</div>
+  <div id="materialScale"></div>  
+  
+  <div id="PLbar"></div>  
+  <div id="PL"></div>
+
+  <div id="Lbar"></div>
+  <div id="L"></div>
+  
+  <div id="Mbar"></div>
+  <div id="M"></div>
+  
+  <div id="Sbar"></div>
+  <div id="S"></div>
+</div>
+<div id = "notes"></div>
+<div id = "materialImage"></div>
+</div>
+
+
+<script type="text/javascript">
+var dotCalendar = "dotcalendar_testdata.csv"
+</script>
+<script src="dot_calendar.js"></script>
+<script type="text/javascript">
+  
+jQuery(document).ready(function(){
+  jQuery('#Interaction').addClass('active')
+  
+  jQuery('#Video').click(function(event) {        
+      jQuery('#video1').show();
+      jQuery('#video2').show();
+      jQuery('#video').show();
+       jQuery('#social').hide();
+       jQuery('#sound').hide();
+       jQuery('#location').hide();
+       jQuery('#materials').hide();              
+       $(this).addClass('active').siblings().removeClass('active');
+
+  });
+    jQuery('#Interaction').click(function(event) {              
+         jQuery('#social').show();
+         jQuery('#sound').hide();
+         jQuery('#location').hide();
+         jQuery('#materials').hide();   
+         jQuery('#video1').hide();
+         jQuery('#video2').hide();
+         jQuery('#video').hide();
+                    
+         $(this).addClass('active').siblings().removeClass('active');
+
+    });
+    jQuery('#Sound').click(function(event) {        
+         //jQuery('#sound').toggle('show');
+         jQuery('#social').hide()
+         jQuery('#sound').show();
+         jQuery('#location').hide();
+         jQuery('#materials').hide();
+         jQuery('#video').hide();
+         jQuery('#video1').hide();
+         jQuery('#video2').hide();
+        // $(this).removeClass('active');
+              $(this).addClass('active').siblings().removeClass('active');
+    });
+    jQuery('#Location').click(function(event) {        
+      jQuery('#social').hide();
+      jQuery('#sound').hide();
+      jQuery('#location').show();
+      jQuery('#materials').hide();
+      jQuery('#video').hide();
+      jQuery('#video1').hide();
+      jQuery('#video2').hide();
+      $(this).addClass('active').siblings().removeClass('active');
+      
+    });
+    jQuery('#Material').click(function(event) {        
+      jQuery('#social').hide();
+      jQuery('#sound').hide();
+      jQuery('#location').hide();
+      jQuery('#materials').show();
+      jQuery('#video').hide();
+      jQuery('#video1').hide();
+      jQuery('#video2').hide();
+      $(this).addClass('active').siblings().removeClass('active');
+      
+    });
+});
+</script>
+
+</body>

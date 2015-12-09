@@ -1,0 +1,44 @@
+<div id="sound">
+  <div class="container">
+      <div class="header">
+          <noindex>
+            <ul class="nav nav-pills pull-right">
+             <!--<li><a href="?fill">Fill</a></li>
+              <li><a href="?scroll">Scroll</a></li>
+              <li><a href="?normalize">Normalize</a></li>-->
+          </ul>
+          </noindex>
+
+       <div id="subTitle">a classroom recording from Noah Wall</div>
+      </div>
+            <div id="demo">
+                <div id="waveform">
+                    <div class="progress progress-striped active" id="progress-bar">
+                        <div class="progress-bar progress-bar-info"></div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-primary" data-action="play">
+                        <i class="glyphicon glyphicon-play"></i>
+                        Play
+                        /
+                        <i class="glyphicon glyphicon-pause"></i>
+                        Pause
+                    </button>
+                </div>
+            </div>
+
+            <div id="annotations" class="table-responsive">
+                <!-- Here be transcript -->
+            </div>
+                <div class="footer row">
+
+                    <div class="col-sm-4">
+                        <p>
+                           demo
+                        </p>
+                    </div>
+                </div>
+            </div>
+</div>

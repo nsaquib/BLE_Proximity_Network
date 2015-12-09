@@ -1,0 +1,221 @@
+html, body{
+font-family:"Baskerville"; font-weight: lighter;
+letter-spacing:1px;
+overflow-x: hidden;
+font-size:14px;
+font-color:#222;
+min-height:800px;
+min-width:1000px;
+overflow:hidden;
+}
+
+a:link;{font-color:#000;}
+a:hover{font-color:#92D09B;}
+a:active{font-color:#92D09B;}
+#loader{
+	width:100%;
+	background-color:#fff;
+	opacity:0.6;
+	z-index:99999;
+	position:absolute;
+	top:0px;
+	height:100%;
+	font-size:24px;
+	letter-spacing:1px;
+	color:#000;
+	line-height:175%;
+}
+#loader-text{
+	position:absolute;
+	top:40%;
+	left:10%;
+}
+#header{
+	position:fixed;
+	top:0px;
+	left:0px;
+	z-index: 9999;
+	font-size:24px;
+    padding:20px;
+	min-width:900px;
+    color:purple;
+    letter-spacing:2px;
+}
+#logo{
+	height: 50px;
+	width: 50px;
+	z-index: 9999;
+	margin:12px;
+	margin-top:18px;
+  	cursor:pointer;
+}
+#title-text{
+	position:fixed;
+	left:0px;
+	top:0px;
+	padding-top:5px;
+	margin-left:90px;
+	min-width:900px;
+	z-index: 9;
+	
+}
+#input{
+    font-size: 13px;
+	line-height:80%;
+	position:fixed;
+	bottom:30px;
+	left:20px;
+}
+#submit {
+	border:1px solid #000;
+    color: #555;
+    font-size: 13px;
+	text-spacing:3px;
+    text-decoration: none;
+    cursor: pointer;
+    border:none;
+	background-color:#fff;
+}
+#submit:hover {
+    border: none;
+    color: #000;
+}
+#title{
+	padding-left:5px;
+	font-size: 46px;
+	line-height:100%;
+	margin-top:10px;
+	min-width:900px;
+	
+}
+#subtitle{
+	padding-left:5px;
+	font-size:14px;
+	min-width:900px;
+}
+
+#container {
+	height:650px;width:650px;position:relative;float:top;margin-top:100px;margin-left:0px;overflow:hidden;
+}
+#tooltip {
+	color: black;
+	opacity: .9;
+	position: absolute;
+	z-index: 10;
+	visibility: hidden;
+	pointer-events: none;
+	font-size:14px;
+	position:absolute;
+	top:140px;
+	left:650px;
+	width:500px;
+	height:60px;
+}
+#tabs{
+	position:absolute;
+	left:650px;
+	top:240px;
+	width:450px;
+	height:30px;
+	font-size:16px;
+}
+#foods{
+	position:absolute;
+	left:650px;
+	top:270px;
+	width:500px;
+	height:450px;
+	overflow:auto;
+	font-size:12px;
+	line-height:120%;
+}
+.foodpair{
+	font-size:24px;
+	color:#59DA85;
+}
+#cuisines{
+	position:absolute;
+	left:650px;
+	top:270px;
+	width:250px;
+	height:450px;
+	overflow:auto;
+	font-size:12px;
+	line-height:120%;
+}
+#map{
+	position:absolute;
+	left:650px;
+	top:270px;
+	width:500px;
+	height:450px;
+	overflow:auto;
+	font-size:12px;
+	line-height:120%;
+}
+#restaurants{
+	position:absolute;
+	left:950px;
+	top:270px;
+	width:200px;
+	height:500px;
+	overflow:auto;
+	font-size:10px;
+	line-height:120%;
+}
+#left-column{
+	font-size:18px;
+	padding-left:30px;
+}
+
+
+#circle circle {
+  fill: none;
+  pointer-events: all;
+}
+path.group {
+  fill-opacity: .8;
+}
+path.chord {
+  fill-opacity: .8;
+  stroke: #000;
+  stroke-width: .25px;
+}
+#circle:hover path.fade {
+  display: none;
+}
+
+#footer i.fa-plus {
+  font-size: 10px;
+  opacity: 0.5;
+}
+#footer{min-width:900px;position:fixed;bottom:0px;;padding-left:10px;padding-right:10px;border-top:1px solid #aaa;line-height:200%;color:#aaa;width:100%;background-color:white;}
+
+#footer a{
+  color: rgba(100,100,100,1.0);
+}
+
+.footer-highlight{
+  color: rgba(100,100,100,1.0);
+  cursor: pointer;
+}
+
+.footer-highlight-link{
+  color: rgba(100,100,100,1.0);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.footer-plus {
+  color: #656566;
+}
+/*light boxes*/
+#essayBox{ position:absolute; top:100px;display: none;height: 600px; border-radius: 5px;opacity: 0.0;color : #444;padding-left: 0px; padding-right: 120px; font-size: 16px;letter-spacing: 1px;background-color:rgba(255, 255, 255, 0.9);font-family: 'EB Garamond', serif;z-index:200;}
+#essayBox-close { cursor: pointer; height: 15%;width: 5%; padding: 5px; color:rgb(1,1,1); z-index:100;}
+#essayContent p {margin-bottom: 10px;margin-left:100px;margin-right:150px;z-index:90;}
+#essayContent table{margin-left:100px;margin-right:150px;font-size:11px;}
+#essayContent a {color: black;text-decoration: underline;z-index:90;}
+
+
+#feedback{position:relative; float:right;text-align:right;}
+#credit{position:relative; float:left;text-align:left;}
+#essayBox-close{position:relative;float:right;}

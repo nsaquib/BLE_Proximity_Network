@@ -1,0 +1,64 @@
+body{
+    font-family:baskerville;
+    color:#888;
+}
+#annotations {
+    max-height: 600px;
+    overflow: auto;
+}
+
+.header{
+    font-size:18px;
+    border:none;
+}
+
+.wavesurfer-annotations tr.wavesurfer-active td {
+    background-color: red;
+}
+
+.wavesurfer-time {
+    width: 120px;
+    color: #555;
+}
+
+.wavesurfer-tier-Text {
+    width: 200px;
+}
+
+td.wavesurfer-tier-Comments {
+    color: #999;
+    font-style:italic;
+}
+
+.wavesurfer-handle {
+    background-color: #aaa;
+}
+.btn-primary {
+    color:#aaa;
+    background-color:#fff;
+    border-color:#aaa;
+    position:relative;
+    float:top;
+    margin-left:-700px;
+    
+}
+.table{
+    position:relative;
+    float:top;
+}
+.table thead tr th {
+    font-weight:normal;
+    color:#000;
+}
+.nav-pills li.active a{
+    color:#aaa;
+    background-color:#fff;
+    border-color:#aaa;
+}
+.nav-pills a{
+    color:#aaa;
+    background-color:#fff;
+    border-color:#aaa;
+    font-size:12px;
+    
+}
