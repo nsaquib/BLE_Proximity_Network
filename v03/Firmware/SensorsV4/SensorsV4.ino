@@ -9,16 +9,14 @@
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 // Configuration Parameters
-#define MAX_DEVICES 2
+#define MAX_DEVICES 16
 #define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 17
+#define END_HOUR 13
 #define END_MINUTE 0
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
-#define DEVICE_LOOP_TIME 0
-// Flag for Serial monitor debug output
-#define VERBOSE_FLAG true
+#define DEVICE_LOOP_TIME 100
 
 #include <PrNetRomManager.h>
 #include <RFduinoBLE.h>
@@ -27,7 +25,7 @@
 #include <Time.h>
 
 // Unique device ID
-const int deviceID = 3;
+const int deviceID = 0;
 // Device loops
 const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
 // Pin for the green LED
@@ -70,14 +68,12 @@ void setup() {
   deviceIDString.toCharArray(BLE_NAME, deviceIDString.length() + 1);
   BLE_NAME[0] = char(32);
   BLE_NAME[1] = char(33);
-  //int id = snprintf(BLE_NAME, 10, "%d", deviceID);*/
-  RFduinoBLE.deviceName = "3";
-  //RFduinoBLE.advertisementData = BLE_NAME;
+  int id = snprintf(BLE_NAME, 10, "%d", deviceID);
+  RFduinoBLE.advertisementData = BLE_NAME;*/
+  RFduinoBLE.deviceName = "0";
   
   RFduinoGZLL.hostBaseAddress = HBA;
-  if (VERBOSE_FLAG) {
-    Serial.begin(9600);
-  }
+  Serial.begin(9600);
   if (deviceRole == HOST) {
     setupHost();
   } else {
@@ -119,12 +115,12 @@ void loop() {
 
 void loopHost() {
   Serial.println("HOST");
+  timer.displayDateTime();
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < HOST_LOOPS; i++) {
       if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
         sleepUntilStartTime();
       }
-      timer.displayDateTime();
       collectSamplesFromDevices();
       updateROMTable();
     }
@@ -134,13 +130,13 @@ void loopHost() {
 
 void loopDevice() {
   Serial.println("DEVICE");
+  timer.displayDateTime();
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < DEVICE_LOOPS; i++) {
       if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
         sleepUntilStartTime();
       }
-      timer.displayDateTime();
-      //timer.updateTime();
+      timer.updateTime();
       timer.delayTime(DEVICE_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
       pollHost();
     }
@@ -195,10 +191,12 @@ void waitForTime() {
 
 void sleepDevice(int milliseconds) {
   RFduinoGZLL.end();
+  Serial.end();
   writeTimeROMRow();
   RFduino_ULPDelay(milliseconds);
   writeTimeROMRow();
   deviceRole = HOST;
+  Serial.begin(9600);
   RFduinoGZLL.begin(deviceRole);
 }
 
