@@ -12,7 +12,7 @@
 #define MAX_DEVICES 3
 #define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 13
+#define END_HOUR 17
 #define END_MINUTE 0
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
@@ -83,6 +83,7 @@ void setup() {
   } else {
     setupDevice();
   }
+  writeTimeROMRow();
 }
 
 void setupHost() {
@@ -120,6 +121,9 @@ void loopHost() {
   Serial.println("HOST");
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < HOST_LOOPS; i++) {
+      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+        sleepUntilStartTime();
+      }
       timer.displayDateTime();
       collectSamplesFromDevices();
       updateROMTable();
@@ -132,6 +136,9 @@ void loopDevice() {
   Serial.println("DEVICE");
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < DEVICE_LOOPS; i++) {
+      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+        sleepUntilStartTime();
+      }
       timer.displayDateTime();
       //timer.updateTime();
       timer.delayTime(DEVICE_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
@@ -188,8 +195,10 @@ void waitForTime() {
 
 void sleepDevice(int milliseconds) {
   RFduinoGZLL.end();
+  writeTimeROMRow();
   RFduino_ULPDelay(milliseconds);
-  timer.updateTime();
+  writeTimeROMRow();
+  deviceRole = HOST;
   RFduinoGZLL.begin(deviceRole);
 }
 
@@ -233,6 +242,19 @@ void updateROMTable() {
     rssiTotal[i] = 0;
     rssiCount[i] = 0;
   }
+}
+
+void writeTimeROMRow() {
+  if (rowCounter >= MAX_ROWS) {
+    writePage();
+  }
+  timer.updateTime();
+  int data = timer.currentTime.ms;
+  data += timer.currentTime.seconds * 1000;
+  data += timer.currentTime.minutes * 100000;
+  data += timer.currentTime.hours * 10000000;
+  romManager.table.data[rowCounter] = data;
+  rowCounter++;
 }
 
 void writePage() {
@@ -281,6 +303,7 @@ void RFduinoBLE_onReceive(char *data, int len) {
       //timer.setInitialTime(atoi(month), atoi(day), atoi(year), atoi(weekday), atoi(hour), atoi(minute), atoi(second), atoi(ms));
       timer.isTimeSet = true;
       timer.displayDateTime();
+      writeTimeROMRow();
       RFduinoBLE.send('>');
     } else {
       RFduinoBLE.send(1);
