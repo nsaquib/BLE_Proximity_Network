@@ -12,7 +12,7 @@
 #define MAX_DEVICES 3
 #define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 23
+#define END_HOUR 13
 #define END_MINUTE 0
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
