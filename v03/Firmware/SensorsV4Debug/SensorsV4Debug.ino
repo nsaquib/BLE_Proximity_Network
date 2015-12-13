@@ -258,10 +258,9 @@ void writeTimeROMRow() {
     writePage();
   }
   timer.updateTime();
-  int data = timer.currentTime.ms;
-  data += timer.currentTime.seconds * 1000;
-  data += timer.currentTime.minutes * 100000;
-  data += timer.currentTime.hours * 10000000;
+  int data = timer.currentTime.seconds;
+  data += timer.currentTime.minutes * 100;
+  data += timer.currentTime.hours * 10000;
   romManager.table.data[rowCounter] = data;
   rowCounter++;
 }
