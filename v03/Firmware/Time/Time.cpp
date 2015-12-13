@@ -63,7 +63,7 @@ void Time::updateTime() {
 }
 
 int Time::getTimeUntilStartTime(int startHour, int startMinute) {
-  // Number of ms, seconds, minutes, and hours to sleep until
+  // Number of ms, seconds, minutes, and hours to sleep for
   int days = 0;
   int hours = 0;
   int minutes = 0;
@@ -76,7 +76,7 @@ int Time::getTimeUntilStartTime(int startHour, int startMinute) {
   seconds = (60 - currentTime.seconds - carryOver) % 60;
   carryOver = (seconds > 0 || ms > 0) ? 1 : 0;
   minutes = (60 - currentTime.minutes + startMinute - carryOver) % 60;
-  carryOver = (minutes > startMinute) ? 1 : 0;  // ((currentTime.minutes + carryOver) % 60 > startMinute || (currentTime.minutes + carryOver)) ? 1 : 0; 
+  carryOver = (minutes > startMinute) ? 1 : 0;
   hours = (currentTime.hours + carryOver <= startHour) ? startHour - currentTime.hours - carryOver : 24 - currentTime.hours - carryOver + startHour;
   // If its Friday, sleep through Saturday and Sunday
   if (currentTime.day == 5) {
