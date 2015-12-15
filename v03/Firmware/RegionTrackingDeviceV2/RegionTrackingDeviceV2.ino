@@ -17,7 +17,7 @@
  *  2 DEVICE2
  *  ...
  */
-const int deviceID = 1;
+const int deviceID = 7;
 // Device roles
 const device_t deviceRoles[] = {DEVICE0, DEVICE1, DEVICE2, DEVICE3, DEVICE4, DEVICE5, DEVICE6, DEVICE7};
 device_t role = assignDeviceT();
