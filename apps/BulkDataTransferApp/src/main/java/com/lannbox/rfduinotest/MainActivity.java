@@ -48,7 +48,6 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     private EditData valueEdit;
     private Button startTransferButton;
     private Button writeDataButton;
-    private Button startRegionTrackingButton;
     private Button sendCurrentTimeButton;
     private Button sendInputTimeButton;
     private Button clearButton;
@@ -185,15 +184,6 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             }
         });
 
-        startRegionTrackingButton = (Button) findViewById(R.id.startRegionTracking);
-        startRegionTrackingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String start = "%";
-                byte[] bytes = start.getBytes();
-                rfduinoService.send(bytes);
-            }
-        });
 
         sendCurrentTimeButton = (Button) findViewById(R.id.sendCurrentTime);
         sendCurrentTimeButton.setOnClickListener(new View.OnClickListener() {
@@ -314,7 +304,6 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         // Send
         startTransferButton.setEnabled(connected);
         writeDataButton.setEnabled(connected);
-        startRegionTrackingButton.setEnabled(connected);
         sendCurrentTimeButton.setEnabled(connected);
         sendInputTimeButton.setEnabled(connected);
     }
@@ -377,9 +366,9 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         data_to_write = data_to_write + str;
         if (data[0] == '>') {
             View view = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, dataLayout, false);
-
+            String current_time = new String(data);
             TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-            text1.setText("Set start time");
+            text1.setText(current_time);
 
             dataLayout.addView(
                     view, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
