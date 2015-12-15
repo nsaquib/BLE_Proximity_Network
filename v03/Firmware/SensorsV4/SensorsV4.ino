@@ -25,7 +25,7 @@
 #include <Time.h>
 
 // Unique device ID
-const int deviceID = 0;
+const int deviceID = 14;
 // Device loops
 const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
 // Pin for the green LED
@@ -70,7 +70,7 @@ void setup() {
   BLE_NAME[1] = char(33);
   int id = snprintf(BLE_NAME, 10, "%d", deviceID);
   RFduinoBLE.advertisementData = BLE_NAME;*/
-  RFduinoBLE.deviceName = "0";
+  RFduinoBLE.deviceName = "14";
   
   RFduinoGZLL.hostBaseAddress = HBA;
 //  Serial.begin(9600);
