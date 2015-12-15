@@ -73,7 +73,7 @@ void setup() {
   RFduinoBLE.deviceName = "0";
   
   RFduinoGZLL.hostBaseAddress = HBA;
-  Serial.begin(9600);
+//  Serial.begin(9600);
   if (deviceRole == HOST) {
     setupHost();
   } else {
@@ -192,12 +192,12 @@ void waitForTime() {
 
 void sleepDevice(int milliseconds) {
   RFduinoGZLL.end();
-  Serial.end();
+//  Serial.end();
   writeTimeROMRow();
   RFduino_ULPDelay(milliseconds);
   writeTimeROMRow();
   deviceRole = HOST;
-  Serial.begin(9600);
+//  Serial.begin(9600);
   RFduinoGZLL.begin(deviceRole);
 }
 
@@ -229,7 +229,7 @@ void updateROMTable() {
     Serial.print(",");
     Serial.println(rssiCount[i]);
     if (rssiAverage > -100) {
-      if (rowCounter >= MAX_ROWS/4) {
+      if (rowCounter >= MAX_ROWS) {
         writePage();
       }
       int data = (millis()/1000) % 1000000;
