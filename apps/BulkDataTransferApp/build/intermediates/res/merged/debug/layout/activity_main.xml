@@ -122,14 +122,6 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Start Region Tracking"
-            android:id="@+id/startRegionTracking"
-            android:layout_gravity="center_horizontal"
-            android:enabled="false" />
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:text="Send Current Time"
             android:id="@+id/sendCurrentTime"
             android:layout_gravity="center_horizontal"
@@ -194,4 +186,4 @@
             android:id="@+id/dataLayout"></LinearLayout>
 
     </LinearLayout>
-</ScrollView><!-- From: file:/Users/Dwyane/Desktop/Classes/6.THM/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/res/layout/activity_main.xml -->
+</ScrollView><!-- From: file:/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/BulkDataTransferApp/src/main/res/layout/activity_main.xml -->

@@ -300,13 +300,21 @@ void RFduinoBLE_onReceive(char *data, int len) {
       ms[1] = data[15];*/
       // TODO: get date from app and set date
       timer.setInitialTime(0, 0, 0, 0, atoi(hour), atoi(minute), atoi(second), atoi(ms));
+      //timer.setInitialTime(atoi(month), atoi(day), atoi(year), atoi(weekday), atoi(hour), atoi(minute), atoi(second), atoi(ms));
       timer.initialMillis = millis();
       timer.delayTime(HOST_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % HOST_LOOP_TIME));
-      //timer.setInitialTime(atoi(month), atoi(day), atoi(year), atoi(weekday), atoi(hour), atoi(minute), atoi(second), atoi(ms));
-      timer.isTimeSet = true;
-      timer.displayDateTime();
       writeTimeROMRow();
-      RFduinoBLE.send('>');
+      timer.displayDateTime();
+      char current_time[7] = "";
+      current_time[0] = '>';
+      current_time[1] = timer.currentTime.hours / 10;
+      current_time[2] = timer.currentTime.hours - (current_time[1] * 10);
+      current_time[3] = timer.currentTime.minutes / 10;
+      current_time[4] = timer.currentTime.minutes - (current_time[3] * 10);
+      current_time[5] = timer.currentTime.seconds / 10;
+      current_time[6] = timer.currentTime.seconds - (current_time[5] * 10);
+      RFduinoBLE.send(current_time, 7);
+      timer.isTimeSet = true;
     } else {
       RFduinoBLE.send(1);
       transferFlag = true;
