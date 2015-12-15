@@ -307,6 +307,9 @@ void RFduinoBLE_onReceive(char *data, int len) {
       timer.displayDateTime();
       writeTimeROMRow();
       RFduinoBLE.send('>');
+      timer.updateTime();
+      
+      
     } else {
       RFduinoBLE.send(1);
       transferFlag = true;
