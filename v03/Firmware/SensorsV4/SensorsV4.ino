@@ -25,7 +25,7 @@
 #include <Time.h>
 
 // Unique device ID
-const int deviceID = 14;
+const int deviceID = 0;
 // Device loops
 const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
 // Pin for the green LED
@@ -60,6 +60,10 @@ char second[2];
 char ms[2];
 
 void setup() {
+  // Erase existing ROM data
+  for (int i = STORAGE_FLASH_PAGE; i > STORAGE_FLASH_PAGE - 180; i--) {
+    romManager.erasePage(i);
+  }
   pinMode(greenLED, OUTPUT);
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
   
@@ -70,10 +74,10 @@ void setup() {
   BLE_NAME[1] = char(33);
   int id = snprintf(BLE_NAME, 10, "%d", deviceID);
   RFduinoBLE.advertisementData = BLE_NAME;*/
-  RFduinoBLE.deviceName = "14";
+  RFduinoBLE.deviceName = "0";
   
   RFduinoGZLL.hostBaseAddress = HBA;
-//  Serial.begin(9600);
+  Serial.begin(9600);
   if (deviceRole == HOST) {
     setupHost();
   } else {
@@ -192,12 +196,12 @@ void waitForTime() {
 
 void sleepDevice(int milliseconds) {
   RFduinoGZLL.end();
-//  Serial.end();
+  Serial.end();
   writeTimeROMRow();
   RFduino_ULPDelay(milliseconds);
   writeTimeROMRow();
   deviceRole = HOST;
-//  Serial.begin(9600);
+  Serial.begin(9600);
   RFduinoGZLL.begin(deviceRole);
 }
 
