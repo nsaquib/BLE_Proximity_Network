@@ -39,6 +39,7 @@ class PrNetRomManager {
     void loadPage(int page);
     int erasePage(int page);
     int writePage(int page, struct data values);
+    int writePartialPage(int page, struct data values);
     int updateConfig(struct prnet_config c);
     struct prnet_config loadConfig();
   private:
