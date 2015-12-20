@@ -4,32 +4,30 @@
  * Social Computing Group, MIT Media Lab
  */
 
-#define TX_POWER_LEVEL 4
-#define BLE_AD_INTERVAL 2000
-#define PAGES_TO_TRANSFER 50
-#define HBA 0x000
-// Configuration Parameters
-#define MAX_DEVICES 15
-#define START_HOUR 9
-#define START_MINUTE 0
-#define END_HOUR 13
-#define END_MINUTE 0
-#define HOST_LOOP_TIME 2000
-#define HOST_LOOPS 1
-#define DEVICE_LOOP_TIME 100
-
 #include <PrNetRomManager.h>
 #include <RFduinoBLE.h>
 #include <RFduinoGZLL.h>
 #include <stdlib.h>
 #include <Time.h>
 
+#define TX_POWER_LEVEL 4
+#define BLE_AD_INTERVAL 2000
+#define PAGES_TO_TRANSFER 50
+#define HBA 0x000
+// Configuration Parameters
+#define MAX_DEVICES 5
+#define START_HOUR 3
+#define START_MINUTE 43
+#define END_HOUR 3
+#define END_MINUTE 44
+#define HOST_LOOP_TIME 100
+#define HOST_LOOPS 1
+#define DEVICE_LOOP_TIME 100
+
 // Unique device ID
 const int deviceID = 0;
 // Device loops
 const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
-// Pin for the green LED
-const int greenLED = 3;
 // Initial device role
 device_t deviceRole = HOST;
 // RSSI total and count for each device
@@ -59,14 +57,15 @@ char minute[2];
 char second[2];
 char ms[2];
 
+int offset = 0;
+
+/*
+ * Erases ROM memory and sets radio parameters
+ */
 void setup() {
-  // Erase existing ROM data
-  for (int i = STORAGE_FLASH_PAGE; i > STORAGE_FLASH_PAGE - 180; i--) {
-    romManager.erasePage(i);
-  }
-  pinMode(greenLED, OUTPUT);
+  Serial.begin(9600);
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
-  
+  RFduinoGZLL.hostBaseAddress = HBA;
   /*String deviceIDString = String(deviceID);
   char BLE_NAME[2];
   deviceIDString.toCharArray(BLE_NAME, deviceIDString.length() + 1);
@@ -75,34 +74,40 @@ void setup() {
   int id = snprintf(BLE_NAME, 10, "%d", deviceID);
   RFduinoBLE.advertisementData = BLE_NAME;*/
   RFduinoBLE.deviceName = "0";
-  
-  RFduinoGZLL.hostBaseAddress = HBA;
-  Serial.begin(9600);
   if (deviceRole == HOST) {
     setupHost();
   } else {
     setupDevice();
   }
-  writeTimeROMRow();
 }
 
+/*
+ * Switches GZLL stack to host mode
+ */
 void setupHost() {
   deviceRole = HOST;
   RFduinoGZLL.end();
   RFduinoGZLL.begin(deviceRole);
 }
 
+/*
+ * Switches GZLL stack to device mode
+ */
 void setupDevice() {
   deviceRole = (device_t) (deviceID % 8);
   RFduinoGZLL.end();
   RFduinoGZLL.begin(deviceRole);
 }
 
+/*
+ * Checks that time is set, if in data collection period, collects data, sleeps device otherwise
+ */
 void loop() {
   if (!timer.isTimeSet) {
     waitForTime();
+    eraseROM();
   } else {
-    if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+    if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
       sleepUntilStartTime();
       if (transferFlag) {
         startTransfer();
@@ -117,13 +122,16 @@ void loop() {
   }
 }
 
+/*
+ * Collects data samples HOST_LOOPS time for HOST_LOOP_TIME milliseconds
+ */
 void loopHost() {
   Serial.println("HOST");
   writeTimeROMRow();
   timer.displayDateTime();
-  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
     for (int i = 0; i < HOST_LOOPS; i++) {
-      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
         sleepUntilStartTime();
       }
       collectSamplesFromDevices();
@@ -133,12 +141,15 @@ void loopHost() {
   }
 }
 
+/*
+ * Polls host device for DEVICE_LOOPS times with DEVICE_LOOP_TIME delay between polls
+ */
 void loopDevice() {
   Serial.println("DEVICE");
   timer.displayDateTime();
-  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
     for (int i = 0; i < DEVICE_LOOPS; i++) {
-      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
         sleepUntilStartTime();
       }
       timer.updateTime();
@@ -151,6 +162,9 @@ void loopDevice() {
 
 ////////// Host Functions //////////
 
+/*
+ * Turns on data collection flag for HOST_LOOP_TIME milliseconds
+ */
 void collectSamplesFromDevices() {
   collectSamples = true;
   timer.updateTime();
@@ -160,6 +174,9 @@ void collectSamplesFromDevices() {
 
 ////////// Device Functions //////////
 
+/*
+ * Sends the deviceID to host devices
+ */
 void pollHost() {
   if (deviceRole != HOST) {
     RFduinoGZLL.sendToHost(deviceID);
@@ -168,6 +185,9 @@ void pollHost() {
 
 ////////// Callback Functions //////////
 
+/*
+ * Collects RSSI values from incoming data transmissions
+ */
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   // If collecting samples, update the RSSI total and count
   if (deviceRole == HOST && collectSamples && (int) data[0] >= 0 && (int) data[0] < MAX_DEVICES) {
@@ -178,6 +198,9 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
 
 ////////// Time Functions //////////
 
+/*
+ * Devices device until time is set
+ */
 void waitForTime() {
   RFduinoGZLL.end();
   RFduinoBLE.advertisementInterval = BLE_AD_INTERVAL;
@@ -194,17 +217,30 @@ void waitForTime() {
 
 ////////// Sleep Functions //////////
 
+/*
+ * Disables battery intensive facilities and sleeps device for given amount of milliseconds
+ */
 void sleepDevice(int milliseconds) {
+  offset += 2;
+  writeTimeROMRow();
+  if (rowCounter >= MAX_ROWS) {
+    writePage();
+  } else {
+    writePartialPage();
+  }
   RFduinoGZLL.end();
   Serial.end();
-  writeTimeROMRow();
-  RFduino_ULPDelay(milliseconds);
+  RFduino_ULPDelay(60000);
+  //RFduino_ULPDelay(milliseconds);
   writeTimeROMRow();
   deviceRole = HOST;
   Serial.begin(9600);
   RFduinoGZLL.begin(deviceRole);
 }
 
+/*
+ * Sleeps device until START_HOUR:START_MINUTE plus offset to shift each device's host time
+ */
 void sleepUntilStartTime() {
   int delayTime = timer.getTimeUntilStartTime(START_HOUR, START_MINUTE);
   // Add additional offset to shift each device's initial start time
@@ -217,14 +253,9 @@ void sleepUntilStartTime() {
 ////////// ROM Code //////////
 
 /*  
- *  Store deviceID (I), RSSI (R), and time (T) as I,IRR,TTT,TTT
- *  Maximum value is 4,294,967,295
- *  Maximum deviceID is 41
- *  Maximum RSSI is 99 (-99)
- *  Maximum time is 999,999 seconds
+ * Stores deviceID (I), RSSI (R), and time (T) as I,IRR,TTT,TTT with maximum value of 4,294,967,295
  */
 void updateROMTable() {
-  // Update rows for ROM table and clear collected values
   for (int i = 0; i < MAX_DEVICES; i++) {
     int rssiAverage = (rssiCount[i] == 0) ? -128 : rssiTotal[i] / rssiCount[i];
     Serial.print(i);
@@ -232,7 +263,7 @@ void updateROMTable() {
     Serial.print(rssiAverage);
     Serial.print(",");
     Serial.println(rssiCount[i]);
-    if (rssiAverage > -100) {
+    //if (rssiAverage > -100) {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }
@@ -241,12 +272,15 @@ void updateROMTable() {
       data += (i % 42) * 100000000;
       romManager.table.data[rowCounter] = data;
       rowCounter++;
-    }
+    //}
     rssiTotal[i] = 0;
     rssiCount[i] = 0;
   }
 }
 
+/*
+ * Write a timestamp row HH:MM:SS to the ROM table
+ */
 void writeTimeROMRow() {
   if (rowCounter >= MAX_ROWS) {
     writePage();
@@ -259,21 +293,46 @@ void writeTimeROMRow() {
   rowCounter++;
 }
 
+/*
+ * Persists the table to nonvolatile ROM memory
+ */
 void writePage() {
-  // Erase existing data in the current rom page and write page to memory
-  romManager.erasePage(STORAGE_FLASH_PAGE - romManager.pagecounter);
   int success = romManager.writePage(STORAGE_FLASH_PAGE - romManager.pagecounter, romManager.table);
   Serial.println(success);
   rowCounter = 0;
 }
 
+/*
+ * Persists a partially filled table to nonvolatile ROM memory
+ */
+void writePartialPage() {
+  for (int i = rowCounter; i < MAX_ROWS; i++) {
+    romManager.table.data[i] = -1;
+  }
+  int success = romManager.writePartialPage(STORAGE_FLASH_PAGE - romManager.pagecounter, romManager.table);
+  Serial.println(success);
+  rowCounter++;
+}
+
+/*
+ * Erases all existing ROM data
+ */
+void eraseROM() {
+  for (int i = STORAGE_FLASH_PAGE; i > STORAGE_FLASH_PAGE - 180; i--) {
+    romManager.erasePage(i);
+  }
+  Serial.println("Erased ROM");
+}
+
 ////////// App Integration Code //////////
 
+/*
+ * Sets device parameters through BLE
+ */
 void RFduinoBLE_onReceive(char *data, int len) {
-  // Check if the first byte exists
   if (data[0]) {
     if (data[0] == '>') {
-      // Remove below lines
+      timer.initialMillis = millis();
       hour[0] = data[1];
       hour[1] = data[2];
       minute[0] = data[4];
@@ -282,7 +341,6 @@ void RFduinoBLE_onReceive(char *data, int len) {
       second[1] = data[8];
       ms[0] = data[10];
       ms[1] = data[11];
-      // Uncomment following lines
       /*month[0] = data[1];
       month[1] = data[2];
       day[0] = data[3];
@@ -298,14 +356,11 @@ void RFduinoBLE_onReceive(char *data, int len) {
       second[1] = data[13];
       ms[0] = data[14];
       ms[1] = data[15];*/
-      // TODO: get date from app and set date
+      RFduinoBLE.send('>');
       timer.setInitialTime(0, 0, 0, 0, atoi(hour), atoi(minute), atoi(second), atoi(ms));
       //timer.setInitialTime(atoi(month), atoi(day), atoi(year), atoi(weekday), atoi(hour), atoi(minute), atoi(second), atoi(ms));
-      timer.initialMillis = millis();
-      timer.delayTime(HOST_LOOP_TIME - ((timer.currentTime.seconds*1000 + timer.currentTime.ms) % HOST_LOOP_TIME));
-      writeTimeROMRow();
-      RFduinoBLE.send('>');
       timer.isTimeSet = true;
+      writeTimeROMRow();
     } else {
       RFduinoBLE.send(1);
       transferFlag = true;
@@ -316,6 +371,9 @@ void RFduinoBLE_onReceive(char *data, int len) {
   }
 }
 
+/*
+ * Transfers device ROM to BLE-enabled device
+ */
 void startTransfer() {
   while (transferFlag) {
     romManager2.loadPage(pageCounter);

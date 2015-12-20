@@ -47,6 +47,16 @@ int PrNetRomManager::writePage(int page, struct data values) {
   }
 }
 
+int PrNetRomManager::writePartialPage(int page, struct data values) {
+  data *p = (data*) ADDRESS_OF_PAGE(page);
+  int rc = flashWriteBlock(p, &values, sizeof(values));
+  if( rc == 0) {
+    return 0;
+  } else {
+    return rc;
+  }
+}
+
 int PrNetRomManager::updateConfig(struct prnet_config c) {
   data *p = (data*) ADDRESS_OF_PAGE(SETTINGS_FLASH_PAGE);
   return flashWriteBlock(p, &c, sizeof(c));
