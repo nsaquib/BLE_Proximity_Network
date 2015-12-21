@@ -62,46 +62,29 @@ void Time::updateTime() {
   }
 }
 
-int Time::getTimeUntilStartTime(int startHour, int startMinute) {
-  // Number of ms, seconds, minutes, and hours to sleep for
-  int days = 0;
-  int hours = 0;
-  int minutes = 0;
-  int seconds = 0;
-  int ms = 0;
+struct sleepTime Time::getTimeUntilStartTime(int startHour, int startMinute) {
   int carryOver;
   updateTime();
-  ms = (1000 - currentTime.ms) % 1000;
-  carryOver = (ms > 0) ? 1 : 0;
-  seconds = (60 - currentTime.seconds - carryOver) % 60;
-  carryOver = (seconds > 0 || ms > 0) ? 1 : 0;
-  minutes = (60 - currentTime.minutes + startMinute - carryOver) % 60;
-  carryOver = (minutes > startMinute) ? 1 : 0;
-  hours = (currentTime.hours + carryOver <= startHour) ? startHour - currentTime.hours - carryOver : 24 - currentTime.hours - carryOver + startHour;
+  sleepTime.ms = (1000 - currentTime.ms) % 1000;
+  carryOver = (sleepTime.ms > 0) ? 1 : 0;
+  sleepTime.seconds = (60 - currentTime.seconds - carryOver) % 60;
+  carryOver = (sleepTime.seconds > 0 || sleepTime.ms > 0) ? 1 : 0;
+  sleepTime.minutes = (60 - currentTime.minutes + startMinute - carryOver) % 60;
+  carryOver = (sleepTime.minutes > startMinute) ? 1 : 0;
+  sleepTime.hours = (currentTime.hours + carryOver <= startHour) ? startHour - currentTime.hours - carryOver : 24 - currentTime.hours - carryOver + startHour;
   // If its Friday, sleep through Saturday and Sunday
   if (currentTime.day == 5) {
-    days += 2;
-  }
+    sleepTime.days = 2;
   // If its Saturday, sleep through Sunday
-  if (currentTime.day == 6) {
-    days += 1;
+  } else if (currentTime.day == 6) {
+    sleepTime.days = 1;
+  } else {
+    sleepTime.days = 0;
   }
-  // Calculate time to startHour:startMinute by converting higher order time units to ms
-  int delayTime = ms + (1000 * seconds) + (60000 * minutes) + (3600000 * hours) + (86400000 * days);
-  Serial.print("Sleeping for ");
-  Serial.print(days);
-  Serial.print(":");
-  Serial.print(hours);
-  Serial.print(":");
-  Serial.print(minutes);
-  Serial.print(":");
-  Serial.print(seconds);
-  Serial.print(":");
-  Serial.println(ms);
-  return delayTime;
+  return sleepTime;
 }
 
-boolean Time::inDataCollectionPeriod(int startHour, int startMinute, int endHour, int endMinute) {
+bool Time::inDataCollectionPeriod(int startHour, int startMinute, int endHour, int endMinute) {
   updateTime();
   if (!isTimeSet) {
     return false;

@@ -33,19 +33,28 @@ struct currentTime {
   int ms = 0;
 };
 
+// Sleep time structure
+struct sleepTime {
+  int days = 0;
+  int hours = 0;
+  int minutes = 0;
+  int seconds = 0;
+  int ms = 0;
+};
 
 class Time {
   public:
     struct initialTime initialTime;
     struct currentTime currentTime;
+    struct sleepTime sleepTime;
     unsigned long initialMillis = 0;
-    boolean isTimeSet;
+    bool isTimeSet;
     Time();
     void delayTime(int ms);
     void setInitialTime(int month, int date, int year, int day, int hours, int minutes, int seconds, int ms);
     void updateTime();
-    int getTimeUntilStartTime(int startHour, int startMinute);
-    boolean inDataCollectionPeriod(int startHour, int startMinute, int endHour, int endMinute);
+    struct sleepTime getTimeUntilStartTime(int startHour, int startMinute);
+    bool inDataCollectionPeriod(int startHour, int startMinute, int endHour, int endMinute);
     void displayDate();
     void displayTime();
     void displayDateTime();
