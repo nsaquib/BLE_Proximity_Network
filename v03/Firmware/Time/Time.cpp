@@ -9,10 +9,16 @@
 
 Time::Time() {}
 
+/*
+ * Delays program execution for ms milliseconds
+ */
 void Time::delayTime(int ms) {
   delay(ms);
 }
 
+/*
+ * Sets the initial time
+ */
 void Time::setInitialTime(int month, int date, int year, int day, int hours, int minutes, int seconds, int ms) {
   initialTime.month = month;
   initialTime.date = date;
@@ -24,6 +30,9 @@ void Time::setInitialTime(int month, int date, int year, int day, int hours, int
   initialTime.ms = ms;
 }
 
+/*
+ * Updates the discrete representation of the time
+ */
 void Time::updateTime() {
   if (isTimeSet) {
     unsigned long ms = millis() - initialMillis;
@@ -62,6 +71,9 @@ void Time::updateTime() {
   }
 }
 
+/*
+ * Computes time until the start hour and start minute of the data collection period
+ */
 struct sleepTime Time::getTimeUntilStartTime(int startHour, int startMinute) {
   int carryOver;
   updateTime();
@@ -84,6 +96,9 @@ struct sleepTime Time::getTimeUntilStartTime(int startHour, int startMinute) {
   return sleepTime;
 }
 
+/*
+ * Checks if current time is within data collection period
+ */
 bool Time::inDataCollectionPeriod(int startHour, int startMinute, int endHour, int endMinute) {
   updateTime();
   if (!isTimeSet) {
@@ -105,6 +120,9 @@ bool Time::inDataCollectionPeriod(int startHour, int startMinute, int endHour, i
   }
 }
 
+/*
+ * Prints date representation of the current date
+ */
 void Time::displayDate() {
   updateTime();
   Serial.print(currentTime.month);
@@ -117,6 +135,9 @@ void Time::displayDate() {
   Serial.print(" ");
 }
 
+/*
+ * Prints time representation of the current time
+ */
 void Time::displayTime() {
   updateTime();
   Serial.print(currentTime.hours);
@@ -128,6 +149,9 @@ void Time::displayTime() {
   Serial.println(currentTime.ms);
 }
 
+/*
+ * Prints date and time representation of the current time
+ */
 void Time::displayDateTime() {
   displayDate();
   displayTime();
