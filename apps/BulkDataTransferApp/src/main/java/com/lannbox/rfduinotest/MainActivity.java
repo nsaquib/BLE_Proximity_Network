@@ -304,7 +304,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         // Send
         startTransferButton.setEnabled(connected);
         writeDataButton.setEnabled(connected);
-        sendCurrentTimeButton.setEnabled(on);
+        sendCurrentTimeButton.setEnabled(connected);
         sendInputTimeButton.setEnabled(connected);
     }
 
