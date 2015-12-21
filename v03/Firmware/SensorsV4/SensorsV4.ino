@@ -15,11 +15,11 @@
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 // Configuration Parameters
-#define MAX_DEVICES 5
-#define START_HOUR 3
-#define START_MINUTE 43
-#define END_HOUR 3
-#define END_MINUTE 44
+#define MAX_DEVICES 15
+#define START_HOUR 9
+#define START_MINUTE 0
+#define END_HOUR 13
+#define END_MINUTE 0
 #define HOST_LOOP_TIME 100
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
@@ -56,8 +56,6 @@ char hour[2];
 char minute[2];
 char second[2];
 char ms[2];
-
-int offset = 0;
 
 /*
  * Erases ROM memory and sets radio parameters
@@ -107,7 +105,7 @@ void loop() {
     waitForTime();
     eraseROM();
   } else {
-    if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
+    if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
       sleepUntilStartTime();
       if (transferFlag) {
         startTransfer();
@@ -129,9 +127,9 @@ void loopHost() {
   Serial.println("HOST");
   writeTimeROMRow();
   timer.displayDateTime();
-  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
+  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < HOST_LOOPS; i++) {
-      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
+      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
         sleepUntilStartTime();
       }
       collectSamplesFromDevices();
@@ -147,9 +145,9 @@ void loopHost() {
 void loopDevice() {
   Serial.println("DEVICE");
   timer.displayDateTime();
-  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
+  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < DEVICE_LOOPS; i++) {
-      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
+      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
         sleepUntilStartTime();
       }
       timer.updateTime();
@@ -221,7 +219,6 @@ void waitForTime() {
  * Disables battery intensive facilities and sleeps device for given amount of milliseconds
  */
 void sleepDevice(int milliseconds) {
-  offset += 2;
   writeTimeROMRow();
   if (rowCounter >= MAX_ROWS) {
     writePage();
@@ -230,8 +227,7 @@ void sleepDevice(int milliseconds) {
   }
   RFduinoGZLL.end();
   Serial.end();
-  RFduino_ULPDelay(60000);
-  //RFduino_ULPDelay(milliseconds);
+  RFduino_ULPDelay(milliseconds);
   writeTimeROMRow();
   deviceRole = HOST;
   Serial.begin(9600);
@@ -263,7 +259,7 @@ void updateROMTable() {
     Serial.print(rssiAverage);
     Serial.print(",");
     Serial.println(rssiCount[i]);
-    //if (rssiAverage > -100) {
+    if (rssiAverage > -100) {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }
@@ -272,7 +268,7 @@ void updateROMTable() {
       data += (i % 42) * 100000000;
       romManager.table.data[rowCounter] = data;
       rowCounter++;
-    //}
+    }
     rssiTotal[i] = 0;
     rssiCount[i] = 0;
   }
