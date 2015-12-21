@@ -164,7 +164,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         startTransferButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rfduinoService.send(new byte[]{1});
+                rfduinoService.send(new byte[]{'#'});
                 writeData(data_to_write);
             }
         });
@@ -179,7 +179,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
                 //rfduinoService.send(bytes);
                 //rfduinoService.send(new byte[]{2});
                 //addData(bytes);
-                rfduinoService.send(new byte[]{0});
+                rfduinoService.send(new byte[]{'^'});
                 writeData(data_to_write);
             }
         });
@@ -190,7 +190,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             @Override
             public void onClick(View v) {
                 long yourmilliseconds = System.currentTimeMillis();
-                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm:ss:SS");
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm:ss:SSS");
                 java.util.Date resultdate = new java.util.Date(yourmilliseconds);
                 String currentTime = ">" + sdf.format(resultdate);
 
@@ -304,7 +304,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         // Send
         startTransferButton.setEnabled(connected);
         writeDataButton.setEnabled(connected);
-        sendCurrentTimeButton.setEnabled(connected);
+        sendCurrentTimeButton.setEnabled(on);
         sendInputTimeButton.setEnabled(connected);
     }
 
@@ -368,6 +368,7 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             View view = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, dataLayout, false);
             String current_time = new String(data);
             TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+            text1.setText("Set start time time");
             text1.setText(current_time);
 
             dataLayout.addView(
