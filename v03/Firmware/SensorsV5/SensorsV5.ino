@@ -106,7 +106,7 @@ void loop() {
     eraseROM();
   } else {
     if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE + offset)) {
-      sleepUntilStartTime();
+//      sleepUntilStartTime();
 //      if (transferFlag) {
 //        startTransfer();
 //      }
@@ -363,7 +363,8 @@ void RFduinoBLE_onReceive(char *data, int len) {
       second[0] = data[12];
       second[1] = data[13];
       ms[0] = data[14];
-      ms[1] = data[15];*/
+      ms[1] = data[15];
+      ms[2] = data[16];*/
       hour[0] = data[1];
       hour[1] = data[2];
       minute[0] = data[4];
@@ -373,19 +374,19 @@ void RFduinoBLE_onReceive(char *data, int len) {
       ms[0] = data[10];
       ms[1] = data[11];
       ms[2] = data[12];
-      RFduinoBLE.send('>');
+      while (!RFduinoBLE.send('>'));
       timer.setInitialTime(0, 0, 0, 0, atoi(hour), atoi(minute), atoi(second), atoi(ms));
       //timer.setInitialTime(atoi(month), atoi(day), atoi(year), atoi(weekday), atoi(hour), atoi(minute), atoi(second), atoi(ms));
       timer.isTimeSet = true;
       timer.displayDateTime();
       writeTimeROMRow();
       sendCurrentTime();
-    } else if (data[0] == '<') {
-      RFduinoBLE.send(1);
+    } else if (data[0] == '#') {
+      while (!RFduinoBLE.send(1));
       transferFlag = true;
     }
   } else {
-    RFduinoBLE.send(0);
+    while (!RFduinoBLE.send(0));
     transferFlag = false;
   }
 }
@@ -418,11 +419,12 @@ void startTransfer() {
 }
 
 void sendCurrentTime() {
-//  timer.updateTime();
-//  RFduinoBLE.sendInt(timer.currentTime.hours);
-//  RFduinoBLE.sendInt(timer.currentTime.minutes);
-//  RFduinoBLE.sendInt(timer.currentTime.seconds);
-//  RFduinoBLE.sendInt(timer.currentTime.ms);
+  timer.updateTime();
+  while (!RFduinoBLE.send('>'));
+  while (!RFduinoBLE.send(timer.currentTime.hours));
+  while (!RFduinoBLE.send(timer.currentTime.minutes));
+  while (!RFduinoBLE.send(timer.currentTime.seconds));
+  while (!RFduinoBLE.send(timer.currentTime.ms));
 }
 
 void sendSleepTime(struct sleepTime sleepTime) {
