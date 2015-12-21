@@ -58,7 +58,7 @@ char weekday[1];
 char hour[2];
 char minute[2];
 char second[2];
-char ms[2];
+char ms[3];
 
 int offset = 0; // Debug variable
 
@@ -346,7 +346,7 @@ void eraseROM() {
  */
 void RFduinoBLE_onReceive(char *data, int len) {
   if (data[0]) {
-    if (data[0] == '>' && data[11] && !timer.isTimeSet) {
+    if (data[0] == '>' && data[12] && !timer.isTimeSet) {
       Serial.println("Setting time...");
       timer.initialMillis = millis();
       /*month[0] = data[1];
@@ -372,6 +372,7 @@ void RFduinoBLE_onReceive(char *data, int len) {
       second[1] = data[8];
       ms[0] = data[10];
       ms[1] = data[11];
+      ms[2] = data[12];
       RFduinoBLE.send('>');
       timer.setInitialTime(0, 0, 0, 0, atoi(hour), atoi(minute), atoi(second), atoi(ms));
       //timer.setInitialTime(atoi(month), atoi(day), atoi(year), atoi(weekday), atoi(hour), atoi(minute), atoi(second), atoi(ms));
