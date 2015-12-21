@@ -55,7 +55,7 @@ char weekday[1];
 char hour[2];
 char minute[2];
 char second[2];
-char ms[2];
+char ms[3];
 
 /*
  * Erases ROM memory and sets radio parameters
@@ -337,6 +337,7 @@ void RFduinoBLE_onReceive(char *data, int len) {
       second[1] = data[8];
       ms[0] = data[10];
       ms[1] = data[11];
+      ms[2] = data[12];
       /*month[0] = data[1];
       month[1] = data[2];
       day[0] = data[3];
@@ -358,6 +359,7 @@ void RFduinoBLE_onReceive(char *data, int len) {
       timer.isTimeSet = true;
       writeTimeROMRow();
     } else {
+      //Starts transfer 
       RFduinoBLE.send(1);
       transferFlag = true;
     }
