@@ -28,6 +28,7 @@ void Time::setInitialTime(int month, int date, int year, int day, int hours, int
   initialTime.minutes = minutes;
   initialTime.seconds = seconds;
   initialTime.ms = ms;
+  isTimeSet = true;
 }
 
 /*
@@ -48,25 +49,24 @@ void Time::updateTime() {
     carryOver = (initialTime.hours + carryOver) / 24;
     currentTime.day = (initialTime.day + carryOver) % 7;
     // If in February, check if leap year
-    if (currentTime.month == 1) {
+    if (currentTime.month == 2) {
       if (currentTime.year % 4 != 0) {
-        currentTime.date = (initialTime.date + carryOver) % 28;
-        carryOver = (initialTime.date + carryOver) / 28;
+        currentTime.date = (initialTime.date - 1 + carryOver) % 28 + 1;
+        carryOver = (initialTime.date - 1 + carryOver) / 28;
       } else {
-       currentTime.date = (initialTime.date + carryOver) % 29;
-       carryOver = (initialTime.date + carryOver) / 29;
+       currentTime.date = (initialTime.date + carryOver) % 29 + 1;
+       carryOver = (initialTime.date - 1 + carryOver) / 29;
       }
-    }
     // If in April, June, September, or November
-    if (currentTime.month == 3 || currentTime.month == 5 || currentTime.month == 8 || currentTime.month == 10) {
-      currentTime.date = (initialTime.date + carryOver) % 30;
-      carryOver = (initialTime.date + carryOver) / 30;
+    } else if (currentTime.month == 4 || currentTime.month == 6 || currentTime.month == 9 || currentTime.month == 11) {
+      currentTime.date = (initialTime.date - 1 + carryOver) % 30 + 1;
+      carryOver = (initialTime.date - 1 + carryOver) / 30;
     } else {
-      currentTime.date = (initialTime.date + carryOver) % 31;
-      carryOver = (initialTime.date + carryOver) / 31;
+      currentTime.date = (initialTime.date - 1 + carryOver) % 31 + 1;
+      carryOver = (initialTime.date - 1 + carryOver) / 31;
     }
-    currentTime.month = (initialTime.month + carryOver) % 12;
-    carryOver = (initialTime.month + carryOver) / 12;
+    currentTime.month = (initialTime.month - 1 + carryOver) % 12 + 1;
+    carryOver = (initialTime.month - 1 + carryOver) / 12;
     currentTime.year = (initialTime.year + carryOver) % 99;
   }
 }
