@@ -8,7 +8,7 @@
 #include "PrNetRomManager.h"
 
 PrNetRomManager::PrNetRomManager() {
-  pagecounter = 0;
+  pageCounter = 0;
 }
 
 void PrNetRomManager::printPage(int page) {
@@ -40,7 +40,7 @@ int PrNetRomManager::writePage(int page, struct data values) {
   data *p = (data*) ADDRESS_OF_PAGE(page);
   int rc = flashWriteBlock(p, &values, sizeof(values));
   if( rc == 0) {
-    pagecounter++;
+    pageCounter++;
     return 0;
   } else {
     return rc;
