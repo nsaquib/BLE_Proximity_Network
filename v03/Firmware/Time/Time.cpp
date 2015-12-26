@@ -84,14 +84,23 @@ struct sleepTime Time::getTimeUntilStartTime(int startHour, int startMinute) {
   sleepTime.minutes = (60 - currentTime.minutes + startMinute - carryOver) % 60;
   carryOver = (sleepTime.minutes > startMinute) ? 1 : 0;
   sleepTime.hours = (currentTime.hours + carryOver <= startHour) ? startHour - currentTime.hours - carryOver : 24 - currentTime.hours - carryOver + startHour;
+  // If its Sunday, sleep through Sunday
+  if (currentTime.day == 0) {
+  	if (currentTime.hours < startHour || (currentTime.hours == startHour && currentTime.minutes < startMinute)) {
+  		sleepTime.days = 1;
+  	} else {
+  		sleepTime.days = 0;
+  	}
   // If its Friday, sleep through Saturday and Sunday
-  if (currentTime.day == 5) {
-    sleepTime.days = 2;
+  } else if (currentTime.day == 5) {
+  	if (currentTime.hours < startHour || (currentTime.hours == startHour && currentTime.minutes < startMinute)) {
+  	  sleepTime.days = 0;
+  	} else {
+  	  sleepTime.days = 2;
+  	}
   // If its Saturday, sleep through Sunday
   } else if (currentTime.day == 6) {
     sleepTime.days = 1;
-  } else {
-    sleepTime.days = 0;
   }
   return sleepTime;
 }

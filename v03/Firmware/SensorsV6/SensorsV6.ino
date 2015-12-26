@@ -1,6 +1,6 @@
 /*
  * SensorsV5.ino - Network protocol for PrNet nodes.
- * Created by Dwyane George, December 18, 2015.
+ * Created by Dwyane George, December 24, 2015.
  * Social Computing Group, MIT Media Lab
  */
 
@@ -15,15 +15,15 @@
 #define HBA 0x000
 #define BAUD_RATE 9600
 // Configuration Parameters
-#define MAX_DEVICES 2
-#define START_HOUR 0
-#define START_MINUTE 0
+#define MAX_DEVICES 3
+#define START_HOUR 20
+#define START_MINUTE 42
 #define END_HOUR 23
 #define END_MINUTE 59
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
-#define DEVICE_LOOP_TIME 0
-#define USE_SERIAL_MONITOR true
+#define DEVICE_LOOP_TIME 100
+#define USE_SERIAL_MONITOR false
 
 // Unique device ID
 const int deviceID = 0;
@@ -63,10 +63,9 @@ void setup() {
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
   RFduinoGZLL.hostBaseAddress = HBA;
   RFduinoBLE.deviceName = deviceBLEName;
-  if (deviceRole == HOST) {
-    setupHost();
-  } else {
-    setupDevice();
+  if (!timer.isTimeSet) {
+    waitForTime();
+    eraseROM();
   }
 }
 
@@ -93,12 +92,8 @@ void setupDevice() {
  */
 void loop() {
   if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
-    if (!timer.isTimeSet) {
-      waitForTime();
-      eraseROM();
-    } else {
-      sleepUntilStartTime();
-    }
+    sleepUntilStartTime();
+    setupHost();
   } else {
     if (deviceRole == HOST) {
       loopHost();
@@ -138,8 +133,7 @@ void loopDevice() {
       if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
         sleepUntilStartTime();
       }
-      timer.updateTime();
-      timer.delayTime(DEVICE_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
+      delayDevice();
       pollHost();
     }
     setupHost();
@@ -166,6 +160,21 @@ void collectSamplesFromDevices() {
 void pollHost() {
   if (deviceRole != HOST) {
     RFduinoGZLL.sendToHost(deviceID);
+  }
+}
+
+/*
+ * Delays device in ultra low power state for DEVICE_LOOP_TIME
+ */
+void delayDevice() {
+  if (USE_SERIAL_MONITOR) {
+    Serial.end();
+  }
+  timer.delayTime(10);
+  timer.updateTime();
+  RFduino_ULPDelay(DEVICE_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
+  if (USE_SERIAL_MONITOR) {
+    Serial.begin(BAUD_RATE);
   }
 }
 
@@ -203,13 +212,6 @@ void waitForTime() {
 ////////// Sleep Functions //////////
 
 /*
- * Disables battery intensive facilities and sleeps device for given amount of milliseconds
- */
-void sleepDevice(int milliseconds) {
-  RFduino_ULPDelay(milliseconds);
-}
-
-/*
  * Sleeps device until START_HOUR:START_MINUTE plus offset to shift each device's host time
  */
 void sleepUntilStartTime() {
@@ -240,18 +242,11 @@ void sleepUntilStartTime() {
   if (USE_SERIAL_MONITOR) {
     Serial.end();
   }
-
-//  RFduinoBLE.begin();
-//  sendSleepTime(sleepTime);
-//  RFduinoBLE.end();
-  
-  sleepDevice(sleepTimeMillis);
+  RFduino_ULPDelay(sleepTimeMillis);
   writeTimeROMRow();
-  deviceRole = HOST;
   if (USE_SERIAL_MONITOR) {
     Serial.begin(BAUD_RATE);
   }
-  RFduinoGZLL.begin(deviceRole);
 }
 
 ////////// ROM Code //////////
@@ -349,7 +344,6 @@ void RFduinoBLE_onReceive(char *data, int len) {
       while (!RFduinoBLE.send('>'));
       timer.displayDateTime();
       writeTimeROMRow();
-//      sendCurrentTime();
     } else if (data[0] == '#') {
       while (!RFduinoBLE.send(1));
       transferFlag = true;
