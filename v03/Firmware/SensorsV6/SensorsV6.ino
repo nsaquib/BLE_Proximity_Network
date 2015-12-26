@@ -15,18 +15,18 @@
 #define HBA 0x000
 #define BAUD_RATE 9600
 // Configuration Parameters
-#define MAX_DEVICES 3
-#define START_HOUR 20
-#define START_MINUTE 42
-#define END_HOUR 23
-#define END_MINUTE 59
+#define MAX_DEVICES 13
+#define START_HOUR 6
+#define START_MINUTE 0
+#define END_HOUR 10
+#define END_MINUTE 0
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
-#define DEVICE_LOOP_TIME 100
+#define DEVICE_LOOP_TIME 0
 #define USE_SERIAL_MONITOR false
 
 // Unique device ID
-const int deviceID = 0;
+const int deviceID = 12;
 // Device BLE name
 char deviceBLEName[2];
 // Device loops
@@ -224,7 +224,7 @@ void sleepUntilStartTime() {
   }
   struct sleepTime sleepTime = timer.getTimeUntilStartTime(START_HOUR, START_MINUTE);
   // Calculate time to startHour:startMinute by converting higher order time units to ms
-  int sleepTimeMillis = sleepTime.ms + (1000 * sleepTime.seconds) + (60000 * sleepTime.minutes) + (3600000 * sleepTime.hours) + (86400000 * sleepTime.days);
+  int sleepTimeMillis = sleepTime.ms + (1000 * sleepTime.seconds) + (60000 * sleepTime.minutes) + (3600000 * sleepTime.hours); // + (86400000 * sleepTime.days);
   // Add additional offset to shift each device's initial start time
   sleepTimeMillis += HOST_LOOP_TIME * HOST_LOOPS * deviceID;
   Serial.print("Sleeping for ");
@@ -296,7 +296,7 @@ void writeTimeROMRow() {
  * Persists the table to nonvolatile ROM memory
  */
 void writePage() {
-  int success = writeROMManager.writePage(STORAGE_FLASH_PAGE - writeROMManager.pagecounter, writeROMManager.table);
+  int success = writeROMManager.writePage(STORAGE_FLASH_PAGE - writeROMManager.pageCounter, writeROMManager.table);
   Serial.println(success);
   rowCounter = 0;
 }
@@ -308,7 +308,7 @@ void writePartialPage() {
   for (int i = rowCounter; i < MAX_ROWS; i++) {
     writeROMManager.table.data[i] = -1;
   }
-  int success = writeROMManager.writePartialPage(STORAGE_FLASH_PAGE - writeROMManager.pagecounter, writeROMManager.table);
+  int success = writeROMManager.writePartialPage(STORAGE_FLASH_PAGE - writeROMManager.pageCounter, writeROMManager.table);
   Serial.println(success);
   rowCounter++;
 }

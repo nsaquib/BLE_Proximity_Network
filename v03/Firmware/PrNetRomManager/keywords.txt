@@ -1,0 +1,34 @@
+#######################################
+# Syntax Coloring Map SPI
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+PrNetRomManager			KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+table					KEYWORD2
+config					KEYWORD2
+pageCounter				KEYWORD2
+currentFlashPage		KEYWORD2
+
+printPage				KEYWORD2
+loadPage				KEYWORD2
+erasePage				KEYWORD2
+writePage				KEYWORD2
+writePartialPage		KEYWORD2
+updateConfig			KEYWORD2
+loadConfig				KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+SETTINGS_FLASH_PAGE		LITERAL1
+STORAGE_FLASH_PAGE		LITERAL1
+MAX_ROWS				LITERAL1
