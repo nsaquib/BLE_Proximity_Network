@@ -1,6 +1,6 @@
 #include <PrNetRomManager.h>
 
-#define PAGES_TO_READ 8
+#define PAGES_TO_READ 2
 #define BAUD_RATE 250000
 
 void setup() {
@@ -11,8 +11,7 @@ void setup() {
   for (int i = STORAGE_FLASH_PAGE; i > STORAGE_FLASH_PAGE - PAGES_TO_READ; i--) {
     m.printPage(i);
   }
+  Serial.println("Reading ROM complete");
 }
 
-void loop() {
-
-}
+void loop() {}

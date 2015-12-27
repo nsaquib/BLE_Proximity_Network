@@ -1,5 +1,5 @@
 /*
- * SensorsV5.ino - Network protocol for PrNet nodes.
+ * SensorsV6.ino - Network protocol for PrNet nodes.
  * Created by Dwyane George, December 24, 2015.
  * Social Computing Group, MIT Media Lab
  */
@@ -9,28 +9,30 @@
 #include <RFduinoGZLL.h>
 #include <Time.h>
 
-#define TX_POWER_LEVEL 4
+#define TX_POWER_LEVEL 0
 #define BLE_AD_INTERVAL 2000
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 #define BAUD_RATE 9600
 // Configuration Parameters
 #define MAX_DEVICES 13
-#define START_HOUR 6
-#define START_MINUTE 0
-#define END_HOUR 10
-#define END_MINUTE 0
+#define START_HOUR 1
+#define START_MINUTE 30
+#define END_HOUR 23
+#define END_MINUTE 59
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
-#define DEVICE_LOOP_TIME 0
+#define DEVICE_LOOP_TIME 200
+#define REGION_TRACKER false
+#define REGION_TRACKER_DELAY 8000
 #define USE_SERIAL_MONITOR false
 
 // Unique device ID
-const int deviceID = 12;
+const int deviceID = 0;
 // Device BLE name
 char deviceBLEName[2];
 // Device loops
-const int DEVICE_LOOPS = (DEVICE_LOOP_TIME == 0) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
+const int DEVICE_LOOPS = (REGION_TRACKER) ? 0 : (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
 // Initial device role
 device_t deviceRole = HOST;
 // RSSI total and count for each device
@@ -55,9 +57,7 @@ int pageCounter = STORAGE_FLASH_PAGE;
  * Erases ROM memory and sets radio parameters
  */
 void setup() {
-  if (USE_SERIAL_MONITOR) {
-    Serial.begin(BAUD_RATE);
-  }
+  enableSerialMonitor();
   deviceBLEName[0] = (deviceID < 10) ? deviceID + '0' : ((deviceID - (deviceID % 10)) / 10) + '0';
   deviceBLEName[1] = (deviceID < 10) ? 0 : (deviceID % 10) + '0';
   RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
@@ -108,8 +108,8 @@ void loop() {
  */
 void loopHost() {
   Serial.println("HOST");
-  writeTimeROMRow();
   timer.displayDateTime();
+  writeTimeROMRow();
   if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
     for (int i = 0; i < HOST_LOOPS; i++) {
       if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
@@ -118,7 +118,7 @@ void loopHost() {
       collectSamplesFromDevices();
       updateROMTable();
     }
-    setupDevice();
+    transitionHost();
   }
 }
 
@@ -135,6 +135,9 @@ void loopDevice() {
       }
       delayDevice();
       pollHost();
+      if ((i + 1) % (HOST_LOOP_TIME / DEVICE_LOOP_TIME) == 0) {
+        updateROMTable();
+      }
     }
     setupHost();
   }
@@ -152,39 +155,54 @@ void collectSamplesFromDevices() {
   collectSamples = false;
 }
 
+/*
+ * Transitions host for next collection cycle
+ */
+void transitionHost() {
+  if (!REGION_TRACKER) {
+    setupDevice();
+  } else {
+    RFduinoGZLL.end();
+    disableSerialMonitor();
+    timer.updateTime();
+    RFduino_ULPDelay(REGION_TRACKER_DELAY - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % HOST_LOOP_TIME));
+    enableSerialMonitor();
+    RFduinoGZLL.begin(deviceRole);
+  }
+}
+
 ////////// Device Functions //////////
 
 /*
  * Sends the deviceID to host devices
  */
 void pollHost() {
-  if (deviceRole != HOST) {
-    RFduinoGZLL.sendToHost(deviceID);
-  }
+  RFduinoGZLL.sendToHost(deviceID);
 }
 
 /*
  * Delays device in ultra low power state for DEVICE_LOOP_TIME
  */
 void delayDevice() {
-  if (USE_SERIAL_MONITOR) {
-    Serial.end();
-  }
+  disableSerialMonitor();
   timer.delayTime(10);
   timer.updateTime();
   RFduino_ULPDelay(DEVICE_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
-  if (USE_SERIAL_MONITOR) {
-    Serial.begin(BAUD_RATE);
-  }
+  enableSerialMonitor();
 }
 
 ////////// Callback Functions //////////
 
 /*
- * Collects RSSI values from incoming data transmissions
+ * Collects RSSI values and responds to incoming data transmissions
  */
 void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   if (deviceRole == HOST && collectSamples && (int) data[0] >= 0 && (int) data[0] < MAX_DEVICES) {
+    rssiTotal[(int) data[0]] += rssi;
+    rssiCount[(int) data[0]]++;
+    RFduinoGZLL.sendToDevice(device, deviceID);
+  }
+  if (deviceRole != HOST && (int) data[0] >= 0 && (int) data[0] < MAX_DEVICES) {
     rssiTotal[(int) data[0]] += rssi;
     rssiCount[(int) data[0]]++;
   }
@@ -220,7 +238,7 @@ void sleepUntilStartTime() {
   if (rowCounter >= MAX_ROWS) {
     writePage();
   } else {
-    writePartialPage();
+    writePartialPage(true);
   }
   struct sleepTime sleepTime = timer.getTimeUntilStartTime(START_HOUR, START_MINUTE);
   // Calculate time to startHour:startMinute by converting higher order time units to ms
@@ -239,13 +257,29 @@ void sleepUntilStartTime() {
   Serial.println(sleepTime.ms);
   Serial.print("Offset: ");
   Serial.println(HOST_LOOP_TIME * HOST_LOOPS * deviceID);
-  if (USE_SERIAL_MONITOR) {
-    Serial.end();
-  }
+  disableSerialMonitor();
   RFduino_ULPDelay(sleepTimeMillis);
   writeTimeROMRow();
+  enableSerialMonitor();
+}
+
+////////// Serial Monitor Code //////////
+
+/*  
+ * Enables the serial monitor
+ */
+void enableSerialMonitor() {
   if (USE_SERIAL_MONITOR) {
     Serial.begin(BAUD_RATE);
+  }
+}
+
+/*  
+ * Disables the serial monitor
+ */
+void disableSerialMonitor() {
+  if (USE_SERIAL_MONITOR) {
+    Serial.end();
   }
 }
 
@@ -275,6 +309,7 @@ void updateROMTable() {
     rssiTotal[i] = 0;
     rssiCount[i] = 0;
   }
+  writePartialPage(false);
 }
 
 /*
@@ -304,13 +339,15 @@ void writePage() {
 /*
  * Persists a partially filled table to nonvolatile ROM memory
  */
-void writePartialPage() {
+void writePartialPage(bool advanceRowCounter) {
   for (int i = rowCounter; i < MAX_ROWS; i++) {
     writeROMManager.table.data[i] = -1;
   }
   int success = writeROMManager.writePartialPage(STORAGE_FLASH_PAGE - writeROMManager.pageCounter, writeROMManager.table);
   Serial.println(success);
-  rowCounter++;
+  if (advanceRowCounter) {
+    rowCounter++;
+  }
 }
 
 /*
