@@ -87,20 +87,24 @@ struct sleepTime Time::getTimeUntilStartTime(int startHour, int startMinute) {
   // If its Sunday, sleep through Sunday
   if (currentTime.day == 0) {
   	if (currentTime.hours < startHour || (currentTime.hours == startHour && currentTime.minutes < startMinute)) {
-  		sleepTime.days = 1;
+      sleepTime.days = 1;
   	} else {
-  		sleepTime.days = 0;
+      sleepTime.days = 0;
   	}
   // If its Friday, sleep through Saturday and Sunday
   } else if (currentTime.day == 5) {
   	if (currentTime.hours < startHour || (currentTime.hours == startHour && currentTime.minutes < startMinute)) {
-  	  sleepTime.days = 0;
+      sleepTime.days = 0;
   	} else {
-  	  sleepTime.days = 2;
+      sleepTime.days = 2;
   	}
   // If its Saturday, sleep through Sunday
   } else if (currentTime.day == 6) {
-    sleepTime.days = 1;
+    if (currentTime.hours < startHour || (currentTime.hours == startHour && currentTime.minutes < startMinute)) {
+      sleepTime.days = 2;
+    } else {
+      sleepTime.days = 1;
+    }
   }
   return sleepTime;
 }
