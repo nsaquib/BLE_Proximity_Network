@@ -9,20 +9,20 @@
 #include <RFduinoGZLL.h>
 #include <Time.h>
 
-#define TX_POWER_LEVEL 0
+#define TX_POWER_LEVEL 4
 #define BLE_AD_INTERVAL 2000
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 #define BAUD_RATE 9600
 // Configuration Parameters
 #define MAX_DEVICES 13
-#define START_HOUR 1
-#define START_MINUTE 30
+#define START_HOUR 2
+#define START_MINUTE 0
 #define END_HOUR 23
 #define END_MINUTE 59
 #define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
-#define DEVICE_LOOP_TIME 200
+#define DEVICE_LOOP_TIME 100
 #define REGION_TRACKER false
 #define REGION_TRACKER_DELAY 8000
 #define USE_SERIAL_MONITOR false
@@ -40,18 +40,18 @@ int rssiTotal[MAX_DEVICES];
 int rssiCount[MAX_DEVICES];
 // Collect samples flag
 boolean collectSamples = false;
-// Time
+// Time data structure
 Time timer;
 // ROM Manager for writing to flash ROM
 PrNetRomManager writeROMManager;
 // ROM Manager for reading flash ROM and sending through BLE
 PrNetRomManager readROMManager;
+// Transfer data flag to cell phone app
+boolean transferFlag = false;
+// Counter for current write page
+int pageCounter = STORAGE_FLASH_PAGE;
 // Counter for current ROM page row
 int rowCounter = 0;
-// Flag to transfer data to cell phone app
-boolean transferFlag = false;
-// Counter for current page to write to
-int pageCounter = STORAGE_FLASH_PAGE;
 
 /*
  * Erases ROM memory and sets radio parameters
@@ -110,16 +110,14 @@ void loopHost() {
   Serial.println("HOST");
   timer.displayDateTime();
   writeTimeROMRow();
-  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
-    for (int i = 0; i < HOST_LOOPS; i++) {
-      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
-        sleepUntilStartTime();
-      }
-      collectSamplesFromDevices();
-      updateROMTable();
+  for (int i = 0; i < HOST_LOOPS; i++) {
+    if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+      return;
     }
-    transitionHost();
+    collectSamplesFromDevices();
+    updateROMTable();
   }
+  transitionHost();
 }
 
 /*
@@ -128,19 +126,17 @@ void loopHost() {
 void loopDevice() {
   Serial.println("DEVICE");
   timer.displayDateTime();
-  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
-    for (int i = 0; i < DEVICE_LOOPS; i++) {
-      if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
-        sleepUntilStartTime();
-      }
-      delayDevice();
-      pollHost();
-      if ((i + 1) % (HOST_LOOP_TIME / DEVICE_LOOP_TIME) == 0) {
-        updateROMTable();
-      }
+  for (int i = 0; i < DEVICE_LOOPS; i++) {
+    if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+      return;
     }
-    setupHost();
+    delayDevice();
+    RFduinoGZLL.sendToHost(deviceID);
+    if ((i + 1) % (HOST_LOOP_TIME / DEVICE_LOOP_TIME) == 0) {
+      updateROMTable();
+    }
   }
+  setupHost();
 }
 
 ////////// Host Functions //////////
@@ -174,21 +170,12 @@ void transitionHost() {
 ////////// Device Functions //////////
 
 /*
- * Sends the deviceID to host devices
- */
-void pollHost() {
-  RFduinoGZLL.sendToHost(deviceID);
-}
-
-/*
  * Delays device in ultra low power state for DEVICE_LOOP_TIME
  */
 void delayDevice() {
-  disableSerialMonitor();
   timer.delayTime(10);
   timer.updateTime();
   RFduino_ULPDelay(DEVICE_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
-  enableSerialMonitor();
 }
 
 ////////// Callback Functions //////////
@@ -241,9 +228,7 @@ void sleepUntilStartTime() {
     writePartialPage(true);
   }
   struct sleepTime sleepTime = timer.getTimeUntilStartTime(START_HOUR, START_MINUTE);
-  // Calculate time to startHour:startMinute by converting higher order time units to ms
   int sleepTimeMillis = sleepTime.ms + (1000 * sleepTime.seconds) + (60000 * sleepTime.minutes) + (3600000 * sleepTime.hours); // + (86400000 * sleepTime.days);
-  // Add additional offset to shift each device's initial start time
   sleepTimeMillis += HOST_LOOP_TIME * HOST_LOOPS * deviceID;
   Serial.print("Sleeping for ");
   Serial.print(sleepTime.days);
@@ -300,7 +285,7 @@ void updateROMTable() {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }
-      int data = (millis()/1000) % 1000000;       // Seconds
+      int data = (millis() / 1000) % 1000000;       // Seconds
       data += abs(rssiAverage % 100) * 1000000;   // RSSI
       data += (i % 42) * 100000000;               // Device ID
       writeROMManager.table.data[rowCounter] = data;
@@ -309,7 +294,9 @@ void updateROMTable() {
     rssiTotal[i] = 0;
     rssiCount[i] = 0;
   }
-  writePartialPage(false);
+  if (deviceRole == HOST) {
+    writePartialPage(false);
+  }
 }
 
 /*
@@ -415,25 +402,4 @@ void startTransfer() {
       RFduinoBLE.send(0);
     }
   }
-}
-
-void sendCurrentTime() {
-//  timer.updateTime();
-//  while (!RFduinoBLE.send('>'));
-//  while (!RFduinoBLE.send(timer.currentTime.month));
-//  while (!RFduinoBLE.send(timer.currentTime.date));
-//  while (!RFduinoBLE.send(timer.currentTime.year));
-//  while (!RFduinoBLE.send(timer.currentTime.day));
-//  while (!RFduinoBLE.send(timer.currentTime.hours));
-//  while (!RFduinoBLE.send(timer.currentTime.minutes));
-//  while (!RFduinoBLE.send(timer.currentTime.seconds));
-//  while (!RFduinoBLE.send(timer.currentTime.ms));
-}
-
-void sendSleepTime(struct sleepTime sleepTime) {
-//  while (!RFduinoBLE.send(sleepTime.days));
-//  while (!RFduinoBLE.send(sleepTime.hours));
-//  while (!RFduinoBLE.send(sleepTime.minutes));
-//  while (!RFduinoBLE.send(sleepTime.seconds));
-//  while (!RFduinoBLE.send(sleepTime.ms));
 }
