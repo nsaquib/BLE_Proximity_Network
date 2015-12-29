@@ -16,11 +16,11 @@
 #define BAUD_RATE 9600
 // Configuration Parameters
 #define MAX_DEVICES 13
-#define START_HOUR 2
+#define START_HOUR 0
 #define START_MINUTE 0
 #define END_HOUR 23
-#define END_MINUTE 59
-#define HOST_LOOP_TIME 2000
+#define END_MINUTE 0
+#define HOST_LOOP_TIME 20000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
 #define REGION_TRACKER false
@@ -44,8 +44,6 @@ boolean collectSamples = false;
 Time timer;
 // ROM Manager for writing to flash ROM
 PrNetRomManager writeROMManager;
-// ROM Manager for reading flash ROM and sending through BLE
-PrNetRomManager readROMManager;
 // Transfer data flag to cell phone app
 boolean transferFlag = false;
 // Counter for current write page
@@ -228,7 +226,7 @@ void sleepUntilStartTime() {
     writePartialPage(true);
   }
   struct sleepTime sleepTime = timer.getTimeUntilStartTime(START_HOUR, START_MINUTE);
-  int sleepTimeMillis = sleepTime.ms + (1000 * sleepTime.seconds) + (60000 * sleepTime.minutes) + (3600000 * sleepTime.hours); // + (86400000 * sleepTime.days);
+  int sleepTimeMillis = sleepTime.ms + (1000 * sleepTime.seconds) + (60000 * sleepTime.minutes) + (3600000 * sleepTime.hours) + (86400000 * sleepTime.days);
   sleepTimeMillis += HOST_LOOP_TIME * HOST_LOOPS * deviceID;
   Serial.print("Sleeping for ");
   Serial.print(sleepTime.days);
@@ -276,18 +274,20 @@ void disableSerialMonitor() {
 void updateROMTable() {
   for (int i = 0; i < MAX_DEVICES; i++) {
     int rssiAverage = (rssiCount[i] == 0) ? -128 : rssiTotal[i] / rssiCount[i];
-    Serial.print(i);
-    Serial.print(",");
-    Serial.print(rssiAverage);
-    Serial.print(",");
-    Serial.println(rssiCount[i]);
+//    Serial.print(i);
+//    Serial.print(",");
+//    Serial.print(rssiAverage);
+//    Serial.print(",");
+//    Serial.println(rssiCount[i]);
     if (rssiAverage > -100) {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }
       int data = (millis() / 1000) % 1000000;       // Seconds
-      data += abs(rssiAverage % 100) * 1000000;   // RSSI
-      data += (i % 42) * 100000000;               // Device ID
+      data += abs(rssiAverage % 100) * 1000000;     // RSSI
+      //data += abs(rssiCount[i] % 100) * 1000000;  // Packet Count
+      data += (i % 42) * 100000000;                 // Device ID
+      Serial.println(data);
       writeROMManager.table.data[rowCounter] = data;
       rowCounter++;
     }
@@ -307,9 +307,9 @@ void writeTimeROMRow() {
     writePage();
   }
   timer.updateTime();
-  int data = timer.currentTime.seconds;           // Seconds
-  data += timer.currentTime.minutes * 100;        // Minutes
-  data += timer.currentTime.hours * 10000;        // Hours
+  int data = timer.currentTime.seconds;             // Seconds
+  data += timer.currentTime.minutes * 100;          // Minutes
+  data += timer.currentTime.hours * 10000;          // Hours
   writeROMManager.table.data[rowCounter] = data;
   rowCounter++;
 }
@@ -382,6 +382,7 @@ void RFduinoBLE_onReceive(char *data, int len) {
  * Transfers device ROM to BLE-enabled device
  */
 void startTransfer() {
+  PrNetRomManager readROMManager;
   while (transferFlag) {
     readROMManager.loadPage(pageCounter);
     Serial.print("Sending page ");
