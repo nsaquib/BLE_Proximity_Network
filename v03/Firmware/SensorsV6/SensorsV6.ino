@@ -16,15 +16,15 @@
 #define BAUD_RATE 9600
 // Configuration Parameters
 #define MAX_DEVICES 13
-#define START_HOUR 0
+#define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 23
+#define END_HOUR 13
 #define END_MINUTE 0
-#define HOST_LOOP_TIME 20000
+#define HOST_LOOP_TIME 2000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
 #define REGION_TRACKER false
-#define REGION_TRACKER_DELAY 8000
+#define REGION_TRACKER_DELAY 0
 #define USE_SERIAL_MONITOR false
 
 // Unique device ID
@@ -156,6 +156,9 @@ void transitionHost() {
   if (!REGION_TRACKER) {
     setupDevice();
   } else {
+    if (REGION_TRACKER_DELAY == 0) {
+      return;
+    }
     RFduinoGZLL.end();
     disableSerialMonitor();
     timer.updateTime();
@@ -274,18 +277,17 @@ void disableSerialMonitor() {
 void updateROMTable() {
   for (int i = 0; i < MAX_DEVICES; i++) {
     int rssiAverage = (rssiCount[i] == 0) ? -128 : rssiTotal[i] / rssiCount[i];
-//    Serial.print(i);
-//    Serial.print(",");
-//    Serial.print(rssiAverage);
-//    Serial.print(",");
-//    Serial.println(rssiCount[i]);
+    Serial.print(i);
+    Serial.print(",");
+    Serial.print(rssiAverage);
+    Serial.print(",");
+    Serial.println(rssiCount[i]);
     if (rssiAverage > -100) {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }
       int data = (millis() / 1000) % 1000000;       // Seconds
       data += abs(rssiAverage % 100) * 1000000;     // RSSI
-      //data += abs(rssiCount[i] % 100) * 1000000;  // Packet Count
       data += (i % 42) * 100000000;                 // Device ID
       Serial.println(data);
       writeROMManager.table.data[rowCounter] = data;
