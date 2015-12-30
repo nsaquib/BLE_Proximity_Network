@@ -75,8 +75,8 @@ void Time::updateTime() {
  * Computes time until the start hour and start minute of the data collection period
  */
 struct sleepTime Time::getTimeUntilStartTime(int startHour, int startMinute) {
-  int carryOver;
   updateTime();
+  int carryOver;
   sleepTime.ms = (1000 - currentTime.ms) % 1000;
   carryOver = (sleepTime.ms > 0) ? 1 : 0;
   sleepTime.seconds = (60 - currentTime.seconds - carryOver) % 60;
@@ -116,6 +116,10 @@ bool Time::inDataCollectionPeriod(int startHour, int startMinute, int endHour, i
   updateTime();
   if (!isTimeSet) {
     return false;
+  }
+  // Check the weekday
+  if (currentTime.day == 0 || currentTime.day == 6) {
+  	return false;
   }
   // Collect data while within range
   if ((currentTime.hours > startHour) && (currentTime.hours < endHour)) {
