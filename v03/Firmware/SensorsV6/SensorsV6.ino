@@ -154,11 +154,11 @@ void collectSamplesFromDevices() {
  */
 void transitionHost() {
   if (!REGION_TRACKER) {
-    setupDevice();
+    return setupDevice();
+  }
+  if (REGION_TRACKER_DELAY == 0) {
+    return;
   } else {
-    if (REGION_TRACKER_DELAY == 0) {
-      return;
-    }
     RFduinoGZLL.end();
     disableSerialMonitor();
     timer.updateTime();
@@ -282,7 +282,7 @@ void updateROMTable() {
     Serial.print(rssiAverage);
     Serial.print(",");
     Serial.println(rssiCount[i]);
-    if (rssiAverage > -100) {
+    if (rssiAverage > -100 && (i == (deviceID + 1) % MAX_DEVICES)) {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }

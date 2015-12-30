@@ -1,6 +1,6 @@
 #include <PrNetRomManager.h>
 
-#define PAGES_TO_READ 25
+#define PAGES_TO_READ 70
 #define BAUD_RATE 250000
 
 void setup() {
