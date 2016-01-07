@@ -1,0 +1,48 @@
+function [aggregatedData] = aggregateRawData(input, startHour, startMinute, SInodes)
+% processRawData Procosses unprocessed data from PrNet sensors
+%   input: name of folder containing txt input files
+%   startHour: hour at which data collection began
+%   startMinute: minute at which data collection began
+%   SInodes: number of social interaction network nodes
+%   processedData: processed data with the following schema:
+%       hostID deviceID RSSI regionTracking day hour minute second time
+
+% Create data structure for holding aggregate raw data
+aggregatedData = zeros(0, 9);
+
+% Iterate over input txt files
+files = dir(strcat(input, '/*.txt'));
+for file = files'
+    % Open file
+    fileID = fopen(file.name);
+    % Get receiving sensor ID from file name
+    fileNameExtension = strsplit(file.name, '.');
+    hostID = str2num(cell2mat(fileNameExtension(1)));
+    % Get line from input file
+    textLine = fgetl(fileID);
+    while ischar(textLine)
+        % Check if line is a numerical representation
+        if (~cellfun('isempty', regexp({textLine}, '^-?\d+$')))
+            value = str2num(textLine);
+            % Compute row data components
+            deviceID = floor(value / 100000000);
+            value = value - deviceID * 100000000;
+            rssi = floor(value / 1000000);
+            value = value - rssi * 1000000;
+            rt = (hostID > SInodes - 1);
+            day = 0;
+            hour = 0;
+            minute = 0;
+            second = 0;
+            time = value;
+            dataRow = [hostID deviceID rssi rt day hour minute second time];
+            aggregatedData = [aggregatedData; dataRow];
+        end
+        % Continue onto next line
+        textLine = fgetl(fileID);
+    end
+    % Close file
+    fclose(fileID);
+end
+
+end
