@@ -282,13 +282,16 @@ void updateROMTable() {
     Serial.print(rssiAverage);
     Serial.print(",");
     Serial.println(rssiCount[i]);
-    if (rssiAverage > -100 && (i == (deviceID + 1) % MAX_DEVICES)) {
+    if (rssiAverage > -100) {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }
-      int data = (millis() / 1000) % 1000000;       // Seconds
-      data += abs(rssiAverage % 100) * 1000000;     // RSSI
-      data += (i % 42) * 100000000;                 // Device ID
+      timer.updateTime();
+      int data = timer.currentTime.seconds % 60;        // Seconds
+      data += (timer.currentTime.minutes % 60) * 100;   // Minutes
+      data += (timer.currentTime.hours % 24) * 10000;   // Hours
+      data += abs(rssiAverage % 100) * 1000000;         // RSSI
+      data += (i % 42) * 100000000;                     // Device ID
       Serial.println(data);
       writeROMManager.table.data[rowCounter] = data;
       rowCounter++;
