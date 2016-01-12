@@ -6,7 +6,7 @@
 
 #include <RFduinoGZLL.h>
 
-#define TX_POWER_LEVEL 4
+#define TX_POWER_LEVEL -16
 #define HBA 0x000
 #define BAUD_RATE 9600
 #define DEVICE_LOOP_TIME 100
