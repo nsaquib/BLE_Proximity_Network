@@ -15,12 +15,12 @@
 #define HBA 0x000
 #define BAUD_RATE 9600
 // Configuration Parameters
-#define MAX_DEVICES 13
+#define MAX_DEVICES 3
 #define START_HOUR 9
 #define START_MINUTE 0
 #define END_HOUR 13
 #define END_MINUTE 0
-#define HOST_LOOP_TIME 2000
+#define HOST_LOOP_TIME 1000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
 #define REGION_TRACKER false
@@ -62,7 +62,7 @@ void setup() {
   RFduinoGZLL.hostBaseAddress = HBA;
   RFduinoBLE.deviceName = deviceBLEName;
   if (!timer.isTimeSet) {
-    waitForTime();
+    waitForParameters();
     eraseROM();
   }
 }
@@ -107,7 +107,6 @@ void loop() {
 void loopHost() {
   Serial.println("HOST");
   timer.displayDateTime();
-  writeTimeROMRow();
   for (int i = 0; i < HOST_LOOPS; i++) {
     if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
       return;
@@ -155,14 +154,11 @@ void collectSamplesFromDevices() {
 void transitionHost() {
   if (!REGION_TRACKER) {
     return setupDevice();
-  }
-  if (REGION_TRACKER_DELAY == 0) {
-    return;
   } else {
     RFduinoGZLL.end();
     disableSerialMonitor();
     timer.updateTime();
-    RFduino_ULPDelay(REGION_TRACKER_DELAY - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % HOST_LOOP_TIME));
+    RFduino_ULPDelay(max(0, REGION_TRACKER_DELAY - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % HOST_LOOP_TIME)));
     enableSerialMonitor();
     RFduinoGZLL.begin(deviceRole);
   }
@@ -201,11 +197,11 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
 /*
  * Devices device until time is set
  */
-void waitForTime() {
-  RFduinoGZLL.end();
+void waitForParameters() {
+  Serial.println("Waiting for parameters...");
+  disableSerialMonitor();
   RFduinoBLE.advertisementInterval = BLE_AD_INTERVAL;
   RFduinoBLE.begin();
-  Serial.println("Waiting for time...");
   while (!timer.isTimeSet) {
     timer.delayTime(5);
     if (transferFlag) {
@@ -213,6 +209,7 @@ void waitForTime() {
     }
   }
   RFduinoBLE.end();
+  enableSerialMonitor();
 }
 
 ////////// Sleep Functions //////////
@@ -292,7 +289,6 @@ void updateROMTable() {
       data += (timer.currentTime.hours % 24) * 10000;   // Hours
       data += abs(rssiAverage % 100) * 1000000;         // RSSI
       data += (i % 42) * 100000000;                     // Device ID
-      Serial.println(data);
       writeROMManager.table.data[rowCounter] = data;
       rowCounter++;
     }
@@ -312,9 +308,9 @@ void writeTimeROMRow() {
     writePage();
   }
   timer.updateTime();
-  int data = timer.currentTime.seconds;             // Seconds
-  data += timer.currentTime.minutes * 100;          // Minutes
-  data += timer.currentTime.hours * 10000;          // Hours
+  int data = timer.currentTime.seconds % 60;        // Seconds
+  data += (timer.currentTime.minutes % 60) * 100;   // Minutes
+  data += (timer.currentTime.hours % 24) * 10000;   // Hours
   writeROMManager.table.data[rowCounter] = data;
   rowCounter++;
 }
