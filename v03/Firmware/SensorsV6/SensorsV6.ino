@@ -9,7 +9,7 @@
 #include <RFduinoGZLL.h>
 #include <Time.h>
 
-#define TX_POWER_LEVEL 4
+#define TX_POWER_LEVEL -16
 #define BLE_AD_INTERVAL 2000
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
@@ -18,12 +18,12 @@
 #define MAX_DEVICES 3
 #define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 13
+#define END_HOUR 23
 #define END_MINUTE 0
 #define HOST_LOOP_TIME 1000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
-#define REGION_TRACKER false
+#define REGION_TRACKER true
 #define REGION_TRACKER_DELAY 0
 #define USE_SERIAL_MONITOR false
 
