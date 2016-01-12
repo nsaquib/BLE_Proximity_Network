@@ -16,8 +16,9 @@ def decompressFile(readFile, writeFile):
                         rssi = math.floor(value / 1000000)
                         value -= rssi * 1000000
                         time = value
-                        row = [time, deviceID, rssi]
-                        writer.writerow(row)
+                        if rssi > 0:
+                            row = [time, deviceID, rssi]
+                            writer.writerow(row)
 
 for readFile in os.listdir(os.getcwd()):
     if readFile.endswith(".txt"):
