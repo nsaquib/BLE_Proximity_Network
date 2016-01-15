@@ -1,31 +1,31 @@
 /*
- * SensorsV6.ino - Network protocol for PrNet nodes.
- * Created by Dwyane George, December 24, 2015.
+ * SensorsV7.ino - Network protocol for PrNet nodes.
+ * Created by Dwyane George, January 14, 2015.
  * Social Computing Group, MIT Media Lab
  */
 
 #include <PrNetRomManager.h>
-#include <RFduinoBLE.h>
-#include <RFduinoGZLL.h>
+#include <SimbleeBLE.h>
+#include <SimbleeGZLL.h>
 #include <Time.h>
 
-#define TX_POWER_LEVEL -4
+#define TX_POWER_LEVEL 4
 #define BLE_AD_INTERVAL 2000
 #define PAGES_TO_TRANSFER 50
 #define HBA 0x000
 #define BAUD_RATE 9600
 // Configuration Parameters
-#define MAX_DEVICES 2
+#define MAX_DEVICES 15
 #define START_HOUR 9
 #define START_MINUTE 0
-#define END_HOUR 23
+#define END_HOUR 13
 #define END_MINUTE 0
 #define HOST_LOOP_TIME 1000
 #define HOST_LOOPS 1
 #define DEVICE_LOOP_TIME 100
 #define REGION_TRACKER false
 #define REGION_TRACKER_DELAY 0
-#define USE_SERIAL_MONITOR true
+#define USE_SERIAL_MONITOR false
 
 // Unique device ID
 const int deviceID = 0;
@@ -58,9 +58,9 @@ void setup() {
   enableSerialMonitor();
   deviceBLEName[0] = (deviceID < 10) ? deviceID + '0' : ((deviceID - (deviceID % 10)) / 10) + '0';
   deviceBLEName[1] = (deviceID < 10) ? 0 : (deviceID % 10) + '0';
-  RFduinoGZLL.txPowerLevel = TX_POWER_LEVEL;
-  RFduinoGZLL.hostBaseAddress = HBA;
-  RFduinoBLE.deviceName = deviceBLEName;
+  SimbleeGZLL.txPowerLevel = TX_POWER_LEVEL;
+  SimbleeGZLL.hostBaseAddress = HBA;
+  SimbleeBLE.deviceName = deviceBLEName;
   if (!timer.isTimeSet) {
     waitForParameters();
     eraseROM();
@@ -72,8 +72,8 @@ void setup() {
  */
 void setupHost() {
   deviceRole = HOST;
-  RFduinoGZLL.end();
-  RFduinoGZLL.begin(deviceRole);
+  SimbleeGZLL.end();
+  SimbleeGZLL.begin(deviceRole);
 }
 
 /*
@@ -81,8 +81,8 @@ void setupHost() {
  */
 void setupDevice() {
   deviceRole = (device_t) (deviceID % 8);
-  RFduinoGZLL.end();
-  RFduinoGZLL.begin(deviceRole);
+  SimbleeGZLL.end();
+  SimbleeGZLL.begin(deviceRole);
 }
 
 /*
@@ -128,7 +128,7 @@ void loopDevice() {
       return;
     }
     delayDevice();
-    RFduinoGZLL.sendToHost(deviceID);
+    SimbleeGZLL.sendToHost(deviceID);
     if ((i + 1) % (HOST_LOOP_TIME / DEVICE_LOOP_TIME) == 0) {
       updateROMTable();
     }
@@ -155,12 +155,12 @@ void transitionHost() {
   if (!REGION_TRACKER) {
     return setupDevice();
   } else {
-    RFduinoGZLL.end();
+    SimbleeGZLL.end();
     disableSerialMonitor();
     timer.updateTime();
-    RFduino_ULPDelay(max(0, REGION_TRACKER_DELAY - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % HOST_LOOP_TIME)));
+    Simblee_ULPDelay(max(0, REGION_TRACKER_DELAY - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % HOST_LOOP_TIME)));
     enableSerialMonitor();
-    RFduinoGZLL.begin(deviceRole);
+    SimbleeGZLL.begin(deviceRole);
   }
 }
 
@@ -172,7 +172,7 @@ void transitionHost() {
 void delayDevice() {
   timer.delayTime(10);
   timer.updateTime();
-  RFduino_ULPDelay(DEVICE_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
+  Simblee_ULPDelay(DEVICE_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
 }
 
 ////////// Callback Functions //////////
@@ -180,11 +180,11 @@ void delayDevice() {
 /*
  * Collects RSSI values and responds to incoming data transmissions
  */
-void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
+void SimbleeGZLL_onReceive(device_t device, int rssi, char *data, int len) {
   if (deviceRole == HOST && collectSamples && (int) data[0] >= 0 && (int) data[0] < MAX_DEVICES) {
     rssiTotal[(int) data[0]] += rssi;
     rssiCount[(int) data[0]]++;
-    RFduinoGZLL.sendToDevice(device, deviceID);
+    SimbleeGZLL.sendToDevice(device, deviceID);
   }
   if (deviceRole != HOST && (int) data[0] >= 0 && (int) data[0] < MAX_DEVICES) {
     rssiTotal[(int) data[0]] += rssi;
@@ -200,15 +200,15 @@ void RFduinoGZLL_onReceive(device_t device, int rssi, char *data, int len) {
 void waitForParameters() {
   Serial.println("Waiting for parameters...");
   disableSerialMonitor();
-  RFduinoBLE.advertisementInterval = BLE_AD_INTERVAL;
-  RFduinoBLE.begin();
+  SimbleeBLE.advertisementInterval = BLE_AD_INTERVAL;
+  SimbleeBLE.begin();
   while (!timer.isTimeSet) {
     timer.delayTime(5);
     if (transferFlag) {
       startTransfer();
     }
   }
-  RFduinoBLE.end();
+  SimbleeBLE.end();
   enableSerialMonitor();
 }
 
@@ -218,7 +218,7 @@ void waitForParameters() {
  * Sleeps device until START_HOUR:START_MINUTE plus offset to shift each device's host time
  */
 void sleepUntilStartTime() {
-  RFduinoGZLL.end();
+  SimbleeGZLL.end();
   writeTimeROMRow();
   if (rowCounter >= MAX_ROWS) {
     writePage();
@@ -241,7 +241,7 @@ void sleepUntilStartTime() {
   Serial.print("Offset: ");
   Serial.println(HOST_LOOP_TIME * HOST_LOOPS * deviceID);
   disableSerialMonitor();
-  RFduino_ULPDelay(sleepTimeMillis);
+  Simblee_ULPDelay(sleepTimeMillis);
   writeTimeROMRow();
   enableSerialMonitor();
 }
@@ -353,7 +353,7 @@ void eraseROM() {
 /*
  * Sets device parameters with format MMddyyEHHmmssSSS through BLE
  */
-void RFduinoBLE_onReceive(char *data, int len) {
+void SimbleeBLE_onReceive(char *data, int len) {
   if (data[0]) {
     if (data[0] == '>' && data[16] && !timer.isTimeSet) {
       timer.initialMillis = millis();
@@ -366,15 +366,15 @@ void RFduinoBLE_onReceive(char *data, int len) {
         (data[10] - '0') * 10 + (data[11] - '0'),                           // Minute
         (data[12] - '0') * 10 + (data[13] - '0'),                           // Second
         (data[14] - '0') * 100 + (data[15] - '0') * 10 + (data[16] - '0')); // Millisecond
-      while (!RFduinoBLE.send('>'));
+      while (!SimbleeBLE.send('>'));
       timer.displayDateTime();
       writeTimeROMRow();
     } else if (data[0] == '#') {
-      while (!RFduinoBLE.send(1));
+      while (!SimbleeBLE.send(1));
       transferFlag = true;
     }
   } else {
-    while (!RFduinoBLE.send(0));
+    while (!SimbleeBLE.send(0));
     transferFlag = false;
   }
 }
@@ -392,16 +392,16 @@ void startTransfer() {
     for (int i = 0; i < MAX_ROWS; i++) {
       char dataBuffer[10];
       sprintf(dataBuffer, "%d", readROMManager.table.data[i]);
-      while (!RFduinoBLE.send(dataBuffer, 10));
-      while (!RFduinoBLE.send('|'));
+      while (!SimbleeBLE.send(dataBuffer, 10));
+      while (!SimbleeBLE.send('|'));
     }
-    while (!RFduinoBLE.send('#'));
+    while (!SimbleeBLE.send('#'));
     timer.delayTime(200);
     pageCounter--;
     if (pageCounter < STORAGE_FLASH_PAGE - PAGES_TO_TRANSFER) {
       Serial.println("Data transfer complete");
       transferFlag = false;
-      RFduinoBLE.send(0);
+      SimbleeBLE.send(0);
     }
   }
 }
