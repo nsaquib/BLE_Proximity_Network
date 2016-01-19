@@ -89,17 +89,17 @@ public class RFduinoService extends Service {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                mBluetoothGattService = gatt.getService(UUID_SERVICE);
+                mBluetoothGattService = gatt.getServices().get(1);
                 if (mBluetoothGattService == null) {
                     Log.e(TAG, "RFduino GATT service not found!");
                     return;
                 }
 
                 BluetoothGattCharacteristic receiveCharacteristic =
-                        mBluetoothGattService.getCharacteristic(UUID_RECEIVE);
+                        mBluetoothGattService.getCharacteristics().get(0);
                 if (receiveCharacteristic != null) {
                     BluetoothGattDescriptor receiveConfigDescriptor =
-                            receiveCharacteristic.getDescriptor(UUID_CLIENT_CONFIGURATION);
+                            receiveCharacteristic.getDescriptors().get(0);
                     if (receiveConfigDescriptor != null) {
                         gatt.setCharacteristicNotification(receiveCharacteristic, true);
 
@@ -143,7 +143,7 @@ public class RFduinoService extends Service {
 
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
-        if (UUID_RECEIVE.equals(characteristic.getUuid())) {
+        if (true) {
             final Intent intent = new Intent(action);
             intent.putExtra(EXTRA_DATA, characteristic.getValue());
             sendBroadcast(intent, Manifest.permission.BLUETOOTH);
@@ -262,7 +262,7 @@ public class RFduinoService extends Service {
         }
 
         BluetoothGattCharacteristic characteristic =
-                mBluetoothGattService.getCharacteristic(UUID_RECEIVE);
+                mBluetoothGattService.getCharacteristics().get(0);
 
         mBluetoothGatt.readCharacteristic(characteristic);
     }
@@ -274,7 +274,7 @@ public class RFduinoService extends Service {
         }
 
         BluetoothGattCharacteristic characteristic =
-                mBluetoothGattService.getCharacteristic(UUID_SEND);
+                mBluetoothGattService.getCharacteristics().get(0);
 
         if (characteristic == null) {
             Log.w(TAG, "Send characteristic not found");

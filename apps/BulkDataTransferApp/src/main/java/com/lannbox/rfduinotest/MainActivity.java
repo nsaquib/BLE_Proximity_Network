@@ -138,7 +138,6 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
             public void onClick(View v) {
                 scanStarted = true;
                 bluetoothAdapter.startLeScan(
-                        new UUID[]{ RFduinoService.UUID_SERVICE },
                         MainActivity.this);
             }
         });
@@ -413,17 +412,22 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
 
     @Override
     public void onLeScan(BluetoothDevice device, final int rssi, final byte[] scanRecord) {
-        bluetoothAdapter.stopLeScan(this);
+        //bluetoothAdapter.stopLeScan(this);
         bluetoothDevice = device;
-
-        MainActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                deviceInfoText.setText(
-                        BluetoothHelper.getDeviceInfoText(bluetoothDevice, rssi, scanRecord));
-                updateUi();
+        if (bluetoothDevice != null && bluetoothDevice.getName() != null) {
+            String test_string = bluetoothDevice.getName().substring(0, 1);
+            if (test_string.equals("#")) {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        deviceInfoText.append(
+                                BluetoothHelper.getDeviceInfoText(bluetoothDevice, rssi, scanRecord));
+                        updateUi();
+                    }
+                });
+                bluetoothAdapter.stopLeScan(this);
             }
-        });
+        }
     }
 
 }
