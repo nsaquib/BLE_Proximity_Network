@@ -8,38 +8,30 @@
 #include <SimbleeBLE.h>
 #include <Time.h>
 
-#define TX_POWER_LEVEL -8
+#define TX_POWER_LEVEL 4
 #define BLE_AD_INTERVAL 2000
 #define PAGES_TO_TRANSFER 50
 #define BAUD_RATE 9600
 // Configuration Parameters
-#define MAX_DEVICES 3
+#define NETWORK_SIZE 3
 #define START_HOUR 0
 #define START_MINUTE 0
 #define END_HOUR 23
 #define END_MINUTE 0
-#define HOST_LOOP_TIME 1000
-#define HOST_LOOPS 1
-#define DEVICE_LOOP_TIME 100
-#define SLEEP_LOOP_TIME 1000
-#define REGION_TRACKER_DELAY 0
+#define PACKETS 20
+#define PACKET_DELAY 50
+#define SLEEP_DELAY 0
 #define USE_SERIAL_MONITOR true
 
 // Unique device ID
-const int deviceID = 0;
+int deviceID;
 // Data to transmit
-char payload[] = { deviceID };
+char payload[1];
 // Device BLE name
 char deviceBLEName[2];
-// Device loops
-const int DEVICE_LOOPS = (HOST_LOOP_TIME*HOST_LOOPS)*(MAX_DEVICES-1)/(DEVICE_LOOP_TIME);
-// Initial device role
-boolean isHost = true;
 // RSSI total and count for each device
-int rssiTotal[MAX_DEVICES];
-int rssiCount[MAX_DEVICES];
-// Collect samples flag
-boolean collectSamples = false;
+int rssiTotal[NETWORK_SIZE];
+int rssiCount[NETWORK_SIZE];
 // Time data structure
 Time timer;
 // ROM Manager for writing to flash ROM
@@ -50,17 +42,26 @@ boolean transferFlag = false;
 int pageCounter = STORAGE_FLASH_PAGE;
 // Counter for current ROM page row
 int rowCounter = 0;
+// Device ESN Matrix
+const unsigned int ESNs[3][20] = {
+  // Wildflower ESNs
+  { 1, 1, 1, 1, 1 },
+  // Aster ESNs
+  { 1, 1, 1, 1, 1 },
+  // Simblee DIP ESNs
+  { 4173946190, 783932000, 2763040268 }
+};
 
 /*
  * Erases ROM memory and sets radio parameters
  */
 void setup() {
-  timer.isTimeSet = true;
-  timer.initialTime.day = 1;
   enableSerialMonitor();
+  getDeviceID();
   deviceBLEName[0] = (deviceID < 10) ? deviceID + '0' : ((deviceID - (deviceID % 10)) / 10) + '0';
   deviceBLEName[1] = (deviceID < 10) ? 0 : (deviceID % 10) + '0';
-  SimbleeBLE.deviceName = deviceBLEName;
+  timer.isTimeSet = true;
+  timer.initialTime.day = 1;
   if (!timer.isTimeSet) {
     waitForParameters();
     eraseROM();
@@ -71,33 +72,63 @@ void setup() {
 
 
 /*
- * Checks that time is set, if in data collection period, collects data, sleeps device otherwise
+ * If in data collection period, collect data, otherise sleep device
  */
 void loop() {
-  if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
-    sleepUntilStartTime();
+  if (timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
+    collectData();
+    pauseDataCollection();
   } else {
-    getData();
+    sleepUntilStartTime();
   }
 }
 
 /*
  * Polls host device for DEVICE_LOOPS times with DEVICE_LOOP_TIME delay between polls
  */
-void getData() {
+void collectData() {
   timer.displayDateTime();
-  for (int i = 0; i < DEVICE_LOOPS; i++) {
+  for (int i = 0; i < PACKETS; i++) {
     if (!timer.inDataCollectionPeriod(START_HOUR, START_MINUTE, END_HOUR, END_MINUTE)) {
       return;
     }
     SimbleeCOM.send(payload, sizeof(payload));
-    delay(DEVICE_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
-    if ((i + 1) % (HOST_LOOP_TIME / DEVICE_LOOP_TIME) == 0) {
-      updateROMTable();
+    struct currentTime t = timer.getTime();
+    delay(max(0, PACKET_DELAY - ((t.seconds * 1000 + t.ms) % PACKET_DELAY)));
+  }
+  updateROMTable();
+}
+
+/*
+ * Sleeps device between data collection periods
+ */
+void pauseDataCollection() {
+  if (SLEEP_DELAY > 0) {
+    SimbleeCOM.end();
+    struct currentTime t = timer.getTime();
+    Simblee_ULPDelay(max(0, SLEEP_DELAY - ((t.seconds * 1000 + t.ms) % PACKET_DELAY)));
+    SimbleeCOM.begin();
+  }
+}
+
+/*
+ * Maps ESN to unique device ID less than NETWORK_SIZE
+ */
+void getDeviceID() {
+  unsigned int esn = SimbleeCOM.getESN();
+  Serial.print("ESN: ");
+  Serial.println(esn);
+  for (int school = 0; school < sizeof(ESNs)/sizeof(unsigned int); school++) {
+    for (int id = 0; id < sizeof(ESNs[school])/sizeof(unsigned int); id++) {
+      if (esn == ESNs[school][id]) {
+        deviceID = id;
+        payload[0] = deviceID;
+        Serial.print("Device ID: ");
+        Serial.println(deviceID);
+        return;
+      }
     }
   }
-  Simblee_ULPDelay(max(0, SLEEP_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % SLEEP_LOOP_TIME)));
-  delay(10);
 }
 
 ////////// Callback Functions //////////
@@ -106,7 +137,7 @@ void getData() {
  * Collects RSSI values and responds to incoming data transmissions
  */
 void SimbleeCOM_onReceive(unsigned int esn, const char *payload, int len, int rssi) {
-  if ((int) payload[0] >= 0 && (int) payload[0] < MAX_DEVICES) {
+  if ((int) payload[0] >= 0 && (int) payload[0] < NETWORK_SIZE) {
     rssiTotal[(int) payload[0]] += rssi;
     rssiCount[(int) payload[0]]++;
   }
@@ -121,9 +152,10 @@ void waitForParameters() {
   Serial.println("Waiting for parameters...");
   disableSerialMonitor();
   SimbleeBLE.advertisementInterval = BLE_AD_INTERVAL;
+  SimbleeBLE.deviceName = deviceBLEName;
   SimbleeBLE.begin();
   while (!timer.isTimeSet) {
-    timer.delayTime(5);
+    delay(5);
     if (transferFlag) {
       startTransfer();
     }
@@ -147,7 +179,6 @@ void sleepUntilStartTime() {
   }
   struct sleepTime sleepTime = timer.getTimeUntilStartTime(START_HOUR, START_MINUTE);
   int sleepTimeMillis = sleepTime.ms + (1000 * sleepTime.seconds) + (60000 * sleepTime.minutes) + (3600000 * sleepTime.hours) + (86400000 * sleepTime.days);
-  sleepTimeMillis += HOST_LOOP_TIME * HOST_LOOPS * deviceID;
   Serial.print("Sleeping for ");
   Serial.print(sleepTime.days);
   Serial.print(":");
@@ -158,15 +189,13 @@ void sleepUntilStartTime() {
   Serial.print(sleepTime.seconds);
   Serial.print(":");
   Serial.println(sleepTime.ms);
-  Serial.print("Offset: ");
-  Serial.println(HOST_LOOP_TIME * HOST_LOOPS * deviceID);
   disableSerialMonitor();
   Simblee_ULPDelay(sleepTimeMillis);
   writeTimeROMRow();
   enableSerialMonitor();
 }
 
-////////// Serial Monitor Code //////////
+////////// Serial Monitor Functions //////////
 
 /*  
  * Enables the serial monitor
@@ -186,13 +215,13 @@ void disableSerialMonitor() {
   }
 }
 
-////////// ROM Code //////////
+////////// ROM Functions //////////
 
 /*  
  * Stores deviceID (I), RSSI (R), and time (T) as I,IRR,TTT,TTT with maximum value of 4,294,967,295
  */
 void updateROMTable() {
-  for (int i = 0; i < MAX_DEVICES; i++) {
+  for (int i = 0; i < NETWORK_SIZE; i++) {
     int rssiAverage = (rssiCount[i] == 0) ? -128 : rssiTotal[i] / rssiCount[i];
     Serial.print(i);
     Serial.print(",");
@@ -203,10 +232,10 @@ void updateROMTable() {
       if (rowCounter >= MAX_ROWS) {
         writePage();
       }
-      timer.updateTime();
-      int data = timer.currentTime.seconds % 60;        // Seconds
-      data += (timer.currentTime.minutes % 60) * 100;   // Minutes
-      data += (timer.currentTime.hours % 24) * 10000;   // Hours
+      struct currentTime t = timer.getTime();
+      int data = t.seconds % 60;                        // Seconds
+      data += (t.minutes % 60) * 100;                   // Minutes
+      data += (t.hours % 24) * 10000;                   // Hours
       data += abs(rssiAverage % 100) * 1000000;         // RSSI
       data += (i % 42) * 100000000;                     // Device ID
       writeROMManager.table.data[rowCounter] = data;
@@ -225,10 +254,10 @@ void writeTimeROMRow() {
   if (rowCounter >= MAX_ROWS) {
     writePage();
   }
-  timer.updateTime();
-  int data = timer.currentTime.seconds % 60;        // Seconds
-  data += (timer.currentTime.minutes % 60) * 100;   // Minutes
-  data += (timer.currentTime.hours % 24) * 10000;   // Hours
+  struct currentTime t = timer.getTime();
+  int data = t.seconds % 60;                            // Seconds
+  data += (t.minutes % 60) * 100;                       // Minutes
+  data += (t.hours % 24) * 10000;                       // Hours
   writeROMManager.table.data[rowCounter] = data;
   rowCounter++;
 }
@@ -266,7 +295,7 @@ void eraseROM() {
   Serial.println("Erased ROM");
 }
 
-////////// App Integration Code //////////
+////////// App Integration Functions //////////
 
 /*
  * Sets device parameters with format MMddyyEHHmmssSSS through BLE
@@ -313,12 +342,12 @@ void startTransfer() {
       while (!SimbleeBLE.send('|'));
     }
     while (!SimbleeBLE.send('#'));
-    timer.delayTime(200);
+    delay(200);
     pageCounter--;
     if (pageCounter < STORAGE_FLASH_PAGE - PAGES_TO_TRANSFER) {
       Serial.println("Data transfer complete");
       transferFlag = false;
-      SimbleeBLE.send(0);
+      while (!SimbleeBLE.send(0));
     }
   }
 }

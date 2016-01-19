@@ -10,13 +10,6 @@
 Time::Time() {}
 
 /*
- * Delays program execution for ms milliseconds
- */
-void Time::delayTime(int ms) {
-  delay(ms);
-}
-
-/*
  * Sets the initial time
  */
 void Time::setInitialTime(int month, int date, int year, int day, int hours, int minutes, int seconds, int ms) {
@@ -29,6 +22,14 @@ void Time::setInitialTime(int month, int date, int year, int day, int hours, int
   initialTime.seconds = seconds;
   initialTime.ms = ms;
   isTimeSet = true;
+}
+
+/*
+ * Returns the current time
+ */
+struct currentTime Time::getTime() {
+  updateTime();
+  return currentTime;
 }
 
 /*
