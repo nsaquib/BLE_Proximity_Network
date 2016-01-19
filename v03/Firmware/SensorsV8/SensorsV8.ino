@@ -28,7 +28,7 @@ int deviceID;
 // Data to transmit
 char payload[1];
 // Device BLE name
-char deviceBLEName[2];
+char deviceBLEName[4];
 // RSSI total and count for each device
 int rssiTotal[NETWORK_SIZE];
 int rssiCount[NETWORK_SIZE];
@@ -58,10 +58,9 @@ const unsigned int ESNs[3][20] = {
 void setup() {
   enableSerialMonitor();
   getDeviceID();
-  deviceBLEName[0] = (deviceID < 10) ? deviceID + '0' : ((deviceID - (deviceID % 10)) / 10) + '0';
-  deviceBLEName[1] = (deviceID < 10) ? 0 : (deviceID % 10) + '0';
-  timer.isTimeSet = true;
-  timer.initialTime.day = 1;
+  deviceBLEName[0] = '#';
+  deviceBLEName[1] = (deviceID < 10) ? deviceID + '0' : ((deviceID - (deviceID % 10)) / 10) + '0';
+  deviceBLEName[2] = (deviceID < 10) ? 0 : (deviceID % 10) + '0';
   if (!timer.isTimeSet) {
     waitForParameters();
     eraseROM();
@@ -150,7 +149,8 @@ void SimbleeCOM_onReceive(unsigned int esn, const char *payload, int len, int rs
  */
 void waitForParameters() {
   Serial.println("Waiting for parameters...");
-  disableSerialMonitor();
+  SimbleeCOM.end();
+  //disableSerialMonitor();
   SimbleeBLE.advertisementInterval = BLE_AD_INTERVAL;
   SimbleeBLE.deviceName = deviceBLEName;
   SimbleeBLE.begin();
@@ -161,7 +161,8 @@ void waitForParameters() {
     }
   }
   SimbleeBLE.end();
-  enableSerialMonitor();
+  SimbleeCOM.begin();
+  //enableSerialMonitor();
 }
 
 ////////// Sleep Functions //////////
@@ -189,7 +190,7 @@ void sleepUntilStartTime() {
   Serial.print(sleepTime.seconds);
   Serial.print(":");
   Serial.println(sleepTime.ms);
-  disableSerialMonitor();
+  //disableSerialMonitor();
   Simblee_ULPDelay(sleepTimeMillis);
   writeTimeROMRow();
   enableSerialMonitor();
@@ -296,7 +297,9 @@ void eraseROM() {
 }
 
 ////////// App Integration Functions //////////
-
+void SimbleeBLE_onConnect() {
+  Serial.println("Connected!");
+}
 /*
  * Sets device parameters with format MMddyyEHHmmssSSS through BLE
  */
