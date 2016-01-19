@@ -1,20 +1,18 @@
 #include <PrNetRomManager.h>
 
-void setup() {
-  // put your setup code here, to run once:
-  PrNetRomManager m;
-  Serial.begin(250000);
+#define PAGES_TO_READ 5
+#define BAUD_RATE 250000
 
-  // iterate over pages
-  for(int i = STORAGE_FLASH_PAGE; i >= 0; i--)
-  {
+void setup() {
+  PrNetRomManager m;
+  Serial.begin(BAUD_RATE);
+
+  // Iterate over pages
+  for(int i = STORAGE_FLASH_PAGE; i > STORAGE_FLASH_PAGE - PAGES_TO_READ; i--) {
     m.erasePage(i);
     m.printPage(i);
   }
-  Serial.println("Erase complete");
+  Serial.println("Erasing ROM complete");
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-
-}
+void loop() {}

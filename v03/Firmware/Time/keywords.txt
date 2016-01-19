@@ -1,0 +1,32 @@
+#######################################
+# Syntax Coloring Map SPI
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Time					KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+initialTime				KEYWORD2
+currentTime				KEYWORD2
+sleepTime				KEYWORD2
+initialMillis			KEYWORD2
+isTimeSet				KEYWORD2
+
+delayTime				KEYWORD2
+setInitialTime			KEYWORD2
+updateTime				KEYWORD2
+getTimeUntilStartTime	KEYWORD2
+inDataCollectionPeriod	KEYWORD2
+displayDate				KEYWORD2
+displayTime				KEYWORD2
+displayDateTime			KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
