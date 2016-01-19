@@ -11,15 +11,15 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.FileNotFoundException;
 import java.io.File;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class MainActivity extends Activity implements BluetoothAdapter.LeScanCallback {
@@ -189,13 +189,28 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
         sendCurrentTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long yourmilliseconds = System.currentTimeMillis();
-                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm:ss:SSS");
-                java.util.Date resultdate = new java.util.Date(yourmilliseconds);
-                String currentTime = ">" + sdf.format(resultdate);
-
-                byte[] bytes = currentTime.getBytes();
-                android.util.Log.e("sending time", currentTime);
+                long yourMilliseconds = System.currentTimeMillis();
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMddyyEHHmmssSSS");
+                java.util.Date resultDate = new java.util.Date(yourMilliseconds);
+                String currentDateTime = sdf.format(resultDate);
+                if (currentDateTime.contains("Sun")) {
+                    currentDateTime = currentDateTime.substring(0, 6) + "0" + currentDateTime.substring(9);
+                } else if (currentDateTime.contains("Mon")) {
+                    currentDateTime = currentDateTime.substring(0, 6) + "1" + currentDateTime.substring(9);
+                } else if (currentDateTime.contains("Tue")) {
+                    currentDateTime = currentDateTime.substring(0, 6) + "2" + currentDateTime.substring(9);
+                } else if (currentDateTime.contains("Wed")) {
+                    currentDateTime = currentDateTime.substring(0, 6) + "3" + currentDateTime.substring(9);
+                } else if (currentDateTime.contains("Thu")) {
+                    currentDateTime = currentDateTime.substring(0, 6) + "4" + currentDateTime.substring(9);
+                } else if (currentDateTime.contains("Fri")) {
+                    currentDateTime = currentDateTime.substring(0, 6) + "5" + currentDateTime.substring(9);
+                } else if (currentDateTime.contains("Sat")) {
+                    currentDateTime = currentDateTime.substring(0, 6) + "6" + currentDateTime.substring(9);
+                }
+                currentDateTime = ">" + currentDateTime;
+                byte[] bytes = currentDateTime.getBytes();
+                android.util.Log.d("Sending Time", currentDateTime);
                 rfduinoService.send(bytes);
                 //rfduinoService.send(new byte[]{2});
                 //addData(bytes);
@@ -364,11 +379,12 @@ public class MainActivity extends Activity implements BluetoothAdapter.LeScanCal
     private void addData(byte[] data) {
         String str = new String(data);
         data_to_write = data_to_write + str;
+        System.out.println("Data 0 is: " + data[0]);
         if (data[0] == '>') {
             View view = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, dataLayout, false);
             String current_time = new String(data);
             TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-            text1.setText("Set start time time");
+            text1.setText("Set start time");
             text1.setText(current_time);
 
             dataLayout.addView(

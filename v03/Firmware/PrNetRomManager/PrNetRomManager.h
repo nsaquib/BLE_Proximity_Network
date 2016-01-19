@@ -32,8 +32,8 @@ class PrNetRomManager {
   public:
     struct data table;
     struct prnet_config config;
-    long pagecounter;
-    long curflashpage;
+    long pageCounter;
+    long currentFlashPage;
     PrNetRomManager();
     void printPage(int page);
     void loadPage(int page);

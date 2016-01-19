@@ -28,6 +28,7 @@ void Time::setInitialTime(int month, int date, int year, int day, int hours, int
   initialTime.minutes = minutes;
   initialTime.seconds = seconds;
   initialTime.ms = ms;
+  isTimeSet = true;
 }
 
 /*
@@ -48,25 +49,24 @@ void Time::updateTime() {
     carryOver = (initialTime.hours + carryOver) / 24;
     currentTime.day = (initialTime.day + carryOver) % 7;
     // If in February, check if leap year
-    if (currentTime.month == 1) {
+    if (currentTime.month == 2) {
       if (currentTime.year % 4 != 0) {
-        currentTime.date = (initialTime.date + carryOver) % 28;
-        carryOver = (initialTime.date + carryOver) / 28;
+        currentTime.date = (initialTime.date - 1 + carryOver) % 28 + 1;
+        carryOver = (initialTime.date - 1 + carryOver) / 28;
       } else {
-       currentTime.date = (initialTime.date + carryOver) % 29;
-       carryOver = (initialTime.date + carryOver) / 29;
+       currentTime.date = (initialTime.date + carryOver) % 29 + 1;
+       carryOver = (initialTime.date - 1 + carryOver) / 29;
       }
-    }
     // If in April, June, September, or November
-    if (currentTime.month == 3 || currentTime.month == 5 || currentTime.month == 8 || currentTime.month == 10) {
-      currentTime.date = (initialTime.date + carryOver) % 30;
-      carryOver = (initialTime.date + carryOver) / 30;
+    } else if (currentTime.month == 4 || currentTime.month == 6 || currentTime.month == 9 || currentTime.month == 11) {
+      currentTime.date = (initialTime.date - 1 + carryOver) % 30 + 1;
+      carryOver = (initialTime.date - 1 + carryOver) / 30;
     } else {
-      currentTime.date = (initialTime.date + carryOver) % 31;
-      carryOver = (initialTime.date + carryOver) / 31;
+      currentTime.date = (initialTime.date - 1 + carryOver) % 31 + 1;
+      carryOver = (initialTime.date - 1 + carryOver) / 31;
     }
-    currentTime.month = (initialTime.month + carryOver) % 12;
-    carryOver = (initialTime.month + carryOver) / 12;
+    currentTime.month = (initialTime.month - 1 + carryOver) % 12 + 1;
+    carryOver = (initialTime.month - 1 + carryOver) / 12;
     currentTime.year = (initialTime.year + carryOver) % 99;
   }
 }
@@ -75,8 +75,8 @@ void Time::updateTime() {
  * Computes time until the start hour and start minute of the data collection period
  */
 struct sleepTime Time::getTimeUntilStartTime(int startHour, int startMinute) {
-  int carryOver;
   updateTime();
+  int carryOver;
   sleepTime.ms = (1000 - currentTime.ms) % 1000;
   carryOver = (sleepTime.ms > 0) ? 1 : 0;
   sleepTime.seconds = (60 - currentTime.seconds - carryOver) % 60;
@@ -84,14 +84,27 @@ struct sleepTime Time::getTimeUntilStartTime(int startHour, int startMinute) {
   sleepTime.minutes = (60 - currentTime.minutes + startMinute - carryOver) % 60;
   carryOver = (sleepTime.minutes > startMinute) ? 1 : 0;
   sleepTime.hours = (currentTime.hours + carryOver <= startHour) ? startHour - currentTime.hours - carryOver : 24 - currentTime.hours - carryOver + startHour;
+  // If its Sunday, sleep through Sunday
+  if (currentTime.day == 0) {
+  	if (currentTime.hours < startHour || (currentTime.hours == startHour && currentTime.minutes < startMinute)) {
+      sleepTime.days = 1;
+  	} else {
+      sleepTime.days = 0;
+  	}
   // If its Friday, sleep through Saturday and Sunday
-  if (currentTime.day == 5) {
-    sleepTime.days = 2;
+  } else if (currentTime.day == 5) {
+  	if (currentTime.hours < startHour || (currentTime.hours == startHour && currentTime.minutes < startMinute)) {
+      sleepTime.days = 0;
+  	} else {
+      sleepTime.days = 2;
+  	}
   // If its Saturday, sleep through Sunday
   } else if (currentTime.day == 6) {
-    sleepTime.days = 1;
-  } else {
-    sleepTime.days = 0;
+    if (currentTime.hours < startHour || (currentTime.hours == startHour && currentTime.minutes < startMinute)) {
+      sleepTime.days = 2;
+    } else {
+      sleepTime.days = 1;
+    }
   }
   return sleepTime;
 }
@@ -103,6 +116,10 @@ bool Time::inDataCollectionPeriod(int startHour, int startMinute, int endHour, i
   updateTime();
   if (!isTimeSet) {
     return false;
+  }
+  // Check the weekday
+  if (currentTime.day == 0 || currentTime.day == 6) {
+  	return false;
   }
   // Collect data while within range
   if ((currentTime.hours > startHour) && (currentTime.hours < endHour)) {
