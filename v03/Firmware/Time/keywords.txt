@@ -20,6 +20,7 @@ isTimeSet				KEYWORD2
 
 delayTime				KEYWORD2
 setInitialTime			KEYWORD2
+getTime					KEYWORD2
 updateTime				KEYWORD2
 getTimeUntilStartTime	KEYWORD2
 inDataCollectionPeriod	KEYWORD2

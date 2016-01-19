@@ -50,8 +50,8 @@ class Time {
     unsigned long initialMillis = 0;
     bool isTimeSet;
     Time();
-    void delayTime(int ms);
     void setInitialTime(int month, int date, int year, int day, int hours, int minutes, int seconds, int ms);
+    struct currentTime getTime();
     void updateTime();
     struct sleepTime getTimeUntilStartTime(int startHour, int startMinute);
     bool inDataCollectionPeriod(int startHour, int startMinute, int endHour, int endMinute);
