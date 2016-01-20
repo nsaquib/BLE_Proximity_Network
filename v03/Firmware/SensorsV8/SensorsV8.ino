@@ -366,10 +366,11 @@ void createScreen1()
 {
   SimbleeForMobile.beginScreen(WHITE);
 
-  int textID = SimbleeForMobile.drawText(0, 60, "Simblee App", BLACK, 30);
-  int textID2 = SimbleeForMobile.drawText(0, 120, "Enter the time.", BLACK, 10);
-  int textID3 = SimbleeForMobile.drawText(0, 220, "When you touch out the keyboard, the time will be submitted", BLACK, 10);
-  textfield = SimbleeForMobile.drawTextField(0, 325, 300, "MMddyyEHHmmssSSS");
+  int textID = SimbleeForMobile.drawText(10, 60, "Simblee App", BLACK, 30);
+  int textID2 = SimbleeForMobile.drawText(10, 120, "Enter the time.", BLACK, 20);
+  int textID3 = SimbleeForMobile.drawText(10, 200, "When you touch out of the keyboard,", BLACK, 15);
+  int textID4 = SimbleeForMobile.drawText(10, 225, "the time will be submitted.", BLACK, 15);
+  textfield = SimbleeForMobile.drawTextField(10, 325, 250, "MMddyyEHHmmssSSS");
   SimbleeForMobile.setEvents(toScreen2ButtonID, EVENT_RELEASE);
   SimbleeForMobile.endScreen();
 }
