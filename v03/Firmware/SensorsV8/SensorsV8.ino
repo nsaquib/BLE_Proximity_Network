@@ -6,6 +6,7 @@
 
 #include <PrNetRomManager.h>
 #include <SimbleeBLE.h>
+#include <SimbleeForMobile.h>
 #include <Time.h>
 
 #define TX_POWER_LEVEL 4
@@ -22,6 +23,17 @@
 #define PACKET_DELAY 50
 #define SLEEP_DELAY 0
 #define USE_SERIAL_MONITOR true
+
+
+// The ID of the button which displays screen 2
+int toScreen2ButtonID;
+
+// The ID of the button which displays screen 1
+int toScreen1ButtonID;
+
+// The ID of the current screen being displayed
+int currentScreen;
+uint8_t textfield;
 
 // Unique device ID
 int deviceID;
@@ -151,16 +163,18 @@ void waitForParameters() {
   Serial.println("Waiting for parameters...");
   SimbleeCOM.end();
   //disableSerialMonitor();
-  SimbleeBLE.advertisementInterval = BLE_AD_INTERVAL;
-  SimbleeBLE.deviceName = deviceBLEName;
-  SimbleeBLE.begin();
+  SimbleeForMobile.advertisementInterval = BLE_AD_INTERVAL;
+  SimbleeForMobile.deviceName = deviceBLEName;
+  SimbleeForMobile.domain = "twoscreens.simblee.com";
+  SimbleeForMobile.begin();
   while (!timer.isTimeSet) {
+    SimbleeForMobile.process(); 
     delay(5);
     if (transferFlag) {
-      startTransfer();
+      //startTransfer();
     }
   }
-  SimbleeBLE.end();
+  SimbleeForMobile.end();
   SimbleeCOM.begin();
   //enableSerialMonitor();
 }
@@ -297,60 +311,76 @@ void eraseROM() {
 }
 
 ////////// App Integration Functions //////////
-void SimbleeBLE_onConnect() {
-  Serial.println("Connected!");
+void SimbleeForMobile_onConnect()
+{
+  currentScreen = -1;
 }
-/*
- * Sets device parameters with format MMddyyEHHmmssSSS through BLE
- */
-void SimbleeBLE_onReceive(char *data, int len) {
-  if (data[0]) {
-    if (data[0] == '>' && data[16] && !timer.isTimeSet) {
-      timer.initialMillis = millis();
-      timer.setInitialTime(
-        (data[1] - '0') * 10 + (data[2] - '0'),                             // Month
-        (data[3] - '0') * 10 + (data[4] - '0'),                             // Date
-        (data[5] - '0') * 10 + (data[6] - '0'),                             // Year
-        (data[7] - '0'),                                                    // Day
-        (data[8] - '0') * 10 + (data[9] - '0'),                             // Hour
-        (data[10] - '0') * 10 + (data[11] - '0'),                           // Minute
-        (data[12] - '0') * 10 + (data[13] - '0'),                           // Second
-        (data[14] - '0') * 100 + (data[15] - '0') * 10 + (data[16] - '0')); // Millisecond
-      while (!SimbleeBLE.send('>'));
-      timer.displayDateTime();
-      writeTimeROMRow();
-    } else if (data[0] == '#') {
-      while (!SimbleeBLE.send(1));
-      transferFlag = true;
-    }
-  } else {
-    while (!SimbleeBLE.send(0));
-    transferFlag = false;
+
+void ui()
+{  
+  if(SimbleeForMobile.screen == currentScreen) return;
+  
+  currentScreen = SimbleeForMobile.screen;
+  switch(SimbleeForMobile.screen)
+  {
+    case 1:
+      createScreen1();
+      break;
+       
+    case 2:
+      createScreen2();
+      break;
+            
+   default:
+      Serial.print("ui: Uknown screen requested: ");
+      Serial.println(SimbleeForMobile.screen);
   }
 }
 
-/*
- * Transfers device ROM to BLE-enabled device
- */
-void startTransfer() {
-  PrNetRomManager readROMManager;
-  while (transferFlag) {
-    readROMManager.loadPage(pageCounter);
-    Serial.print("Sending page ");
-    Serial.println(pageCounter);
-    for (int i = 0; i < MAX_ROWS; i++) {
-      char dataBuffer[10];
-      sprintf(dataBuffer, "%d", readROMManager.table.data[i]);
-      while (!SimbleeBLE.send(dataBuffer, 10));
-      while (!SimbleeBLE.send('|'));
-    }
-    while (!SimbleeBLE.send('#'));
-    delay(200);
-    pageCounter--;
-    if (pageCounter < STORAGE_FLASH_PAGE - PAGES_TO_TRANSFER) {
-      Serial.println("Data transfer complete");
-      transferFlag = false;
-      while (!SimbleeBLE.send(0));
-    }
+void ui_event(event_t &event)
+{
+  
+  if(event.id == toScreen1ButtonID && event.type == EVENT_RELEASE && currentScreen == 2)
+  {
+    SimbleeForMobile.showScreen(1);
+  } else if(event.id == textfield && currentScreen == 1) 
+  { 
+    Serial.println(event.text);
+    timer.initialMillis = millis();
+    timer.setInitialTime(
+        (event.text[0] - '0') * 10 + (event.text[1] - '0'),                             // Month
+        (event.text[2] - '0') * 10 + (event.text[3] - '0'),                             // Date
+        (event.text[4] - '0') * 10 + (event.text[5] - '0'),                             // Year
+        (event.text[6] - '0'),                                                    // Day
+        (event.text[7] - '0') * 10 + (event.text[8] - '0'),                             // Hour
+        (event.text[9] - '0') * 10 + (event.text[10] - '0'),                           // Minute
+        (event.text[11] - '0') * 10 + (event.text[12] - '0'),                           // Second
+        (event.text[13] - '0') * 100 + (event.text[14] - '0') * 10 + (event.text[15] - '0')); // Millisecond
+    timer.displayDateTime();
+    //writeTimeROMRow();
+    SimbleeForMobile.showScreen(2);
   }
+}
+
+void createScreen1()
+{
+  SimbleeForMobile.beginScreen(WHITE);
+
+  int textID = SimbleeForMobile.drawText(0, 60, "Simblee App", BLACK, 30);
+  int textID2 = SimbleeForMobile.drawText(0, 120, "Enter the time.", BLACK, 10);
+  int textID3 = SimbleeForMobile.drawText(0, 220, "When you touch out the keyboard, the time will be submitted", BLACK, 10);
+  textfield = SimbleeForMobile.drawTextField(0, 325, 300, "MMddyyEHHmmssSSS");
+  SimbleeForMobile.setEvents(toScreen2ButtonID, EVENT_RELEASE);
+  SimbleeForMobile.endScreen();
+}
+
+void createScreen2()
+{
+  SimbleeForMobile.beginScreen(WHITE);
+
+  int textID = SimbleeForMobile.drawText(0, 60, "Simblee App", BLACK, 40);
+  toScreen1ButtonID = SimbleeForMobile.drawButton(100, 200, 100, "Go Back");
+
+  SimbleeForMobile.setEvents(toScreen1ButtonID, EVENT_RELEASE);
+  SimbleeForMobile.endScreen();
 }
