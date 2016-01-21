@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+  <head>
+    <style>
+      rect.bordered {
+        stroke: #E6E6E6;
+        stroke-width:2px;   
+      }
+
+      text.mono {
+        font-size: 9pt;
+        font-family: Consolas, courier;
+        fill: #aaa;
+      }
+
+      text.axis-workweek {
+        fill: #000;
+      }
+
+      text.axis-worktime {
+        fill: #000;
+      }
+    </style>
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script>
+    $(function() {
+      $( "#slider-range" ).slider({
+        range: true,
+        min: 0,
+        max: 500,
+        values: [ 75, 300 ],
+        slide: function( event, ui ) {
+          $( "#amount" ).val( "" + Math.ceil(ui.values[ 0 ]/30) + "/" + (ui.values[ 0 ]%31 + 1) + " - " + Math.ceil(ui.values[ 1 ]/30) + "/" + (ui.values[ 1 ]%31 + 1) );
+        }
+      });
+      $( "#amount" ).val( "" + Math.ceil($( "#slider-range" ).slider( "values", 0 )/30) + "/" + ($( "#slider-range" ).slider( "values", 0 )%31 + 1) +
+        " - " + Math.ceil($( "#slider-range" ).slider( "values", 1 )/30) + "/" + ($( "#slider-range" ).slider( "values", 1 )%31 + 1) );
+    });
+    </script>
+  </head>
+  <body>
+    <h4> Social Interaction for all students </h4>
+    <p> Select a student:
+      <select name="child" id="child" onchange="location = this.options[this.selectedIndex].value;">
+        <option value="select">Select</option>
+          <option value="lyra">Lyra</option>
+          <option value="jay">Jay</option>
+          <option value="penny">Penny</option>
+          <option value="giorgio">Giorgio</option>
+          <option value="ije">Ije</option>
+          <option value="leo">Leo</option>
+          <option value="yusuf">Yusuf</option>
+          <option value="/matrix.html">Mila</option>
+      </select>
+    </p>
+    <p>
+      <label for="amount">Date range:</label>
+      <input type="text" id="amount" readonly style="border:0;font-weight:bold;">
+    </p>
+     
+    <div id="slider-range" style="margin-right:600px"></div>
+
+    <br>
+    <div id="chart"></div>
+    <div id="dataset-picker">
+    </div>
+    <script type="text/javascript">
+      var margin = { top: 20, right: 0, bottom: 100, left: 100 },
+          width = 960 - margin.left - margin.right,
+          height = 600 - margin.top - margin.bottom,
+          gridSize = Math.floor(width / 14),
+          legendElementWidth = gridSize*2,
+          buckets = 9,
+          colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
+          days = ["Lyra", "Jay", "Penny", "Giorgio", "Ije", "Leo", "Yusuf", "Mila"],
+          times = ["Lyra", "Jay", "Penny", "Giorgio", "Ije", "Leo", "Yusuf", "Mila"];
+          datasets = ["data.tsv", "data2.tsv"];
+
+      var svg = d3.select("#chart").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      var dayLabels = svg.selectAll(".dayLabel")
+          .data(days)
+          .enter().append("text")
+            .text(function (d) { return d; })
+            .attr("x", 0)
+            .attr("y", function (d, i) { return i * gridSize; })
+            .style("text-anchor", "end")
+            .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
+            .attr("class", function (d, i) { return ((i >= 0 && i <= 7) ? "dayLabel mono axis axis-workweek" : "dayLabel mono axis"); });
+
+      var timeLabels = svg.selectAll(".timeLabel")
+          .data(times)
+          .enter().append("text")
+            .text(function(d) { return d; })
+            .attr("x", function(d, i) { return i * gridSize; })
+            .attr("y", 0)
+            .style("text-anchor", "middle")
+            .attr("transform", "translate(" + gridSize / 2 + ", -6)")
+            .attr("class", function(d, i) { return ((i >= 0 && i <= 24) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+
+      var heatmapChart = function(tsvFile) {
+        d3.tsv(tsvFile,
+        function(d) {
+          return {
+            day: +d.day,
+            hour: +d.hour,
+            value: +d.value
+          };
+        },
+        function(error, data) {
+          var colorScale = d3.scale.quantile()
+              .domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
+              .range(colors);
+
+          var cards = svg.selectAll(".hour")
+              .data(data, function(d) {return d.day+':'+d.hour;});
+
+          cards.append("title");
+
+          cards.enter().append("rect")
+              .attr("x", function(d) { return (d.hour - 1) * gridSize; })
+              .attr("y", function(d) { return (d.day - 1) * gridSize; })
+              .attr("rx", 4)
+              .attr("ry", 4)
+              .attr("class", "hour bordered")
+              .attr("width", gridSize)
+              .attr("height", gridSize)
+              .style("fill", colors[0]);
+
+          cards.transition().duration(1000)
+              .style("fill", function(d) { return colorScale(d.value); });
+
+          cards.select("title").text(function(d) { return d.value; });
+          
+          cards.exit().remove();
+
+        });  
+      };
+
+      heatmapChart(datasets[0]);
+    </script>
+  </body>
+</html>
