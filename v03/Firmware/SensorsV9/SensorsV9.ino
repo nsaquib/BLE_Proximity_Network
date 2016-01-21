@@ -14,8 +14,8 @@
 #define BAUD_RATE 9600
 // Configuration Parameters
 #define NETWORK_SIZE 3
-#define START_HOUR 16
-#define START_MINUTE 45
+#define START_HOUR 17
+#define START_MINUTE 20
 #define END_HOUR 23
 #define END_MINUTE 0
 #define PACKETS 10
@@ -60,10 +60,8 @@ void setup() {
   getDeviceID();
   deviceBLEName[0] = (deviceID < 10) ? deviceID + '0' : ((deviceID - (deviceID % 10)) / 10) + '0';
   deviceBLEName[1] = (deviceID < 10) ? 0 : (deviceID % 10) + '0';
-  if (!timer.isTimeSet) {
-    waitForParameters();
-    eraseROM();
-  }
+  waitForParameters();
+  eraseROM();
   SimbleeCOM.txPowerLevel = TX_POWER_LEVEL;
   SimbleeCOM.begin();
   struct currentTime t = timer.getTime();
@@ -200,6 +198,7 @@ void sleepUntilStartTime() {
   Simblee_ULPDelay(sleepTimeMillis);
   writeTimeROMRow();
   enableSerialMonitor();
+  SimbleeCOM.begin();
 }
 
 ////////// Serial Monitor Functions //////////
