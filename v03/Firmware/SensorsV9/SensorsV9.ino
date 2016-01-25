@@ -14,11 +14,11 @@
 // Configuration Parameters
 #define NETWORK_SIZE 3
 #define START_HOUR 15
-#define START_MINUTE 55
+#define START_MINUTE 54
 #define END_HOUR 23
 #define END_MINUTE 59
-#define PACKET_DELAY 5000
-#define SLEEP_DELAY 10000          // Assumed to be K * PACKET_DELAY for integer K
+#define PACKET_DELAY 1000
+#define SLEEP_DELAY 0          // Assumed to be K * PACKET_DELAY for integer K
 #define USE_SERIAL_MONITOR true
 
 // Unique device ID
@@ -55,6 +55,8 @@ const unsigned int ESNs[3][20] = {
   // Simblee DIP ESNs
   { 4173946190, 783932000, 2763040268 }
 };
+bool delaySet = false;
+int packetDelay = PACKET_DELAY;
 
 /*
  * Erases ROM memory and sets radio parameters
@@ -90,10 +92,23 @@ void loop() {
  */
 void collectData() {
   startBroadcast();
-  if (timer.isTime(&packetStartTime, PACKET_DELAY)) {
+  getPacketDelay();
+  if (timer.isTime(&packetStartTime, packetDelay)) {
+    delaySet = false;
     updateROMTable();
     timer.displayDateTime();
     pauseDataCollection();
+  }
+}
+
+/*
+ * Computes time to wait for next collection cycle
+ */
+void getPacketDelay() {
+  if (!delaySet) {
+    delaySet = true;
+    struct currentTime t = timer.getTime();
+    packetDelay = max(0, PACKET_DELAY - ((t.seconds * 1000 + t.ms) % PACKET_DELAY));
   }
 }
 
