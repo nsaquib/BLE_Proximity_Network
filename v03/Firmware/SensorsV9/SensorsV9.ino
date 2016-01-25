@@ -10,16 +10,16 @@
 
 #define TX_POWER_LEVEL -8
 #define PAGES_TO_TRANSFER 50
-#define BAUD_RATE 9600
+#define BAUD_RATE 57600
 // Configuration Parameters
 #define NETWORK_SIZE 3
-#define START_HOUR 22
-#define START_MINUTE 1
+#define START_HOUR 15
+#define START_MINUTE 55
 #define END_HOUR 23
 #define END_MINUTE 59
-#define PACKET_DELAY 1000
-#define SLEEP_DELAY 1000          // Assumed to be K * PACKET_DELAY for integer K
-#define USE_SERIAL_MONITOR false
+#define PACKET_DELAY 5000
+#define SLEEP_DELAY 10000          // Assumed to be K * PACKET_DELAY for integer K
+#define USE_SERIAL_MONITOR true
 
 // Unique device ID
 int deviceID;

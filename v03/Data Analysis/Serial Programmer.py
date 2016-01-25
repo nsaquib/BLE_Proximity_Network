@@ -2,12 +2,12 @@ import serial
 import time
 import datetime
 
-baudRate = 9600
+baudRate = 57600
 connected = False
 ser = serial.Serial("/dev/cu.usbserial-DN0073UM", baudRate)
-#ser = serial.Serial("/dev/cu.usbserial-DN00B462", baudRate)
-#ser = serial.Serial("/dev/cu.usbserial-DN00B1WO", baudRate)
-#ser = serial.Serial("/dev/cu.usbserial-DN00BOCJ", baudRate)
+##ser = serial.Serial("/dev/cu.usbserial-DN00B462", baudRate)
+##ser = serial.Serial("/dev/cu.usbserial-DN00B1WO", baudRate)
+##ser = serial.Serial("/dev/cu.usbserial-DN00BOCJ", baudRate)
 while not connected:
     serIn = ser.read()
     connected = True
@@ -21,8 +21,6 @@ hour = now.hour
 minute = now.minute
 sec= now.second
 ms = int(now.microsecond/1000)
-
-print(str(month) + "/" + str(date) + "/" + str(year) + " " + str(day) + " " + str(hour) + ":" + str(minute) + ":" + str(sec) + ":" + str(ms))
 
 ser.write(bytes(str(month), 'ascii'))
 ser.write(bytes(',', 'ascii'))
@@ -40,5 +38,6 @@ ser.write(bytes(str(sec), 'ascii'))
 ser.write(bytes(',', 'ascii'))
 ser.write(bytes(str(ms), 'ascii'))
 
+print(str(month) + "/" + str(date) + "/" + str(year) + " " + str(day) + " " + str(hour) + ":" + str(minute) + ":" + str(sec) + ":" + str(ms))
 print("Wrote bits")
 
