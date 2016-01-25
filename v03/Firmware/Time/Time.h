@@ -52,6 +52,7 @@ class Time {
     Time();
     void setInitialTime(int month, int date, int year, int day, int hours, int minutes, int seconds, int ms);
     struct currentTime getTime();
+    bool isTime(unsigned long *timeMark, unsigned long timeInterval);
     void updateTime();
     struct sleepTime getTimeUntilStartTime(int startHour, int startMinute);
     bool inDataCollectionPeriod(int startHour, int startMinute, int endHour, int endMinute);

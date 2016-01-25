@@ -33,6 +33,19 @@ struct currentTime Time::getTime() {
 }
 
 /*
+ * Return boolean on whether a time interval has elapsed
+ */
+bool Time::isTime(unsigned long *timeMark, unsigned long timeInterval){
+  bool result = false;
+  unsigned long timeCurrent = millis();
+  if (timeCurrent - *timeMark >= timeInterval) {
+    *timeMark = timeCurrent;
+    result = true;
+  }
+  return result;   
+}
+
+/*
  * Updates the discrete representation of the time
  */
 void Time::updateTime() {
