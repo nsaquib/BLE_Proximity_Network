@@ -13,8 +13,8 @@
 #define BAUD_RATE 57600
 // Configuration Parameters
 #define NETWORK_SIZE 3
-#define START_HOUR 15
-#define START_MINUTE 54
+#define START_HOUR 16
+#define START_MINUTE 14
 #define END_HOUR 23
 #define END_MINUTE 59
 #define PACKET_DELAY 1000
@@ -72,6 +72,7 @@ void setup() {
   eraseROM();
   SimbleeCOM.txPowerLevel = TX_POWER_LEVEL;
   SimbleeCOM.mode = LOW_LATENCY;
+  SimbleeCOM.send(payload, sizeof(payload));
   struct currentTime t = timer.getTime();
   delay(max(0, PACKET_DELAY - ((t.seconds * 1000 + t.ms) % PACKET_DELAY)));
 }
@@ -91,25 +92,15 @@ void loop() {
  * Polls host device for DEVICE_LOOPS times with DEVICE_LOOP_TIME delay between polls
  */
 void collectData() {
-  startBroadcast();
-  getPacketDelay();
-  if (timer.isTime(&packetStartTime, packetDelay)) {
-    delaySet = false;
-    updateROMTable();
-    timer.displayDateTime();
-    pauseDataCollection();
-  }
-}
-
-/*
- * Computes time to wait for next collection cycle
- */
-void getPacketDelay() {
-  if (!delaySet) {
-    delaySet = true;
-    struct currentTime t = timer.getTime();
-    packetDelay = max(0, PACKET_DELAY - ((t.seconds * 1000 + t.ms) % PACKET_DELAY));
-  }
+  timer.displayDateTime();
+  struct currentTime t = timer.getTime();
+  delay(max(0, PACKET_DELAY - ((t.seconds * 1000 + t.ms) % PACKET_DELAY)));
+//  updateROMTable();
+  Serial.println(String(rssiCount[0]) + "\t" + String(rssiCount[1]) + "\t" + String(rssiCount[2]));
+  rssiCount[0] = 0;
+  rssiCount[1] = 0;
+  rssiCount[2] = 0;
+//  pauseDataCollection();
 }
 
 /*
