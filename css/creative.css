@@ -25,7 +25,7 @@ hr.light {
 }
 
 a {
-    color: #201E50;
+    color: #BCBCCB;
     -webkit-transition: all .35s;
     -moz-transition: all .35s;
     transition: all .35s;
@@ -33,7 +33,7 @@ a {
 
 a:hover,
 a:focus {
-    color: #201E50;
+    color: #BCBCCB;
 }
 
 h1,
@@ -232,7 +232,7 @@ header .header-content .header-content-inner p {
          /* Fallback for web browsers that don't support RGBa */
         background-color: rgb(32, 30, 80);
     /* RGBa with 0.6 opacity */
-        background-color: rgba(32, 30, 80, 0.4);
+        background-color: rgba(32, 30, 80, 0.7);
         border-radius: 25px;
         padding-top: 50px;
         padding-bottom: 50px;
