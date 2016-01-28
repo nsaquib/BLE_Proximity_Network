@@ -25,7 +25,7 @@
 #define DEVICE_LOOP_TIME 100
 #define REGION_TRACKER false
 #define REGION_TRACKER_DELAY 0
-#define USE_SERIAL_MONITOR false
+#define USE_SERIAL_MONITOR true
 
 // Unique device ID
 const int deviceID = 0;
@@ -144,7 +144,7 @@ void loopDevice() {
 void collectSamplesFromDevices() {
   collectSamples = true;
   timer.updateTime();
-  timer.delayTime(HOST_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % HOST_LOOP_TIME));
+  delay(HOST_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % HOST_LOOP_TIME));
   collectSamples = false;
 }
 
@@ -170,7 +170,7 @@ void transitionHost() {
  * Delays device in ultra low power state for DEVICE_LOOP_TIME
  */
 void delayDevice() {
-  timer.delayTime(10);
+  delay(10);
   timer.updateTime();
   Simblee_ULPDelay(DEVICE_LOOP_TIME - ((timer.currentTime.seconds * 1000 + timer.currentTime.ms) % DEVICE_LOOP_TIME));
 }
@@ -203,7 +203,7 @@ void waitForParameters() {
   SimbleeBLE.advertisementInterval = BLE_AD_INTERVAL;
   SimbleeBLE.begin();
   while (!timer.isTimeSet) {
-    timer.delayTime(5);
+    delay(5);
     if (transferFlag) {
       startTransfer();
     }
@@ -396,7 +396,7 @@ void startTransfer() {
       while (!SimbleeBLE.send('|'));
     }
     while (!SimbleeBLE.send('#'));
-    timer.delayTime(200);
+    delay(200);
     pageCounter--;
     if (pageCounter < STORAGE_FLASH_PAGE - PAGES_TO_TRANSFER) {
       Serial.println("Data transfer complete");

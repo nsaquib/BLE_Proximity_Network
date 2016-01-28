@@ -13,11 +13,11 @@
 #define BAUD_RATE 57600
 // Configuration Parameters
 #define NETWORK_SIZE 3
-#define START_HOUR 16
-#define START_MINUTE 14
+#define START_HOUR 0
+#define START_MINUTE 0
 #define END_HOUR 23
 #define END_MINUTE 59
-#define PACKET_DELAY 1000
+#define PACKET_DELAY 100
 #define SLEEP_DELAY 0          // Assumed to be K * PACKET_DELAY for integer K
 #define USE_SERIAL_MONITOR true
 
@@ -55,8 +55,7 @@ const unsigned int ESNs[3][20] = {
   // Simblee DIP ESNs
   { 4173946190, 783932000, 2763040268 }
 };
-bool delaySet = false;
-int packetDelay = PACKET_DELAY;
+int packets;
 
 /*
  * Erases ROM memory and sets radio parameters
@@ -64,17 +63,16 @@ int packetDelay = PACKET_DELAY;
 void setup() {
   enableSerialMonitor();
   getDeviceID();
-  deviceBLEName[0] = (deviceID < 10) ? deviceID + '0' : ((deviceID - (deviceID % 10)) / 10) + '0';
-  deviceBLEName[1] = (deviceID < 10) ? 0 : (deviceID % 10) + '0';
-  waitForParameters();
-//  timer.isTimeSet = true;
-//  timer.initialTime.day = 1;
-  eraseROM();
+//  deviceBLEName[0] = (deviceID < 10) ? deviceID + '0' : ((deviceID - (deviceID % 10)) / 10) + '0';
+//  deviceBLEName[1] = (deviceID < 10) ? 0 : (deviceID % 10) + '0';
+//  waitForParameters();
+  timer.isTimeSet = true;
+  timer.initialTime.day = 1;
+//  eraseROM();
   SimbleeCOM.txPowerLevel = TX_POWER_LEVEL;
   SimbleeCOM.mode = LOW_LATENCY;
-  SimbleeCOM.send(payload, sizeof(payload));
-  struct currentTime t = timer.getTime();
-  delay(max(0, PACKET_DELAY - ((t.seconds * 1000 + t.ms) % PACKET_DELAY)));
+//  struct currentTime t = timer.getTime();
+//  delay(max(0, PACKET_DELAY - ((t.seconds * 1000 + t.ms) % PACKET_DELAY)));
 }
 
 /*
@@ -92,14 +90,20 @@ void loop() {
  * Polls host device for DEVICE_LOOPS times with DEVICE_LOOP_TIME delay between polls
  */
 void collectData() {
-  timer.displayDateTime();
-  struct currentTime t = timer.getTime();
-  delay(max(0, PACKET_DELAY - ((t.seconds * 1000 + t.ms) % PACKET_DELAY)));
+  SimbleeCOM.send(payload, sizeof(payload));
+  delay(1000);
+  Serial.println(packets);
+  packets = 0;
+//  timer.displayDateTime();
+//  SimbleeCOM.send(payload, sizeof(payload));
+//  struct currentTime t = timer.getTime();
+//  delay(100);
+//  delay(max(0, PACKET_DELAY - ((t.seconds * 1000 + t.ms) % PACKET_DELAY)));
 //  updateROMTable();
-  Serial.println(String(rssiCount[0]) + "\t" + String(rssiCount[1]) + "\t" + String(rssiCount[2]));
-  rssiCount[0] = 0;
-  rssiCount[1] = 0;
-  rssiCount[2] = 0;
+//  Serial.println(String(rssiCount[0]) + "\t" + String(rssiCount[1]) + "\t" + String(rssiCount[2]));
+//  rssiCount[0] = 0;
+//  rssiCount[1] = 0;
+//  rssiCount[2] = 0;
 //  pauseDataCollection();
 }
 
@@ -139,6 +143,8 @@ void getDeviceID() {
  * Collects RSSI values and responds to incoming data transmissions
  */
 void SimbleeCOM_onReceive(unsigned int esn, const char *payload, int len, int rssi) {
+  Serial.println("Data");
+  packets++;
   if ((int) payload[0] >= 0 && (int) payload[0] < NETWORK_SIZE) {
     rssiTotal[(int) payload[0]] += rssi;
     rssiCount[(int) payload[0]]++;
