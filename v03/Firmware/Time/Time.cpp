@@ -68,7 +68,7 @@ void Time::updateTime() {
         currentTime.date = (initialTime.date - 1 + carryOver) % 28 + 1;
         carryOver = (initialTime.date - 1 + carryOver) / 28;
       } else {
-       currentTime.date = (initialTime.date + carryOver) % 29 + 1;
+       currentTime.date = (initialTime.date - 1 + carryOver) % 29 + 1;
        carryOver = (initialTime.date - 1 + carryOver) / 29;
       }
     // If in April, June, September, or November
