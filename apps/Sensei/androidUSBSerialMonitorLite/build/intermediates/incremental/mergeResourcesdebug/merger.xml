@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="unspecified"><source path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/build/intermediates/exploded-aar/AndroidUSBSerialMonitorLite/physicaloidLibrary/unspecified/res"/></dataSet><dataSet config="main"><source path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res"><file name="ic_launcher" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/drawable-hdpi/ic_launcher.png" qualifiers="hdpi" type="drawable"/><file name="terminal" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/drawable-hdpi/terminal.png" qualifiers="hdpi" type="drawable"/><file name="ic_launcher" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/drawable-ldpi/ic_launcher.png" qualifiers="ldpi" type="drawable"/><file name="terminal" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/drawable-ldpi/terminal.png" qualifiers="ldpi" type="drawable"/><file name="ic_launcher" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/drawable-mdpi/ic_launcher.png" qualifiers="mdpi" type="drawable"/><file name="terminal" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/drawable-mdpi/terminal.png" qualifiers="mdpi" type="drawable"/><file name="main" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/layout/main.xml" qualifiers="" type="layout"/><file name="wordlist" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/layout/wordlist.xml" qualifiers="" type="layout"/><file path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/values/arrays.xml" qualifiers=""><string-array name="parity_entries">
+        <item>NONE</item>
+        <item>ODD</item>
+        <item>EVEN</item>
+        <item>MARK</item>
+        <item>SPACE</item>
+    </string-array><string-array name="readlinefeedcode_entries">
+        <item>CR</item>
+        <item>CR+LF</item>
+        <item>LF</item>
+        <item>NONE</item>
+    </string-array><string-array name="readlinefeedcode_entryvalues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array><string-array name="display_entries">
+        <item>Character</item>
+        <item>Decimal</item>
+        <item>Hex</item>
+    </string-array><string-array name="display_entryvalues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array><string-array name="break_entries">
+        <item>NO BREAK</item>
+        <item>BREAK</item>
+    </string-array><string-array name="stopbits_entryvalues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array><string-array name="typeface_entryvalues">
+        <item>3</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array><string-array name="stopbits_entries">
+        <item>1</item>
+        <item>1.5</item>
+        <item>2</item>
+    </string-array><string-array name="parity_entryvalues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array><string-array name="fontsize_entries">
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>12</item>
+        <item>14</item>
+        <item>16</item>
+        <item>20</item>
+        <item>32</item>
+        <item>48</item>
+        <item>64</item>
+        <item>72</item>
+        <item>100</item>
+        <item>128</item>
+    </string-array><string-array name="typeface_entries">
+        <item>monospace</item>
+        <item>normal</item>
+        <item>sans</item>
+        <item>serif</item>
+    </string-array><string-array name="writelinefeedcode_entryvalues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array><string-array name="flowcontrol_entries">
+        <item>OFF</item>
+        <item>ON</item>
+    </string-array><string-array name="fontsize_entryvalues">
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>12</item>
+        <item>14</item>
+        <item>16</item>
+        <item>20</item>
+        <item>32</item>
+        <item>48</item>
+        <item>64</item>
+        <item>72</item>
+        <item>100</item>
+        <item>128</item>
+    </string-array><string-array name="baudrate_entryvalues">
+        <item>300</item>
+        <item>600</item>
+        <item>1200</item>
+        <item>1800</item>
+        <item>2400</item>
+        <item>4000</item>
+        <item>4800</item>
+        <item>7200</item>
+        <item>9600</item>
+        <item>14400</item>
+        <item>16000</item>
+        <item>19200</item>
+        <item>28800</item>
+        <item>38400</item>
+        <item>51200</item>
+        <item>56000</item>
+        <item>57600</item>
+        <item>64000</item>
+        <item>76800</item>
+        <item>115200</item>
+        <item>128000</item>
+        <item>153600</item>
+        <item>230400</item>
+        <item>250000</item>
+        <item>256000</item>
+        <item>460800</item>
+        <item>500000</item>
+        <item>576000</item>
+        <item>921600</item>
+        <item>2000000</item>
+    </string-array><string-array name="writelinefeedcode_entries">
+        <item>CR</item>
+        <item>CR+LF</item>
+        <item>LF</item>
+        <item>NONE</item>
+    </string-array><string-array name="baudrate_entries">
+        <item>300</item>
+        <item>600</item>
+        <item>1200</item>
+        <item>1800</item>
+        <item>2400</item>
+        <item>4000</item>
+        <item>4800</item>
+        <item>7200</item>
+        <item>9600</item>
+        <item>14400</item>
+        <item>16000</item>
+        <item>19200</item>
+        <item>28800</item>
+        <item>38400</item>
+        <item>51200</item>
+        <item>56000</item>
+        <item>57600</item>
+        <item>64000</item>
+        <item>76800</item>
+        <item>115200</item>
+        <item>128000</item>
+        <item>153600</item>
+        <item>230400</item>
+        <item>250000</item>
+        <item>256000</item>
+        <item>460800</item>
+        <item>500000</item>
+        <item>576000</item>
+        <item>921600</item>
+        <item>2000000</item>
+    </string-array><string-array name="databits_entries">
+        <item>7</item>
+        <item>8</item>
+    </string-array><string-array name="break_entryvalues">
+        <item>0</item>
+        <item>1</item>
+    </string-array><string-array name="databits_entryvalues">
+        <item>7</item>
+        <item>8</item>
+    </string-array><string-array name="flowcontrol_entryvalues">
+        <item>0</item>
+        <item>1</item>
+    </string-array></file><file path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/values/strings.xml" qualifiers=""><string name="button_write">Write</string><string name="flowcontrol_summary">Flow control</string><string name="databits_title">Data bits</string><string name="break_summary">Break</string><string name="display_setting_header_summary"/><string name="flowcontrol_title">Flow control</string><string name="email_summary"/><string name="baudrate_title">Baudrate</string><string name="serial_setting_title">Serial Setting</string><string name="parity_title">Parity check</string><string name="parity_summary">Parity check</string><string name="readlinefeedcode_title">Read Linefeed Code</string><string name="fontsize_title">Font size</string><string name="stopbits_title">Stop bit</string><string name="display_summary">Select char or dec, hex</string><string name="readlinefeedcode_summary">Select CR or LF, CR/LF</string><string name="display_title">Display</string><string name="fontsize_summary">Select font size</string><string name="terminal_setting_header_summary"/><string name="display_setting_title">Display Setting</string><string name="break_title">Break</string><string name="baudrate_summary">baud rate</string><string name="display_setting_header_title">Display Settings</string><string name="typeface_title">Typeface</string><string name="email_title">email</string><string name="add_list">Add</string><string name="typeface_summary">Select typeface</string><string name="email_setting_title">Email Setting</string><string name="stopbits_summary">Stop bit</string><string name="databits_summary">Data bits</string><string name="app_name">PrNet USB Utility</string><string name="writelinefeedcode_title">Write Linefeed Code</string><string name="terminal_setting_header_title">Serial Settings</string><string name="linefeedcode_setting_title">Linefeed Code Setting</string><string name="writelinefeedcode_summary">Select CR or LF, CR/LF</string></file><file name="device_filter" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/xml/device_filter.xml" qualifiers="" type="xml"/><file name="pref_disp_inner" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/xml/pref_disp_inner.xml" qualifiers="" type="xml"/><file name="pref_header" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/xml/pref_header.xml" qualifiers="" type="xml"/><file name="pref_inner" path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/xml/pref_inner.xml" qualifiers="" type="xml"/></source><source path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/build/generated/res/rs/debug"/><source path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/build/generated/res/resValues/debug"/></dataSet><dataSet config="debug"><source path="/Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/debug/res"/></dataSet><mergedItems/></merger>

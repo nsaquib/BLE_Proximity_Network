@@ -1,0 +1,87 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:2:1-40:12
+	xmlns:android
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:2:11-69
+	package
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:3:5-37
+		INJECTED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml
+		INJECTED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:5:5-32
+	android:versionCode
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:4:5-29
+		INJECTED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml
+		INJECTED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml
+uses-permission#android.permission.BLUETOOTH
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:7:5-68
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:7:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:8:5-74
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:8:22-71
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:9:5-81
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:9:22-78
+uses-sdk
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:11:5-44
+MERGED from [AndroidUSBSerialMonitorLite:physicaloidLibrary:unspecified] /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/build/intermediates/exploded-aar/AndroidUSBSerialMonitorLite/physicaloidLibrary/unspecified/AndroidManifest.xml:7:5-9:41
+	android:targetSdkVersion
+		INJECTED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml
+		INJECTED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:11:15-41
+		INJECTED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml
+		INJECTED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml
+uses-feature#android.hardware.usb.host
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:12:5-62
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:12:19-59
+application
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:14:5-38:23
+	android:label
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:16:9-41
+	android:icon
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:15:9-42
+activity#jp.ksksue.app.terminal.AndroidUSBSerialMonitorLite
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:17:9-35:20
+	android:label
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:19:13-45
+	android:configChanges
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:21:13-48
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:18:13-56
+	android:launchMode
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:20:13-44
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:22:13-26:29
+action#android.intent.action.MAIN
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:23:17-69
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:23:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:25:17-77
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:25:27-74
+intent-filter#android.hardware.usb.action.USB_DEVICE_ATTACHED
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:28:13-30:29
+action#android.hardware.usb.action.USB_DEVICE_ATTACHED
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:29:17-90
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:29:25-87
+meta-data#android.hardware.usb.action.USB_DEVICE_ATTACHED
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:32:13-33:57
+	android:resource
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:33:17-54
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:32:24-86
+activity#jp.ksksue.app.terminal.AndroidUSBSerialMonitorLitePrefActivity
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:36:9-86
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:36:19-74
+activity#jp.ksksue.app.terminal.WordListActivity
+ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:37:9-63
+	android:name
+		ADDED from /Users/aybose/Dropbox (MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/AndroidManifest.xml:37:19-51
