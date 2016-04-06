@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/build/intermediates/res/merged/debug/xml/pref_disp_inner.xml",
+        "source": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/src/main/res/xml/pref_disp_inner.xml"
+    },
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/build/intermediates/res/merged/debug/xml/device_filter.xml",
+        "source": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/src/main/res/xml/device_filter.xml"
+    },
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/build/intermediates/res/merged/debug/xml/pref_inner.xml",
+        "source": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/src/main/res/xml/pref_inner.xml"
+    },
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/build/intermediates/res/merged/debug/xml/pref_header.xml",
+        "source": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/src/main/res/xml/pref_header.xml"
+    }
+]

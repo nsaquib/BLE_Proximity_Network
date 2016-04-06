@@ -24,4 +24,3 @@
 <!-- <usb-device vendor-id="" product-id="" /> --> <!--  -->
 <!-- <usb-device class="2" /> --> <!-- CDC -->
 </resources>
-<!-- From: file:/Users/aybose/Dropbox%20(MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/xml/device_filter.xml -->

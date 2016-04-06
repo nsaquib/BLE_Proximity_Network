@@ -33,4 +33,4 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-</LinearLayout><!-- From: file:/Users/aybose/Dropbox%20(MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/layout/wordlist.xml -->
+</LinearLayout>

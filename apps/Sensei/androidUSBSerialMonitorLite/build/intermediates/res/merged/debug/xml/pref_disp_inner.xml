@@ -38,4 +38,4 @@
 		    android:defaultValue="\@gmail.com"
 		/>
 	</PreferenceCategory>
-</PreferenceScreen><!-- From: file:/Users/aybose/Dropbox%20(MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/xml/pref_disp_inner.xml -->
+</PreferenceScreen>

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/aybose/Dropbox%20(MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/values/arrays.xml -->
-    <eat-comment/>
     <string-array name="baudrate_entries">
         <item>300</item>
         <item>600</item>
@@ -190,8 +188,6 @@
         <item>2</item>
         <item>3</item>
     </string-array>
-    <!-- From: file:/Users/aybose/Dropbox%20(MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/values/strings.xml -->
-    <eat-comment/>
     <string name="add_list">Add</string>
     <string name="app_name">PrNet USB Utility</string>
     <string name="baudrate_summary">baud rate</string>

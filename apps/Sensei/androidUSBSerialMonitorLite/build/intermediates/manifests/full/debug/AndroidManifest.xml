@@ -36,7 +36,7 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <activity android:name="jp.ksksue.app.terminal.AndroidUSBSerialMonitorLitePrefActivity" />
-        <activity android:name="jp.ksksue.app.terminal.WordListActivity" />
+        <activity android:name="com.jjoe64.graphview_demos.fragments.WordListActivity" />
     </application>
 
 </manifest>

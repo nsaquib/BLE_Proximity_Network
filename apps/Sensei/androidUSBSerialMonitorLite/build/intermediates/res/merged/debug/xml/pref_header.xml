@@ -6,4 +6,4 @@
 	<header	android:fragment="jp.ksksue.app.terminal.AndroidUSBSerialMonitorLitePrefActivity$SettingDisplayPrefsFragment"
 				android:title="@string/display_setting_header_title"
 				android:summary="@string/display_setting_header_summary" />
-</preference-headers><!-- From: file:/Users/aybose/Dropbox%20(MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/xml/pref_header.xml -->
+</preference-headers>

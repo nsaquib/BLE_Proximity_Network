@@ -64,4 +64,4 @@
             android:id="@+id/btWriteFile"
             android:layout_weight="0.19" />
     </LinearLayout>
-</LinearLayout><!-- From: file:/Users/aybose/Dropbox%20(MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/layout/main.xml -->
+</LinearLayout>

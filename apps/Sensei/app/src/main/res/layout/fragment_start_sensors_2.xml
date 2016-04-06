@@ -8,23 +8,40 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:layout_weight="0.14"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:layout_gravity="center|bottom|left|right|top"
+        android:gravity="center_vertical|center_horizontal">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="0.75in"
-            android:text="Start Sensors"
-            android:includeFontPadding="false"
-            android:layout_gravity="center"
-            android:gravity="center"
+
+        <ImageButton
+            android:layout_width="180dp"
+            android:layout_height="240dp"
             android:id="@+id/startSensors"
-            android:layout_weight="0.19"
-            android:layout_marginBottom="0.1in"
-            android:layout_marginTop="0.1in"
-            android:layout_marginLeft="0.05in"
-            android:layout_marginRight="0.05in"/>
+            android:src="@drawable/starttrim"
+            android:textAlignment="center"
+            android:cropToPadding="true"
+            android:scaleType="fitStart"
+            android:nestedScrollingEnabled="false"
+            android:paddingBottom="0dp"
+            android:paddingRight="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="5dp"
+            android:padding="0dp"
+            android:background="#EAE0E0"
+            android:layout_margin="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            android:baselineAlignBottom="false"
+            android:clickable="true"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:layout_gravity="center|bottom|left|right|top"
+            android:longClickable="true"
+            android:focusable="true" />
 
     </LinearLayout>
 
@@ -35,13 +52,47 @@
         android:text="Devices Online:"
         android:layout_marginLeft="0.05in"
         android:layout_marginTop="0.1in"
-        android:id="@+id/textView3" />
+        android:id="@+id/textView3"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="5dp" />
 
     <LinearLayout
-        android:id="@+id/checkboxList"
-        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_weight="0.14"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:id="@+id/checkboxList"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/checkboxList2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/checkboxList3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_weight="1"></LinearLayout>
+
+
+
+
 
     </LinearLayout>
 

@@ -66,4 +66,4 @@
             android:title="@string/writelinefeedcode_title" />
     </PreferenceCategory>
 
-</PreferenceScreen><!-- From: file:/Users/aybose/Dropbox%20(MIT)/PrNet/ftdi_app/AndroidUSBSerialMonitorLite/androidUSBSerialMonitorLite/src/main/res/xml/pref_inner.xml -->
+</PreferenceScreen>

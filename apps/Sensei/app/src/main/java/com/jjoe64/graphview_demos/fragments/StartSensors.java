@@ -46,6 +46,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -112,10 +113,11 @@ public class StartSensors extends Fragment {
 
     Handler mHandler = new Handler();
 
-    private Button startSensors;
+    private ImageButton startSensors;
 
     //File parameters
-    private int networkSize = 5;
+    private String[] names = {"Alice", "Bob", "Chris", "Dave", "Eliza", "Fred", "George", "Helen", "Jack", "Kelly", "Linda", "Meg", "Noah", "Oscar", "Peter", "Quinn"};
+    private int networkSize = 16;
     private int currDeviceID = 0;
     private int[] dataReceived = new int[networkSize];
 
@@ -151,15 +153,22 @@ public class StartSensors extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_start_sensors_2, container, false);
 
         LinearLayout checkboxList = (LinearLayout) rootView.findViewById(R.id.checkboxList);
+        LinearLayout checkboxList2 = (LinearLayout) rootView.findViewById(R.id.checkboxList2);
+        LinearLayout checkboxList3 = (LinearLayout) rootView.findViewById(R.id.checkboxList3);
         for (int i = 0; i < networkSize; i++) {
             devicesOnline[i] = new CheckBox(getActivity());
-            devicesOnline[i].setText(Integer.toString(i));
+            devicesOnline[i].setText(names[i]);
             devicesOnline[i].setId(i);
-            checkboxList.addView(devicesOnline[i]);
+            if (i <= 5)
+                checkboxList.addView(devicesOnline[i]);
+            else if (i > 5 && i < 11)
+                checkboxList2.addView(devicesOnline[i]);
+            else
+                checkboxList3.addView(devicesOnline[i]);
         }
         mSvText = (ScrollView) rootView.findViewById(R.id.svText);
         mTvSerial = (TextView) rootView.findViewById(R.id.tvSerial);
-        startSensors = (Button) rootView.findViewById(R.id.startSensors);
+        startSensors = (ImageButton) rootView.findViewById(R.id.startSensors);
         startSensors.setEnabled(false);
 
         if (SHOW_DEBUG) {
@@ -187,6 +196,7 @@ public class StartSensors extends Fragment {
         // ---------------------------------------------------------------------------------------
         // Collect Button
         // ---------------------------------------------------------------------------------------
+
         startSensors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

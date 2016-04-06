@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">PrNet</string>
-    <string name="title_simple">Collect Data</string>
-    <string name="title_manual_viewport">Start Sensors</string>
+    <string name="app_name">Sensei</string>
+    <string name="title_simple">Start Sensors</string>
+    <string name="title_manual_viewport">Collect Data</string>
     <string name="title_scrolling_1">Check Battery Life</string>
     <string name="title_scrolling_2">View Data</string>
     <string name="title_styling"> </string>

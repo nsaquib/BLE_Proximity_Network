@@ -39,6 +39,7 @@ import android.support.v4.widget.DrawerLayout;
 import com.jjoe64.graphview_demos.fragments.AddSeriesAtRuntime;
 import com.jjoe64.graphview_demos.fragments.CustomLabelFormatter;
 import com.jjoe64.graphview_demos.fragments.DateAsXAxis;
+import com.jjoe64.graphview_demos.fragments.Home;
 import com.jjoe64.graphview_demos.fragments.LineBarCombination;
 import com.jjoe64.graphview_demos.fragments.ManualViewport;
 import com.jjoe64.graphview_demos.fragments.MultipleBarsGraph;
@@ -74,8 +75,6 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
     private String codeUrl = "";
 
-    public
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,15 +96,15 @@ public class MainActivity extends ActionBarActivity
     private Fragment getFragmentInstance(int sectionNumber) {
         Fragment fragment;
         if (sectionNumber == 0) {
-            fragment = new CollectData();
-        } else if (sectionNumber == 1) {
             fragment = new StartSensors();
+        } else if (sectionNumber == 1) {
+            fragment = new CollectData();
         } else if (sectionNumber == 2) {
             fragment = new ScrollingAutoY();
         } else if (sectionNumber == 3) {
             fragment = new MultipleBarsGraph();;
         } else if (sectionNumber == 4) {
-            fragment = new Styling();
+            fragment = new MultipleBarsGraph();
         } else if (sectionNumber == 5) {
             fragment = new SimpleBarGraph();
         } else if (sectionNumber == 6) {
