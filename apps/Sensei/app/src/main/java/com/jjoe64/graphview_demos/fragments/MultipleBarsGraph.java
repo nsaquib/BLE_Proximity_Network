@@ -65,7 +65,7 @@ public class MultipleBarsGraph extends Fragment {
                 new DataPoint(8, 0.5),
                 new DataPoint(9, 1)
         });
-        series.setColor(Color.rgb(255, 154, 69)); // orange
+        series.setColor(Color.rgb(212, 161, 106)); // brown
         series.setSpacing(30);
         graph.addSeries(series);
 
@@ -81,7 +81,7 @@ public class MultipleBarsGraph extends Fragment {
                 new DataPoint(8, 1.3),
                 new DataPoint(9, 1.4)
         });
-        series2.setColor(Color.rgb(148, 255, 147)); // green
+        series2.setColor(Color.rgb(85, 44, 0)); // dark brown
         series2.setSpacing(30);
         graph.addSeries(series2);
 
