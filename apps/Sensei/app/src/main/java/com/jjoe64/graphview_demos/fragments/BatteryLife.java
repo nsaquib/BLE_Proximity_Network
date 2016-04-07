@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
@@ -133,6 +134,11 @@ public class BatteryLife extends Fragment {
         staticLabelsFormatter.setHorizontalLabels(new String[]{"", ""});
         staticLabelsFormatter.setVerticalLabels(new String[]{"low", "med", "high"});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+        GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
+        gridLabel.setHorizontalAxisTitle("Sensors");
+        gridLabel.setVerticalAxisTitle("Battery Life");
+
 
 
         // legend

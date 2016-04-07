@@ -170,9 +170,9 @@ public class StartSensors extends Fragment {
                 checkboxList2.addView(devicesOnline[i]);
         }
         mSvText = (ScrollView) rootView.findViewById(R.id.svText);
-        mTvSerial = (TextView) rootView.findViewById(R.id.tvSerial);
+        //mTvSerial = (TextView) rootView.findViewById(R.id.tvSerial);
         startSensors = (Button) rootView.findViewById(R.id.startSensors);
-        startSensors.setEnabled(false);
+        startSensors.setEnabled(true);
 
         if (SHOW_DEBUG) {
             Log.d(TAG, "New FTDriver");
@@ -203,7 +203,7 @@ public class StartSensors extends Fragment {
         startSensors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSerial != null) {
+                //if (mSerial != null) {
                     Calendar c = Calendar.getInstance();
                     int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
 
@@ -219,7 +219,7 @@ public class StartSensors extends Fragment {
                     Log.d(TAG, "time sent: " + toSend);
 
                     byte[] start_code = toSend.getBytes();
-                    mSerial.write(start_code, start_code.length);
+                    //mSerial.write(start_code, start_code.length);
                     startSensors.setEnabled(false);
                     Log.d(TAG, "Should be starting sensors");
 
@@ -242,7 +242,7 @@ public class StartSensors extends Fragment {
                             device_counter = device_counter + 1;
                         }
                     }.start();
-                }
+                //}
             }
         });
 
@@ -298,7 +298,7 @@ public class StartSensors extends Fragment {
 
             res = pref.getString("fontsize_list", Integer.toString(12));
             mTextFontSize = Integer.valueOf(res);
-            mTvSerial.setTextSize(mTextFontSize);
+            //mTvSerial.setTextSize(mTextFontSize);
 
             res = pref.getString("typeface_list", Integer.toString(3));
             switch(Integer.valueOf(res)){
@@ -315,7 +315,7 @@ public class StartSensors extends Fragment {
                     mTextTypeface = Typeface.MONOSPACE;
                     break;
             }
-            mTvSerial.setTypeface(mTextTypeface);
+            //mTvSerial.setTypeface(mTextTypeface);
             //etWrite.setTypeface(mTextTypeface);
 
             res = pref.getString("readlinefeedcode_list", Integer.toString(LINEFEED_CODE_CRLF));
@@ -461,26 +461,26 @@ public class StartSensors extends Fragment {
 
                     mHandler.post(new Runnable() {
                         public void run() {
-                            if (mTvSerial.length() > TEXT_MAX_SIZE) {
-                                StringBuilder sb = new StringBuilder();
-                                sb.append(mTvSerial.getText());
-                                sb.delete(0, TEXT_MAX_SIZE / 2);
-                                //mTvSerial.setText(sb);
-                            }
-                            if (mText.toString().length() > 1) {
-                                if (mText.toString().substring(0, 1).equals("O") && mText.toString().length() < 10) {
-                                    Log.d(TAG, "Should have found online device string");
-                                    String[] deviceInfo = mText.toString().split("\t");
-                                    for (int i = 0 ; i < deviceInfo.length ; i++) {
-                                        if (deviceInfo[i].equals("1")) {
-                                            devicesOnline[i-1].setChecked(true);
-                                        }
-                                    }
-                                }
-                            }
-                            //mTvSerial.append(mText);
-                            mText.setLength(0);
-                            mSvText.fullScroll(ScrollView.FOCUS_DOWN);
+//                            if (mTvSerial.length() > TEXT_MAX_SIZE) {
+//                                StringBuilder sb = new StringBuilder();
+//                                sb.append(mTvSerial.getText());
+//                                sb.delete(0, TEXT_MAX_SIZE / 2);
+//                                //mTvSerial.setText(sb);
+//                            }
+//                            if (mText.toString().length() > 1) {
+//                                if (mText.toString().substring(0, 1).equals("O") && mText.toString().length() < 10) {
+//                                    Log.d(TAG, "Should have found online device string");
+//                                    String[] deviceInfo = mText.toString().split("\t");
+//                                    for (int i = 0 ; i < deviceInfo.length ; i++) {
+//                                        if (deviceInfo[i].equals("1")) {
+//                                            devicesOnline[i-1].setChecked(true);
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                            //mTvSerial.append(mText);
+//                            mText.setLength(0);
+//                            mSvText.fullScroll(ScrollView.FOCUS_DOWN);
                         }
                     });
                 }
@@ -600,7 +600,7 @@ public class StartSensors extends Fragment {
                 mTextTypeface = Typeface.MONOSPACE;
                 break;
         }
-        mTvSerial.setTypeface(mTextTypeface);
+        //mTvSerial.setTypeface(mTextTypeface);
         //etWrite.setTypeface(mTextTypeface);
 
         res = pref.getString("readlinefeedcode_list", Integer.toString(LINEFEED_CODE_CRLF));
@@ -634,7 +634,7 @@ public class StartSensors extends Fragment {
                         + mEmailAddress));
 
         intent.putExtra("subject", "Result of " + getString(R.string.app_name));
-        intent.putExtra("body", mTvSerial.getText().toString().trim());
+        //intent.putExtra("body", mTvSerial.getText().toString().trim());
         startActivity(intent);
     }
 
@@ -647,7 +647,7 @@ public class StartSensors extends Fragment {
 
     private void openUsbSerial() {
         if(mSerial == null) {
-            Toast.makeText(getActivity(), "cannot open", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "cannot open", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -656,7 +656,7 @@ public class StartSensors extends Fragment {
                 Log.d(TAG, "onNewIntent begin");
             }
             if (!mSerial.open()) {
-                Toast.makeText(getActivity(), "cannot open", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "cannot open", Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 loadDefaultSettingValues();
@@ -673,7 +673,7 @@ public class StartSensors extends Fragment {
                     Log.d(TAG, "setConfig : baud : "+mBaudrate+", DataBits : "+mDataBits+", StopBits : "+mStopBits+", Parity : "+mParity+", dtr : "+dtrOn+", rts : "+rtsOn);
                 }
 
-                mTvSerial.setTextSize(mTextFontSize);
+                //mTvSerial.setTextSize(mTextFontSize);
 
                 Toast.makeText(getActivity(), "connected", Toast.LENGTH_SHORT).show();
             }
@@ -701,7 +701,7 @@ public class StartSensors extends Fragment {
 
     private void detachedUi() {
         //etWrite.setEnabled(false);
-        Toast.makeText(getActivity(), "disconnect", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "disconnect", Toast.LENGTH_SHORT).show();
     }
 
     // BroadcastReceiver when insert/remove the device USB plug into/from a USB

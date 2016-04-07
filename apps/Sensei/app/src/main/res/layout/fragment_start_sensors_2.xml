@@ -58,13 +58,6 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="21dp"
-        android:id="@+id/progressBar"
-        android:layout_gravity="center_horizontal" />
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="80dp"

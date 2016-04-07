@@ -168,7 +168,7 @@ public class CollectData extends Fragment {
         //mSvText = (ScrollView) rootView.findViewById(R.id.svText);
         //mTvSerial = (TextView) rootView.findViewById(R.id.tvSerial);
         startCollect = (Button) rootView.findViewById(R.id.startCollect);
-        startCollect.setEnabled(false);
+        startCollect.setEnabled(true);
         mProgressBar=(ProgressBar) rootView.findViewById(R.id.progressBar);
         mProgressBar.setMax(15);
         //btWriteFile = (Button) rootView.findViewById(R.id.btWriteFile);
@@ -220,15 +220,15 @@ public class CollectData extends Fragment {
         startCollect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSerial != null) {
+                //if (mSerial != null) {
                     String toSend = "D";
                     for (int i = 0; i < networkSize; i++) {
                         toSend = toSend.concat(Integer.toString(dataReceived[i]));
                     }
                     byte[] start_code = toSend.getBytes();
-                    mSerial.write(start_code, start_code.length);
+                    //mSerial.write(start_code, start_code.length);
                     //startCollect.setEnabled(false);
-                    collectData = true;
+                    //collectData = true;
                     Log.d(TAG, "Should be collecting data now");
 
                     //TEMP
@@ -254,7 +254,7 @@ public class CollectData extends Fragment {
                             mProgressBar.setProgress(mProgressBar.getMax());
                         }
                     }.start();
-                }
+                //}
             }
         });
 
@@ -685,7 +685,7 @@ public class CollectData extends Fragment {
 
     private void openUsbSerial() {
         if(mSerial == null) {
-            Toast.makeText(getActivity(), "cannot open", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "cannot open", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -694,7 +694,7 @@ public class CollectData extends Fragment {
                 Log.d(TAG, "onNewIntent begin");
             }
             if (!mSerial.open()) {
-                Toast.makeText(getActivity(), "cannot open", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "cannot open", Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 loadDefaultSettingValues();
@@ -739,7 +739,7 @@ public class CollectData extends Fragment {
 
     private void detachedUi() {
         //etWrite.setEnabled(false);
-        Toast.makeText(getActivity(), "disconnect", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "disconnect", Toast.LENGTH_SHORT).show();
     }
 
     // BroadcastReceiver when insert/remove the device USB plug into/from a USB
