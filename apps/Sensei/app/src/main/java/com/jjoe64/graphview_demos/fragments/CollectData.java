@@ -182,7 +182,7 @@ public class CollectData extends Fragment {
             devicesOnline[i] = new CheckBox(getActivity());
             devicesOnline[i].setText(names[i]);
             devicesOnline[i].setId(i);
-            devicesOnline[i].setHeight(150);
+            devicesOnline[i].setHeight(75);
             devicesOnline[i].setTextSize(25);
             devicesOnline[i].setTextAppearance(getActivity(), android.R.style.TextAppearance_Medium);
             if (i <= 7)

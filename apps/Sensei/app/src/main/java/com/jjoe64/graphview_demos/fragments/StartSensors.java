@@ -161,9 +161,11 @@ public class StartSensors extends Fragment {
             devicesOnline[i] = new CheckBox(getActivity());
             devicesOnline[i].setText(names[i]);
             devicesOnline[i].setId(i);
-            devicesOnline[i].setHeight(150);
+            devicesOnline[i].setHeight(75);
             devicesOnline[i].setTextSize(25);
             devicesOnline[i].setTextAppearance(getActivity(), android.R.style.TextAppearance_Medium);
+            devicesOnline[i].setIncludeFontPadding(false);
+            devicesOnline[i].setPadding(0,0,0,0);
             if (i <= 7)
                 checkboxList.addView(devicesOnline[i]);
             else
