@@ -1,10 +1,18 @@
 [
     {
-        "merged": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/build/intermediates/res/merged/debug/drawable-hdpi-v4/ic_launcher.png",
-        "source": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/src/main/res/drawable-hdpi/ic_launcher.png"
+        "merged": "/Users/Dwyane/Desktop/6.THM/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/build/intermediates/res/merged/debug/drawable-hdpi-v4/terminal.png",
+        "source": "/Users/Dwyane/Desktop/6.THM/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/src/main/res/drawable-hdpi/terminal.png"
+    },
+    {
+        "merged": "/Users/Dwyane/Desktop/6.THM/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/build/intermediates/res/merged/debug/drawable-hdpi-v4/ic_launcher.png",
+        "source": "/Users/Dwyane/Desktop/6.THM/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/src/main/res/drawable-hdpi/ic_launcher.png"
     },
     {
         "merged": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/build/intermediates/res/merged/debug/drawable-hdpi-v4/terminal.png",
         "source": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/src/main/res/drawable-hdpi/terminal.png"
+    },
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/build/intermediates/res/merged/debug/drawable-hdpi-v4/ic_launcher.png",
+        "source": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/androidUSBSerialMonitorLite/src/main/res/drawable-hdpi/ic_launcher.png"
     }
 ]

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Devices Online:"
+        android:text="Active Sensors"
         android:layout_marginLeft="0.05in"
         android:layout_marginTop="0.1in"
         android:id="@+id/textView3"
