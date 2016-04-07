@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
@@ -64,12 +65,12 @@ public class MultipleBarsGraph extends Fragment {
                 new DataPoint(8, 0.5),
                 new DataPoint(9, 1)
         });
-        series.setColor(Color.RED);
+        series.setColor(Color.rgb(255, 154, 69)); // orange
         series.setSpacing(30);
         graph.addSeries(series);
 
         BarGraphSeries<DataPoint> series2 = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(0, 1.2),
+                new DataPoint(0, 1),
                 new DataPoint(1, 1.9),
                 new DataPoint(2, 0.9),
                 new DataPoint(3, 1.7),
@@ -80,13 +81,13 @@ public class MultipleBarsGraph extends Fragment {
                 new DataPoint(8, 1.3),
                 new DataPoint(9, 1.4)
         });
-        series2.setColor(Color.BLUE);
+        series2.setColor(Color.rgb(148, 255, 147)); // green
         series2.setSpacing(30);
         graph.addSeries(series2);
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinX(-1);
+        graph.getViewport().setMinX(-0.5);
         graph.getViewport().setMaxX(10);
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(3);
@@ -94,21 +95,33 @@ public class MultipleBarsGraph extends Fragment {
         graph.setTitleTextSize(48);
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        staticLabelsFormatter.setHorizontalLabels(new String[]{"Alice", "Bob", "Chris", "Dan", "Emma", "Faith", "Grace", "Henry", "Isaac", "Julia"});
+        final String[] xLabels = new String[]{"Alice", "Bob", "Chris", "Dave", "Eliza", "Fred", "George", "Helen", "Isaac", "Jack"};
+        staticLabelsFormatter.setHorizontalLabels(xLabels);
         staticLabelsFormatter.setVerticalLabels(new String[]{"0", "1", "2", "3"});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+        GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
+        gridLabel.setHorizontalAxisTitle("Students");
+        gridLabel.setVerticalAxisTitle("Hours");
 
         // Tap Listeners
         series.setOnDataPointTapListener(new OnDataPointTapListener() {
             @Override
             public void onTap(Series series, DataPointInterface dataPoint) {
-                Toast.makeText(getActivity(), series.getTitle() + " - " + dataPoint.getX() + " : " + dataPoint, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), series.getTitle() + " - " + xLabels[(int) dataPoint.getX()] + " : " + dataPoint.getY() + ((dataPoint.getY() <= 1 && dataPoint.getY() != 0) ? " hour" : " hours"), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        series2.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series series, DataPointInterface dataPoint) {
+                Toast.makeText(getActivity(), series.getTitle() + " - " + xLabels[(int) dataPoint.getX()] + " : " + dataPoint.getY() + ((dataPoint.getY() <= 1 && dataPoint.getY() != 0) ? " hour" : " hours"), Toast.LENGTH_SHORT).show();
             }
         });
 
         // Legend
-        series.setTitle("Alyssa P. Hacker");
-        series2.setTitle("Ben Bitdiddle");
+        series.setTitle("Alyssa");
+        series2.setTitle("Ben");
         graph.getLegendRenderer().setVisible(true);
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
