@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_material_dark">#3b2463</color>
+    <color name="primary_material_dark">#533f38</color>
     <color name="foreground_material_light">#0c4491</color>
-    <color name="black">#3d2b65</color>
+    <color name="black">#533f38</color>
     <color name="statusBarColor">#0c4491</color>
-    <color name="windowBackground">#f2e1e1</color>
-    <color name="background_material_light">#eae0e0</color>
-    <color name="accent_material_light">#2f2755</color>
+    <color name="windowBackground">#ddd3d0</color>
+    <color name="background_material_light">#ddd3d0</color>
+    <color name="accent_material_light">#533f38</color>
 </resources>

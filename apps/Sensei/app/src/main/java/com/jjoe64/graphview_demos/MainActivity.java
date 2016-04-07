@@ -37,6 +37,7 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 
 import com.jjoe64.graphview_demos.fragments.AddSeriesAtRuntime;
+import com.jjoe64.graphview_demos.fragments.BatteryLife;
 import com.jjoe64.graphview_demos.fragments.CustomLabelFormatter;
 import com.jjoe64.graphview_demos.fragments.DateAsXAxis;
 import com.jjoe64.graphview_demos.fragments.Home;
@@ -100,7 +101,7 @@ public class MainActivity extends ActionBarActivity
         } else if (sectionNumber == 1) {
             fragment = new CollectData();
         } else if (sectionNumber == 2) {
-            fragment = new ScrollingAutoY();
+            fragment = new BatteryLife();
         } else if (sectionNumber == 3) {
             fragment = new MultipleBarsGraph();;
         } else if (sectionNumber == 4) {

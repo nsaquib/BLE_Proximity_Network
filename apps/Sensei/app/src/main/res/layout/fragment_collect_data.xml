@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Collect Data"
-        android:id="@+id/collectData"
+        android:id="@+id/startCollect"
         android:layout_below="@+id/editText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -41,7 +41,7 @@
         android:text="Progress:"
         android:id="@+id/textView"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/collectData"
+        android:layout_below="@+id/startCollect"
         android:layout_alignParentLeft="true" />
 
     <TextView

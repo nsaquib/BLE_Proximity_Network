@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:gravity="center_horizontal"
+    android:background="#DDD3D0">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Need to be charged:"
+        android:layout_marginLeft="0.05in"
+        android:layout_marginTop="0.1in"
+        android:id="@+id/textView3"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="5dp"
+        android:textSize="20dp" />
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+        <TableRow>
+            <ImageView
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:id="@+id/imageView2"
+                android:src="@drawable/lesson"
+                android:adjustViewBounds="false"
+                android:textAlignment="center"
+                android:scaleType="fitCenter" />
+            <TextView
+                android:text="Lesson Tracking Sensors"
+                android:gravity="right"
+                android:padding="3dip" />
+        </TableRow>
+
+        <TableRow>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView3"
+                android:src="@drawable/region" />
+            <TextView
+                android:text="Region Tracking Sensors"
+                android:gravity="right"
+                android:padding="3dip" />
+        </TableRow>
+    </TableLayout>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Recharged Batteries"
+        android:id="@+id/startCollect"
+        android:layout_gravity="center"
+        android:background="#8c8b8b"
+        android:textColor="#f4f4f4"
+        android:textSize="25dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
+
+</LinearLayout>

@@ -36,7 +36,9 @@ import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -47,7 +49,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +70,7 @@ import com.physicaloid.lib.usb.driver.uart.UartConfig;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -121,9 +128,11 @@ public class CollectData extends Fragment {
     private Button btWriteFile;
     private Button startCollect;
     private EditText etWrite;
+    private ProgressBar mProgressBar;
 
     //File parameters
-    private int networkSize = 5;
+    private String[] names = {"Alice", "Bob", "Chris", "Dave", "Eliza", "Fred", "George", "Helen", "Jack", "Kelly", "Linda", "Meg", "Noah", "Oscar", "Peter", "Quinn"};
+    private int networkSize = 16;
     private int currDeviceID = 0;
     private int[] dataReceived = new int[networkSize];
 
@@ -148,22 +157,39 @@ public class CollectData extends Fragment {
     // Linefeed
     private final static String BR = System.getProperty("line.separator");
 
+    public CheckBox[] devicesOnline = new CheckBox[networkSize];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_collect_data_2, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_collect_data_3, container, false);
 
 
-        mSvText = (ScrollView) rootView.findViewById(R.id.svText);
-        mTvSerial = (TextView) rootView.findViewById(R.id.tvSerial);
+        //mSvText = (ScrollView) rootView.findViewById(R.id.svText);
+        //mTvSerial = (TextView) rootView.findViewById(R.id.tvSerial);
         startCollect = (Button) rootView.findViewById(R.id.startCollect);
         startCollect.setEnabled(false);
-        btWriteFile = (Button) rootView.findViewById(R.id.btWriteFile);
-        btWriteFile.setEnabled(false);
-        etWrite = (EditText) rootView.findViewById(R.id.etWrite);
-        etWrite.setEnabled(false);
-        etWrite.setHint("CR : \\r, LF : \\n, bin : \\u0000");
+        mProgressBar=(ProgressBar) rootView.findViewById(R.id.progressBar);
+        mProgressBar.setMax(15);
+        //btWriteFile = (Button) rootView.findViewById(R.id.btWriteFile);
+        //btWriteFile.setEnabled(false);
+        //etWrite = (EditText) rootView.findViewById(R.id.etWrite);
+        //etWrite.setEnabled(false);
+        //etWrite.setHint("CR : \\r, LF : \\n, bin : \\u0000");
+        LinearLayout checkboxList = (LinearLayout) rootView.findViewById(R.id.checkboxList);
+        LinearLayout checkboxList2 = (LinearLayout) rootView.findViewById(R.id.checkboxList2);
+        for (int i = 0; i < networkSize; i++) {
+            devicesOnline[i] = new CheckBox(getActivity());
+            devicesOnline[i].setText(names[i]);
+            devicesOnline[i].setId(i);
+            devicesOnline[i].setHeight(150);
+            devicesOnline[i].setTextSize(25);
+            devicesOnline[i].setTextAppearance(getActivity(), android.R.style.TextAppearance_Medium);
+            if (i <= 7)
+                checkboxList.addView(devicesOnline[i]);
+            else
+                checkboxList2.addView(devicesOnline[i]);
+        }
 
         if (SHOW_DEBUG) {
             Log.d(TAG, "New FTDriver");
@@ -204,6 +230,30 @@ public class CollectData extends Fragment {
                     //startCollect.setEnabled(false);
                     collectData = true;
                     Log.d(TAG, "Should be collecting data now");
+
+                    //TEMP
+                    new CountDownTimer(300000, 10000) {
+                        int device_counter = 0;
+                        public void onTick(long millisUntilFinished) {
+                            if (device_counter < networkSize) {
+                                Random rand = new Random();
+                                int n = rand.nextInt(20) + 0;
+                                n = n * 1000;
+                                SystemClock.sleep(n);
+                                devicesOnline[device_counter].setChecked(true);
+                                device_counter = device_counter + 1;
+                                mProgressBar.setProgress(device_counter);
+                            }
+                            else{
+                                mProgressBar.setProgress(mProgressBar.getMax());
+                            }
+                        }
+
+                        public void onFinish() {
+                            device_counter = device_counter + 1;
+                            mProgressBar.setProgress(mProgressBar.getMax());
+                        }
+                    }.start();
                 }
             }
         });
@@ -211,7 +261,7 @@ public class CollectData extends Fragment {
         // ---------------------------------------------------------------------------------------
         // Write Button
         // ---------------------------------------------------------------------------------------
-        btWriteFile.setOnClickListener(new View.OnClickListener() {
+        /*btWriteFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mTvSerial.getText().toString().length() != 0) {
@@ -221,7 +271,7 @@ public class CollectData extends Fragment {
                     btWriteFile.setEnabled(false);
                 }
             }
-        });
+        });*/
 
         return rootView;
     }
@@ -248,9 +298,9 @@ public class CollectData extends Fragment {
         return out;
     }
 
-    public void setWriteTextString(String str) {
-        etWrite.setText(str);
-    }
+//    public void setWriteTextString(String str) {
+//        etWrite.setText(str);
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -259,9 +309,9 @@ public class CollectData extends Fragment {
             if(resultCode == getActivity().RESULT_OK) {
                 try {
                     String strWord = data.getStringExtra("word");
-                    etWrite.setText(strWord);
+                    //etWrite.setText(strWord);
                     // Set a cursor position last
-                    etWrite.setSelection(etWrite.getText().length());
+                    //etWrite.setSelection(etWrite.getText().length());
                 } catch(Exception e) {
                     Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -292,8 +342,8 @@ public class CollectData extends Fragment {
                     mTextTypeface = Typeface.MONOSPACE;
                     break;
             }
-            mTvSerial.setTypeface(mTextTypeface);
-            etWrite.setTypeface(mTextTypeface);
+//            mTvSerial.setTypeface(mTextTypeface);
+//            etWrite.setTypeface(mTextTypeface);
 
             res = pref.getString("readlinefeedcode_list", Integer.toString(LINEFEED_CODE_CRLF));
             mReadLinefeedCode = Integer.valueOf(res);
@@ -371,7 +421,7 @@ public class CollectData extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(BUNDLEKEY_LOADTEXTVIEW, mTvSerial.getText().toString());
+        //outState.putString(BUNDLEKEY_LOADTEXTVIEW, mTvSerial.getText().toString());
     }
 
     /**
@@ -396,8 +446,8 @@ public class CollectData extends Fragment {
         mStop = false;
         mRunningMainLoop = true;
         startCollect.setEnabled(true);
-        btWriteFile.setEnabled(true);
-        etWrite.setEnabled(true);
+        //btWriteFile.setEnabled(true);
+        //etWrite.setEnabled(true);
         Toast.makeText(getActivity(), "connected", Toast.LENGTH_SHORT).show();
         if (SHOW_DEBUG) {
             Log.d(TAG, "start mainloop");
@@ -438,7 +488,7 @@ public class CollectData extends Fragment {
 
                     mHandler.post(new Runnable() {
                         public void run() {
-                            if (mTvSerial.length() > TEXT_MAX_SIZE) {
+                            /*if (mTvSerial.length() > TEXT_MAX_SIZE) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append(mTvSerial.getText());
                                 sb.delete(0, TEXT_MAX_SIZE / 2);
@@ -468,7 +518,7 @@ public class CollectData extends Fragment {
                                 }
                             }
                             mText.setLength(0);
-                            mSvText.fullScroll(ScrollView.FOCUS_DOWN);
+                            mSvText.fullScroll(ScrollView.FOCUS_DOWN);*/
                         }
                     });
                 }
@@ -588,8 +638,8 @@ public class CollectData extends Fragment {
                 mTextTypeface = Typeface.MONOSPACE;
                 break;
         }
-        mTvSerial.setTypeface(mTextTypeface);
-        etWrite.setTypeface(mTextTypeface);
+        //mTvSerial.setTypeface(mTextTypeface);
+        //etWrite.setTypeface(mTextTypeface);
 
         res = pref.getString("readlinefeedcode_list", Integer.toString(LINEFEED_CODE_CRLF));
         mReadLinefeedCode = Integer.valueOf(res);
@@ -661,7 +711,7 @@ public class CollectData extends Fragment {
                     Log.d(TAG, "setConfig : baud : "+mBaudrate+", DataBits : "+mDataBits+", StopBits : "+mStopBits+", Parity : "+mParity+", dtr : "+dtrOn+", rts : "+rtsOn);
                 }
 
-                mTvSerial.setTextSize(mTextFontSize);
+                //mTvSerial.setTextSize(mTextFontSize);
 
                 Toast.makeText(getActivity(), "connected", Toast.LENGTH_SHORT).show();
             }
@@ -688,7 +738,7 @@ public class CollectData extends Fragment {
     };
 
     private void detachedUi() {
-        etWrite.setEnabled(false);
+        //etWrite.setEnabled(false);
         Toast.makeText(getActivity(), "disconnect", Toast.LENGTH_SHORT).show();
     }
 

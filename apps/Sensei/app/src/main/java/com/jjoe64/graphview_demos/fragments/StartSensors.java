@@ -36,7 +36,9 @@ import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -61,6 +63,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by jonas on 28.08.14.
@@ -113,7 +116,7 @@ public class StartSensors extends Fragment {
 
     Handler mHandler = new Handler();
 
-    private ImageButton startSensors;
+    private Button startSensors;
 
     //File parameters
     private String[] names = {"Alice", "Bob", "Chris", "Dave", "Eliza", "Fred", "George", "Helen", "Jack", "Kelly", "Linda", "Meg", "Noah", "Oscar", "Peter", "Quinn"};
@@ -154,21 +157,21 @@ public class StartSensors extends Fragment {
 
         LinearLayout checkboxList = (LinearLayout) rootView.findViewById(R.id.checkboxList);
         LinearLayout checkboxList2 = (LinearLayout) rootView.findViewById(R.id.checkboxList2);
-        LinearLayout checkboxList3 = (LinearLayout) rootView.findViewById(R.id.checkboxList3);
         for (int i = 0; i < networkSize; i++) {
             devicesOnline[i] = new CheckBox(getActivity());
             devicesOnline[i].setText(names[i]);
             devicesOnline[i].setId(i);
-            if (i <= 5)
+            devicesOnline[i].setHeight(150);
+            devicesOnline[i].setTextSize(25);
+            devicesOnline[i].setTextAppearance(getActivity(), android.R.style.TextAppearance_Medium);
+            if (i <= 7)
                 checkboxList.addView(devicesOnline[i]);
-            else if (i > 5 && i < 11)
-                checkboxList2.addView(devicesOnline[i]);
             else
-                checkboxList3.addView(devicesOnline[i]);
+                checkboxList2.addView(devicesOnline[i]);
         }
         mSvText = (ScrollView) rootView.findViewById(R.id.svText);
         mTvSerial = (TextView) rootView.findViewById(R.id.tvSerial);
-        startSensors = (ImageButton) rootView.findViewById(R.id.startSensors);
+        startSensors = (Button) rootView.findViewById(R.id.startSensors);
         startSensors.setEnabled(false);
 
         if (SHOW_DEBUG) {
@@ -219,6 +222,26 @@ public class StartSensors extends Fragment {
                     mSerial.write(start_code, start_code.length);
                     startSensors.setEnabled(false);
                     Log.d(TAG, "Should be starting sensors");
+
+
+                    //TEMP
+                    new CountDownTimer(30000, 1000) {
+                        int device_counter = 0;
+                        public void onTick(long millisUntilFinished) {
+                            if (device_counter < networkSize-1) {
+                                Random rand = new Random();
+                                int n = rand.nextInt(2) + 0;
+                                n = n * 1000;
+                                SystemClock.sleep(n);
+                                devicesOnline[device_counter].setChecked(true);
+                                device_counter = device_counter + 1;
+                            }
+                        }
+
+                        public void onFinish() {
+                            device_counter = device_counter + 1;
+                        }
+                    }.start();
                 }
             }
         });
@@ -371,7 +394,7 @@ public class StartSensors extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(BUNDLEKEY_LOADTEXTVIEW, mTvSerial.getText().toString());
+//        outState.putString(BUNDLEKEY_LOADTEXTVIEW, mTvSerial.getText().toString());
     }
 
     /**
