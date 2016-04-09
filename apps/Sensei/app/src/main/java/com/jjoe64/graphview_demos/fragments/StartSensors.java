@@ -64,6 +64,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by jonas on 28.08.14.
@@ -111,6 +113,7 @@ public class StartSensors extends Fragment {
     private TextView mTvSerial;
     private StringBuilder mText = new StringBuilder();
     private boolean mStop = false;
+    private EditText etWrite;
 
     String TAG = "AndroidSerialTerminal";
 
@@ -119,8 +122,8 @@ public class StartSensors extends Fragment {
     private Button startSensors;
 
     //File parameters
-    private String[] names = {"Alice", "Bob", "Chris", "Dave", "Eliza", "Fred", "George", "Helen", "Jack", "Kelly", "Linda", "Meg", "Noah", "Oscar", "Peter", "Quinn"};
-    private int networkSize = 16;
+    private String[] names = {"Violet", "Solomon", "Yasin", "Aydin", "Gus", "Eleanor", "Beatrix", "Shalom", "Calvin", "George", "Iona", "Anika", "Ryland"};
+    private int networkSize = 13;
     private int currDeviceID = 0;
     private int[] dataReceived = new int[networkSize];
 
@@ -155,6 +158,7 @@ public class StartSensors extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_start_sensors_2, container, false);
 
+
         LinearLayout checkboxList = (LinearLayout) rootView.findViewById(R.id.checkboxList);
         LinearLayout checkboxList2 = (LinearLayout) rootView.findViewById(R.id.checkboxList2);
         for (int i = 0; i < networkSize; i++) {
@@ -164,7 +168,8 @@ public class StartSensors extends Fragment {
             devicesOnline[i].setHeight(150);
             devicesOnline[i].setTextSize(25);
             devicesOnline[i].setTextAppearance(getActivity(), android.R.style.TextAppearance_Medium);
-            if (i <= 7)
+            devicesOnline[i].setClickable(false);
+            if (i <= 6)
                 checkboxList.addView(devicesOnline[i]);
             else
                 checkboxList2.addView(devicesOnline[i]);
@@ -173,6 +178,9 @@ public class StartSensors extends Fragment {
         mTvSerial = (TextView) rootView.findViewById(R.id.tvSerial);
         startSensors = (Button) rootView.findViewById(R.id.startSensors);
         startSensors.setEnabled(false);
+//        etWrite = (EditText) rootView.findViewById(R.id.etWrite);
+//        etWrite.setEnabled(false);
+//        etWrite.setHint("CR : \\r, LF : \\n, bin : \\u0000");
 
         if (SHOW_DEBUG) {
             Log.d(TAG, "New FTDriver");
@@ -224,24 +232,24 @@ public class StartSensors extends Fragment {
                     Log.d(TAG, "Should be starting sensors");
 
 
-                    //TEMP
-                    new CountDownTimer(30000, 1000) {
-                        int device_counter = 0;
-                        public void onTick(long millisUntilFinished) {
-                            if (device_counter < networkSize-1) {
-                                Random rand = new Random();
-                                int n = rand.nextInt(2) + 0;
-                                n = n * 1000;
-                                SystemClock.sleep(n);
-                                devicesOnline[device_counter].setChecked(true);
-                                device_counter = device_counter + 1;
-                            }
-                        }
-
-                        public void onFinish() {
-                            device_counter = device_counter + 1;
-                        }
-                    }.start();
+//                    //TEMP
+//                    new CountDownTimer(30000, 1000) {
+//                        int device_counter = 0;
+//                        public void onTick(long millisUntilFinished) {
+//                            if (device_counter < networkSize-1) {
+//                                Random rand = new Random();
+//                                int n = rand.nextInt(2) + 0;
+//                                n = n * 1000;
+//                                SystemClock.sleep(n);
+//                                devicesOnline[device_counter].setChecked(true);
+//                                device_counter = device_counter + 1;
+//                            }
+//                        }
+//
+//                        public void onFinish() {
+//                            device_counter = device_counter + 1;
+//                        }
+//                    }.start();
                 }
             }
         });
@@ -394,7 +402,7 @@ public class StartSensors extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-//        outState.putString(BUNDLEKEY_LOADTEXTVIEW, mTvSerial.getText().toString());
+        outState.putString(BUNDLEKEY_LOADTEXTVIEW, mTvSerial.getText().toString());
     }
 
     /**
@@ -465,12 +473,16 @@ public class StartSensors extends Fragment {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append(mTvSerial.getText());
                                 sb.delete(0, TEXT_MAX_SIZE / 2);
-                                //mTvSerial.setText(sb);
+                                mTvSerial.setText(sb);
                             }
                             if (mText.toString().length() > 1) {
-                                if (mText.toString().substring(0, 1).equals("O") && mText.toString().length() < 10) {
+                                Log.d(TAG, mText.toString());
+                                Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+                                Matcher matcher = pattern.matcher(mText.toString());
+                                if (matcher.find()) {
                                     Log.d(TAG, "Should have found online device string");
-                                    String[] deviceInfo = mText.toString().split("\t");
+                                    Log.d(TAG, "This:" + matcher.group(0).toString());
+                                    String[] deviceInfo = matcher.group(0).toString().split("\t");
                                     for (int i = 0 ; i < deviceInfo.length ; i++) {
                                         if (deviceInfo[i].equals("1")) {
                                             devicesOnline[i-1].setChecked(true);
@@ -478,7 +490,7 @@ public class StartSensors extends Fragment {
                                     }
                                 }
                             }
-                            //mTvSerial.append(mText);
+                            mTvSerial.append(mText);
                             mText.setLength(0);
                             mSvText.fullScroll(ScrollView.FOCUS_DOWN);
                         }
@@ -732,7 +744,7 @@ public class StartSensors extends Fragment {
                 }
                 mStop = true;
                 detachedUi();
-//                mSerial.usbDetached(intent);
+                //mSerial.usbDetached(intent);
                 mSerial.close();
             } else if (ACTION_USB_PERMISSION.equals(action)) {
                 if (SHOW_DEBUG) {

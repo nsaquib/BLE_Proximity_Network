@@ -95,7 +95,7 @@ public class MultipleBarsGraph extends Fragment {
         graph.setTitleTextSize(48);
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        final String[] xLabels = new String[]{"Alice", "Bob", "Chris", "Dave", "Eliza", "Fred", "George", "Helen", "Isaac", "Jack"};
+        final String[] xLabels = new String[]{"Violet", "Solomon", "Yasin", "Aydin", "Gus", "Eleanor", "Beatrix", "Shalom", "Calvin", ""};
         staticLabelsFormatter.setHorizontalLabels(xLabels);
         staticLabelsFormatter.setVerticalLabels(new String[]{"0", "1", "2", "3"});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
@@ -120,8 +120,8 @@ public class MultipleBarsGraph extends Fragment {
         });
 
         // Legend
-        series.setTitle("Alyssa");
-        series2.setTitle("Ben");
+        series.setTitle("Lindy");
+        series2.setTitle("Sarah");
         graph.getLegendRenderer().setVisible(true);
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 

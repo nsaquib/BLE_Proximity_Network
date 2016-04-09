@@ -59,73 +59,73 @@ public class BatteryLife extends Fragment {
         graph.addSeries(series);
 
         BarGraphSeries<DataPoint> series2 = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(2,4)
+                new DataPoint(2,5)
         });
         series2.setColor(Color.rgb(213, 62, 79));
         series2.setSpacing(0);
         graph.addSeries(series2);
 
-        BarGraphSeries<DataPoint> series3 = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(3,5)
-        });
-        series3.setColor(Color.rgb(244, 109, 67));
-        series3.setSpacing(0);
-        graph.addSeries(series3);
-
-
-        BarGraphSeries<DataPoint> series4 = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(4,4)
-        });
-        series4.setColor(Color.rgb(253, 174, 97));
-        series4.setSpacing(0);
-        graph.addSeries(series4);
-
-
-        BarGraphSeries<DataPoint> series5 = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(5,4)
-        });
-        series5.setColor(Color.rgb(254, 224, 139));
-        series5.setSpacing(0);
-        graph.addSeries(series5);
-
-        BarGraphSeries<DataPoint> series6 = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(6,3)
-        });
-        series6.setColor(Color.rgb(230, 245, 152));
-        series6.setSpacing(0);
-        graph.addSeries(series6);
-
-        BarGraphSeries<DataPoint> series7 = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(7,4)
-        });
-        series7.setColor(Color.rgb(171, 221, 164));
-        series7.setSpacing(0);
-        graph.addSeries(series7);
-
-        BarGraphSeries<DataPoint> series8 = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(8,5)
-        });
-        series8.setColor(Color.rgb(102, 194, 165));
-        series8.setSpacing(0);
-        graph.addSeries(series8);
-
-        BarGraphSeries<DataPoint> series9 = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(9,5)
-        });
-        series9.setColor(Color.rgb(0, 136, 189));
-        series9.setSpacing(0);
-        graph.addSeries(series9);
-
-        BarGraphSeries<DataPoint> series10 = new BarGraphSeries<DataPoint>(new DataPoint[] {
-                new DataPoint(10,3)
-        });
-        series10.setColor(Color.rgb(94, 79, 162));
-        series10.setSpacing(20);
-        graph.addSeries(series10);
+//        BarGraphSeries<DataPoint> series3 = new BarGraphSeries<DataPoint>(new DataPoint[] {
+//                new DataPoint(3,5)
+//        });
+//        series3.setColor(Color.rgb(244, 109, 67));
+//        series3.setSpacing(0);
+//        graph.addSeries(series3);
+//
+//
+//        BarGraphSeries<DataPoint> series4 = new BarGraphSeries<DataPoint>(new DataPoint[] {
+//                new DataPoint(4,4)
+//        });
+//        series4.setColor(Color.rgb(253, 174, 97));
+//        series4.setSpacing(0);
+//        graph.addSeries(series4);
+//
+//
+//        BarGraphSeries<DataPoint> series5 = new BarGraphSeries<DataPoint>(new DataPoint[] {
+//                new DataPoint(5,4)
+//        });
+//        series5.setColor(Color.rgb(254, 224, 139));
+//        series5.setSpacing(0);
+//        graph.addSeries(series5);
+//
+//        BarGraphSeries<DataPoint> series6 = new BarGraphSeries<DataPoint>(new DataPoint[] {
+//                new DataPoint(6,3)
+//        });
+//        series6.setColor(Color.rgb(230, 245, 152));
+//        series6.setSpacing(0);
+//        graph.addSeries(series6);
+//
+//        BarGraphSeries<DataPoint> series7 = new BarGraphSeries<DataPoint>(new DataPoint[] {
+//                new DataPoint(7,4)
+//        });
+//        series7.setColor(Color.rgb(171, 221, 164));
+//        series7.setSpacing(0);
+//        graph.addSeries(series7);
+//
+//        BarGraphSeries<DataPoint> series8 = new BarGraphSeries<DataPoint>(new DataPoint[] {
+//                new DataPoint(8,5)
+//        });
+//        series8.setColor(Color.rgb(102, 194, 165));
+//        series8.setSpacing(0);
+//        graph.addSeries(series8);
+//
+//        BarGraphSeries<DataPoint> series9 = new BarGraphSeries<DataPoint>(new DataPoint[] {
+//                new DataPoint(9,5)
+//        });
+//        series9.setColor(Color.rgb(0, 136, 189));
+//        series9.setSpacing(0);
+//        graph.addSeries(series9);
+//
+//        BarGraphSeries<DataPoint> series10 = new BarGraphSeries<DataPoint>(new DataPoint[] {
+//                new DataPoint(10,3)
+//        });
+//        series10.setColor(Color.rgb(94, 79, 162));
+//        series10.setSpacing(20);
+//        graph.addSeries(series10);
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(16);
+        graph.getViewport().setMaxX(4);
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(5);
@@ -136,16 +136,16 @@ public class BatteryLife extends Fragment {
 
 
         // legend
-        series.setTitle("math");
-        series2.setTitle("language");
-        series3.setTitle("life");
-        series4.setTitle("sensorial");
-        series5.setTitle("letters");
-        series6.setTitle("blocks");
-        series7.setTitle("washing");
-        series8.setTitle("buttons");
-        series9.setTitle("tea");
-        series10.setTitle("snack");
+        series.setTitle("region");
+        series2.setTitle("lesson");
+//        series3.setTitle("life");
+//        series4.setTitle("sensorial");
+//        series5.setTitle("letters");
+//        series6.setTitle("blocks");
+//        series7.setTitle("washing");
+//        series8.setTitle("buttons");
+//        series9.setTitle("tea");
+//        series10.setTitle("snack");
         graph.getLegendRenderer().setVisible(true);
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 

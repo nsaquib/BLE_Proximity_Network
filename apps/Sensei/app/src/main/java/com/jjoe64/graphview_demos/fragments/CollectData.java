@@ -131,8 +131,8 @@ public class CollectData extends Fragment {
     private ProgressBar mProgressBar;
 
     //File parameters
-    private String[] names = {"Alice", "Bob", "Chris", "Dave", "Eliza", "Fred", "George", "Helen", "Jack", "Kelly", "Linda", "Meg", "Noah", "Oscar", "Peter", "Quinn"};
-    private int networkSize = 16;
+    private String[] names = {"Violet", "Solomon", "Yasin", "Aydin", "Gus", "Eleanor", "Beatrix", "Shalom", "Calvin", "George", "Iona", "Anika", "Ryland"};
+    private int networkSize = 13;
     private int currDeviceID = 0;
     private int[] dataReceived = new int[networkSize];
 
@@ -165,8 +165,8 @@ public class CollectData extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_collect_data_3, container, false);
 
 
-        //mSvText = (ScrollView) rootView.findViewById(R.id.svText);
-        //mTvSerial = (TextView) rootView.findViewById(R.id.tvSerial);
+        mSvText = (ScrollView) rootView.findViewById(R.id.svText);
+        mTvSerial = (TextView) rootView.findViewById(R.id.tvSerial);
         startCollect = (Button) rootView.findViewById(R.id.startCollect);
         startCollect.setEnabled(false);
         mProgressBar=(ProgressBar) rootView.findViewById(R.id.progressBar);
@@ -185,7 +185,7 @@ public class CollectData extends Fragment {
             devicesOnline[i].setHeight(150);
             devicesOnline[i].setTextSize(25);
             devicesOnline[i].setTextAppearance(getActivity(), android.R.style.TextAppearance_Medium);
-            if (i <= 7)
+            if (i <= 6)
                 checkboxList.addView(devicesOnline[i]);
             else
                 checkboxList2.addView(devicesOnline[i]);
@@ -228,32 +228,32 @@ public class CollectData extends Fragment {
                     byte[] start_code = toSend.getBytes();
                     mSerial.write(start_code, start_code.length);
                     //startCollect.setEnabled(false);
-                    collectData = true;
+                    //collectData = true;
                     Log.d(TAG, "Should be collecting data now");
 
                     //TEMP
-                    new CountDownTimer(300000, 10000) {
-                        int device_counter = 0;
-                        public void onTick(long millisUntilFinished) {
-                            if (device_counter < networkSize) {
-                                Random rand = new Random();
-                                int n = rand.nextInt(20) + 0;
-                                n = n * 1000;
-                                SystemClock.sleep(n);
-                                devicesOnline[device_counter].setChecked(true);
-                                device_counter = device_counter + 1;
-                                mProgressBar.setProgress(device_counter);
-                            }
-                            else{
-                                mProgressBar.setProgress(mProgressBar.getMax());
-                            }
-                        }
-
-                        public void onFinish() {
-                            device_counter = device_counter + 1;
-                            mProgressBar.setProgress(mProgressBar.getMax());
-                        }
-                    }.start();
+//                    new CountDownTimer(300000, 10000) {
+//                        int device_counter = 0;
+//                        public void onTick(long millisUntilFinished) {
+//                            if (device_counter < networkSize) {
+//                                Random rand = new Random();
+//                                int n = rand.nextInt(20) + 0;
+//                                n = n * 1000;
+//                                SystemClock.sleep(n);
+//                                devicesOnline[device_counter].setChecked(true);
+//                                device_counter = device_counter + 1;
+//                                mProgressBar.setProgress(device_counter);
+//                            }
+//                            else{
+//                                mProgressBar.setProgress(mProgressBar.getMax());
+//                            }
+//                        }
+//
+//                        public void onFinish() {
+//                            device_counter = device_counter + 1;
+//                            mProgressBar.setProgress(mProgressBar.getMax());
+//                        }
+//                    }.start();
                 }
             }
         });
@@ -342,7 +342,7 @@ public class CollectData extends Fragment {
                     mTextTypeface = Typeface.MONOSPACE;
                     break;
             }
-//            mTvSerial.setTypeface(mTextTypeface);
+            mTvSerial.setTypeface(mTextTypeface);
 //            etWrite.setTypeface(mTextTypeface);
 
             res = pref.getString("readlinefeedcode_list", Integer.toString(LINEFEED_CODE_CRLF));
@@ -421,7 +421,7 @@ public class CollectData extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //outState.putString(BUNDLEKEY_LOADTEXTVIEW, mTvSerial.getText().toString());
+        outState.putString(BUNDLEKEY_LOADTEXTVIEW, mTvSerial.getText().toString());
     }
 
     /**
@@ -488,7 +488,7 @@ public class CollectData extends Fragment {
 
                     mHandler.post(new Runnable() {
                         public void run() {
-                            /*if (mTvSerial.length() > TEXT_MAX_SIZE) {
+                            if (mTvSerial.length() > TEXT_MAX_SIZE) {
                                 StringBuilder sb = new StringBuilder();
                                 sb.append(mTvSerial.getText());
                                 sb.delete(0, TEXT_MAX_SIZE / 2);
@@ -514,11 +514,12 @@ public class CollectData extends Fragment {
                                         String filename = deviceInfo[1] + ".txt";
                                         fm.writeToFile(filename, mTvSerial.getText().toString());
                                         mTvSerial.setText("");
+                                        devicesOnline[Integer.parseInt(deviceInfo[1])].setChecked(true);
                                     }
                                 }
                             }
                             mText.setLength(0);
-                            mSvText.fullScroll(ScrollView.FOCUS_DOWN);*/
+                            mSvText.fullScroll(ScrollView.FOCUS_DOWN);
                         }
                     });
                 }
@@ -638,7 +639,7 @@ public class CollectData extends Fragment {
                 mTextTypeface = Typeface.MONOSPACE;
                 break;
         }
-        //mTvSerial.setTypeface(mTextTypeface);
+        mTvSerial.setTypeface(mTextTypeface);
         //etWrite.setTypeface(mTextTypeface);
 
         res = pref.getString("readlinefeedcode_list", Integer.toString(LINEFEED_CODE_CRLF));
@@ -711,7 +712,7 @@ public class CollectData extends Fragment {
                     Log.d(TAG, "setConfig : baud : "+mBaudrate+", DataBits : "+mDataBits+", StopBits : "+mStopBits+", Parity : "+mParity+", dtr : "+dtrOn+", rts : "+rtsOn);
                 }
 
-                //mTvSerial.setTextSize(mTextFontSize);
+                mTvSerial.setTextSize(mTextFontSize);
 
                 Toast.makeText(getActivity(), "connected", Toast.LENGTH_SHORT).show();
             }
@@ -770,7 +771,7 @@ public class CollectData extends Fragment {
                 }
                 mStop = true;
                 detachedUi();
-//                mSerial.usbDetached(intent);
+                //mSerial.usbDetached(intent);
                 mSerial.close();
             } else if (ACTION_USB_PERMISSION.equals(action)) {
                 if (SHOW_DEBUG) {
