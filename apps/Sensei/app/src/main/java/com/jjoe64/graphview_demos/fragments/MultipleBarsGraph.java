@@ -58,12 +58,7 @@ public class MultipleBarsGraph extends Fragment {
                 new DataPoint(1, 2),
                 new DataPoint(2, 1.1),
                 new DataPoint(3, 1.3),
-                new DataPoint(4, 1.5),
-                new DataPoint(5, 1.7),
-                new DataPoint(6, 0.7),
-                new DataPoint(7, 0.8),
-                new DataPoint(8, 0.5),
-                new DataPoint(9, 1)
+                new DataPoint(4, 1.5)
         });
         series.setColor(Color.rgb(212, 161, 106)); // brown
         series.setSpacing(30);
@@ -74,12 +69,7 @@ public class MultipleBarsGraph extends Fragment {
                 new DataPoint(1, 1.9),
                 new DataPoint(2, 0.9),
                 new DataPoint(3, 1.7),
-                new DataPoint(4, 0.6),
-                new DataPoint(5, 0.9),
-                new DataPoint(6, 0.3),
-                new DataPoint(7, 0.9),
-                new DataPoint(8, 1.3),
-                new DataPoint(9, 1.4)
+                new DataPoint(4, 0.6)
         });
         series2.setColor(Color.rgb(85, 44, 0)); // dark brown
         series2.setSpacing(30);
@@ -88,14 +78,14 @@ public class MultipleBarsGraph extends Fragment {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinX(-0.5);
-        graph.getViewport().setMaxX(10);
+        graph.getViewport().setMaxX(5);
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(3);
         graph.setTitle("Time Spent with Children");
         graph.setTitleTextSize(48);
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        final String[] xLabels = new String[]{"Violet", "Solomon", "Yasin", "Aydin", "Gus", "Eleanor", "Beatrix", "Shalom", "Calvin", ""};
+        final String[] xLabels = new String[]{"Alice", "Bob", "Chris", "Dave", "Eliza",""};
         staticLabelsFormatter.setHorizontalLabels(xLabels);
         staticLabelsFormatter.setVerticalLabels(new String[]{"0", "1", "2", "3"});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
@@ -120,8 +110,8 @@ public class MultipleBarsGraph extends Fragment {
         });
 
         // Legend
-        series.setTitle("Lindy");
-        series2.setTitle("Sarah");
+        series.setTitle("Alyssa");
+        series2.setTitle("Ben");
         graph.getLegendRenderer().setVisible(true);
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 

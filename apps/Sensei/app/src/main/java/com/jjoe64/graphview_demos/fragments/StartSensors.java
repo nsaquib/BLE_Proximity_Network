@@ -122,7 +122,7 @@ public class StartSensors extends Fragment {
     private Button startSensors;
 
     //File parameters
-    private String[] names = {"Violet", "Solomon", "Yasin", "Aydin", "Gus", "Eleanor", "Beatrix", "Shalom", "Calvin", "George", "Iona", "Anika", "Ryland"};
+    private String[] names = {"Alice", "Bob", "Chris", "Dave", "Eliza", "Fred", "George", "Helen", "Ivan", "Jack", "Kelly", "Linda", "Meg"};
     private int networkSize = 13;
     private int currDeviceID = 0;
     private int[] dataReceived = new int[networkSize];
