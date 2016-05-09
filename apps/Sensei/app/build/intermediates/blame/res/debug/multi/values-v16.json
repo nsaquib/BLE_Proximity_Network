@@ -1,0 +1,28 @@
+[
+    {
+        "outputFile": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/app/build/intermediates/res/merged/debug/values-v16/values-v16.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endLine": 4,
+                    "endColumn": 12,
+                    "endOffset": 199
+                },
+                "from": {
+                    "file": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/app/src/main/res/values-v16/styles.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 57,
+                        "endLine": 5,
+                        "endColumn": 12,
+                        "endOffset": 201
+                    }
+                }
+            }
+        ]
+    }
+]

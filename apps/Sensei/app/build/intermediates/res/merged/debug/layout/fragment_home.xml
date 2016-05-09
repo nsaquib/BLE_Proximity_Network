@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Sensei"
+        android:id="@+id/textView4"
+        android:layout_gravity="center"
+        android:typeface="normal"
+        android:textSize="50dp"
+        android:textAlignment="center" />
+
+    <ImageView
+        android:layout_width="206dp"
+        android:layout_height="211dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/shoe_sensor"
+        android:textAlignment="center"
+        android:layout_gravity="center" />
+</LinearLayout>

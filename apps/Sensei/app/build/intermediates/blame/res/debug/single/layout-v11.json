@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/App/app/build/intermediates/res/merged/debug/layout-v11/abc_screen_content_include.xml",
+        "source": "/Users/aybose/Documents/MediaLab/App/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/layout-v11/abc_screen_content_include.xml"
+    },
+    {
+        "merged": "/Users/aybose/Downloads/GraphView-Demos-master/app/build/intermediates/res/merged/debug/layout-v11/abc_screen_content_include.xml",
+        "source": "/Users/aybose/Downloads/GraphView-Demos-master/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/layout-v11/abc_screen_content_include.xml"
+    },
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/app/build/intermediates/res/merged/debug/layout-v11/abc_screen_content_include.xml",
+        "source": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/layout-v11/abc_screen_content_include.xml"
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/App/app/build/intermediates/res/merged/debug/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "source": "/Users/aybose/Documents/MediaLab/App/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png"
+    },
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/app/build/intermediates/res/merged/debug/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "source": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png"
+    },
+    {
+        "merged": "/Users/aybose/Downloads/GraphView-Demos-master/app/build/intermediates/res/merged/debug/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "source": "/Users/aybose/Downloads/GraphView-Demos-master/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png"
+    },
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/App/app/build/intermediates/res/merged/debug/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
+        "source": "/Users/aybose/Documents/MediaLab/App/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png"
+    },
+    {
+        "merged": "/Users/aybose/Downloads/GraphView-Demos-master/app/build/intermediates/res/merged/debug/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
+        "source": "/Users/aybose/Downloads/GraphView-Demos-master/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png"
+    },
+    {
+        "merged": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/app/build/intermediates/res/merged/debug/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
+        "source": "/Users/aybose/Documents/MediaLab/BLE_Proximity_Network/apps/Sensei/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/res/drawable-tvdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png"
+    }
+]
